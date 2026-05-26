@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Network Technician Toolkit</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#0f1117;color:#e2e8f0;min-height:100vh}
+.topbar{background:#161b27;border-bottom:1px solid #2d3748;padding:14px 24px;display:flex;align-items:center;gap:12px}
+.topbar-icon{width:36px;height:36px;border-radius:8px;background:#1e40af;display:flex;align-items:center;justify-content:center}
+.topbar-icon i{font-size:20px;color:#93c5fd}
+.topbar-title{font-size:18px;font-weight:600;color:#f1f5f9}
+.topbar-sub{font-size:13px;color:#64748b;margin-left:auto}
+.container{max-width:960px;margin:0 auto;padding:24px 16px}
+.tabs{display:flex;gap:6px;margin-bottom:24px;flex-wrap:wrap}
+.tab{padding:8px 16px;border:1px solid #2d3748;border-radius:8px;font-size:13px;cursor:pointer;background:#161b27;color:#94a3b8;display:flex;align-items:center;gap:7px;transition:all .15s}
+.tab:hover{background:#1e293b;color:#e2e8f0}
+.tab.active{background:#1e3a8a;color:#93c5fd;border-color:#3b82f6}
+.tab i{font-size:15px}
+.panel{display:none}
+.panel.active{display:block}
+.card{background:#161b27;border:1px solid #2d3748;border-radius:12px;padding:18px 20px;margin-bottom:16px}
+.card h3{font-size:11px;font-weight:600;margin-bottom:14px;color:#475569;text-transform:uppercase;letter-spacing:.08em}
+input[type=text],input[type=number],select,textarea{background:#0f1117;border:1px solid #2d3748;border-radius:8px;padding:8px 12px;font-size:13px;color:#e2e8f0;width:100%;outline:none;transition:border .15s}
+input:focus,select:focus,textarea:focus{border-color:#3b82f6}
+select option{background:#0f1117}
+.row{display:flex;gap:8px;margin-bottom:8px;align-items:center;flex-wrap:wrap}
+.btn{padding:8px 16px;border-radius:8px;font-size:13px;cursor:pointer;border:1px solid #2d3748;background:#1e293b;color:#e2e8f0;display:flex;align-items:center;gap:6px;transition:all .15s;white-space:nowrap}
+.btn:hover{background:#334155}
+.btn-primary{background:#1e3a8a;color:#93c5fd;border-color:#3b82f6}
+.btn-primary:hover{background:#1e40af}
+.result{background:#0a0e18;border:1px solid #1e293b;border-radius:8px;padding:14px;font-size:13px;font-family:'Courier New',monospace;white-space:pre-wrap;min-height:48px;color:#7dd3fc;line-height:1.8;margin-top:8px}
+.input-row{display:flex;gap:8px;margin-bottom:8px;align-items:center}
+.input-row input,.input-row select{flex:1}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.stat{background:#0f1117;border:1px solid #2d3748;border-radius:10px;padding:14px;text-align:center}
+.stat-val{font-size:26px;font-weight:700}
+.stat-lbl{font-size:12px;color:#64748b;margin-top:3px}
+.stat-open .stat-val{color:#f87171}
+.stat-inp .stat-val{color:#fbbf24}
+.stat-res .stat-val{color:#34d399}
+table{width:100%;border-collapse:collapse;font-size:13px}
+td,th{padding:9px 12px;text-align:left;border-bottom:1px solid #1e293b}
+th{color:#64748b;font-weight:500;font-size:12px;text-transform:uppercase;letter-spacing:.05em}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#1a2234}
+.ticket{background:#0f1117;border:1px solid #2d3748;border-radius:10px;padding:14px;margin-bottom:10px}
+.ticket-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.ticket-name{font-size:14px;font-weight:600;color:#f1f5f9}
+.ticket-meta{font-size:12px;color:#64748b;display:flex;gap:12px;flex-wrap:wrap;margin-top:4px}
+.badge{display:inline-block;padding:3px 10px;border-radius:6px;font-size:11px;font-weight:600}
+.badge-open{background:#7f1d1d;color:#fca5a5}
+.badge-inprogress{background:#78350f;color:#fcd34d}
+.badge-resolved{background:#064e3b;color:#6ee7b7}
+.wire{display:flex;align-items:center;gap:8px;margin-bottom:4px;font-size:12px}
+.pin{background:#374151;color:#9ca3af;border-radius:4px;padding:2px 7px;min-width:22px;text-align:center;font-weight:600}
+.quick-btns{display:flex;flex-wrap:wrap;gap:8px}
+.empty{text-align:center;padding:2rem;color:#475569;font-size:13px}
+label.check-item{display:flex;align-items:center;gap:10px;font-size:13px;cursor:pointer;padding:8px 10px;border-radius:8px;transition:background .1s;color:#cbd5e1}
+label.check-item:hover{background:#1e293b}
+label.check-item input{width:16px;height:16px;accent-color:#3b82f6;cursor:pointer}
+label.check-item.done{color:#475569;text-decoration:line-through}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-icon"><i class="ti ti-tool"></i></div>
+  <div class="topbar-title">Network Technician Toolkit</div>
+  <div class="topbar-sub">Ping · Subnet · VoIP · Cable · Customers</div>
+</div>
+
+<div class="container">
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('ping')"><i class="ti ti-radar"></i>Ping & Tests</button>
+    <button class="tab" onclick="switchTab('subnet')"><i class="ti ti-network"></i>Subnet Calc</button>
+    <button class="tab" onclick="switchTab('voip')"><i class="ti ti-phone"></i>VoIP Checker</button>
+    <button class="tab" onclick="switchTab('cable')"><i class="ti ti-plug"></i>Cable Guide</button>
+    <button class="tab" onclick="switchTab('customers')"><i class="ti ti-users"></i>Customers</button>
+  </div>
+
+  <!-- PING -->
+  <div id="panel-ping" class="panel active">
+    <div class="card">
+      <h3>Generate commands</h3>
+      <div class="input-row">
+        <input type="text" id="ping-host" placeholder="IP or hostname e.g. 192.168.1.1"/>
+        <button class="btn btn-primary" onclick="genPing()"><i class="ti ti-terminal"></i> Generate</button>
+      </div>
+      <div id="ping-result" class="result">Enter a host above to generate commands.</div>
+    </div>
+    <div class="card">
+      <h3>Quick targets</h3>
+      <div class="quick-btns">
+        <button class="btn" onclick="setHost('8.8.8.8')"><i class="ti ti-brand-google"></i> Google DNS</button>
+        <button class="btn" onclick="setHost('1.1.1.1')"><i class="ti ti-cloud"></i> Cloudflare</button>
+        <button class="btn" onclick="setHost('192.168.1.1')"><i class="ti ti-router"></i> Default GW</button>
+        <button class="btn" onclick="setHost('10.0.0.1')"><i class="ti ti-router"></i> Router 10.x</button>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Port reference</h3>
+      <table>
+        <tr><th>Port</th><th>Service</th><th>Use</th></tr>
+        <tr><td>21</td><td>FTP</td><td>File transfer</td></tr>
+        <tr><td>22</td><td>SSH</td><td>Remote management</td></tr>
+        <tr><td>23</td><td>Telnet</td><td>Router config (legacy)</td></tr>
+        <tr><td>53</td><td>DNS</td><td>Name resolution</td></tr>
+        <tr><td>80 / 443</td><td>HTTP/S</td><td>Web traffic</td></tr>
+        <tr><td>5060</td><td>SIP</td><td>VoIP signaling</td></tr>
+        <tr><td>5061</td><td>SIP TLS</td><td>Secure VoIP</td></tr>
+        <tr><td>3389</td><td>RDP</td><td>Remote desktop</td></tr>
+        <tr><td>67 / 68</td><td>DHCP</td><td>IP assignment</td></tr>
+        <tr><td>161</td><td>SNMP</td><td>Device monitoring</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- SUBNET -->
+  <div id="panel-subnet" class="panel">
+    <div class="card">
+      <h3>Subnet calculator</h3>
+      <div class="input-row">
+        <input type="text" id="sub-ip" placeholder="IP address e.g. 192.168.1.0" style="flex:2"/>
+        <select id="sub-cidr" style="flex:1">
+          <option>/30</option><option>/29</option><option>/28</option><option>/27</option>
+          <option>/26</option><option>/25</option><option>/24</option><option>/23</option>
+          <option>/22</option><option>/21</option><option>/20</option><option>/19</option>
+          <option>/18</option><option>/16</option>
+        </select>
+        <button class="btn btn-primary" onclick="calcSubnet()">Calculate</button>
+      </div>
+      <div id="subnet-result" class="result">Enter an IP and select a prefix to calculate.</div>
+    </div>
+    <div class="card">
+      <h3>CIDR cheat sheet</h3>
+      <table>
+        <tr><th>CIDR</th><th>Subnet mask</th><th>Usable hosts</th><th>Use case</th></tr>
+        <tr><td>/30</td><td>255.255.255.252</td><td>2</td><td>Point-to-point link</td></tr>
+        <tr><td>/29</td><td>255.255.255.248</td><td>6</td><td>Small office</td></tr>
+        <tr><td>/28</td><td>255.255.255.240</td><td>14</td><td>Small LAN</td></tr>
+        <tr><td>/27</td><td>255.255.255.224</td><td>30</td><td>Small segment</td></tr>
+        <tr><td>/26</td><td>255.255.255.192</td><td>62</td><td>Medium LAN</td></tr>
+        <tr><td>/25</td><td>255.255.255.128</td><td>126</td><td>Half subnet</td></tr>
+        <tr><td>/24</td><td>255.255.255.0</td><td>254</td><td>Standard LAN</td></tr>
+        <tr><td>/23</td><td>255.255.254.0</td><td>510</td><td>Medium network</td></tr>
+        <tr><td>/16</td><td>255.255.0.0</td><td>65534</td><td>Large network</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- VOIP -->
+  <div id="panel-voip" class="panel">
+    <div class="card">
+      <h3>Setup checklist</h3>
+      <div id="voip-checks"></div>
+    </div>
+    <div class="card">
+      <h3>Bandwidth estimator</h3>
+      <div class="input-row">
+        <label style="min-width:130px;font-size:13px;color:#94a3b8">Concurrent calls</label>
+        <input type="number" id="voip-calls" value="5" min="1" max="500" style="width:80px;flex:none"/>
+      </div>
+      <div class="input-row">
+        <label style="min-width:130px;font-size:13px;color:#94a3b8">Codec</label>
+        <select id="voip-codec">
+          <option value="87.2">G.711 (87.2 kbps)</option>
+          <option value="31.2">G.729 (31.2 kbps)</option>
+          <option value="55.2">G.722 (55.2 kbps)</option>
+          <option value="11.2">G.723 (11.2 kbps)</option>
+        </select>
+      </div>
+      <button class="btn btn-primary" onclick="calcVoip()"><i class="ti ti-calculator"></i> Calculate</button>
+      <div id="voip-result" class="result" style="margin-top:10px"></div>
+    </div>
+    <div class="card">
+      <h3>Common VoIP issues</h3>
+      <table>
+        <tr><th>Symptom</th><th>Likely cause</th><th>Fix</th></tr>
+        <tr><td>One-way audio</td><td>NAT / firewall</td><td>Enable SIP ALG or configure STUN</td></tr>
+        <tr><td>Choppy audio</td><td>Jitter / packet loss</td><td>Enable QoS, prioritize SIP/RTP</td></tr>
+        <tr><td>No registration</td><td>Wrong SIP server</td><td>Check SIP proxy & port 5060</td></tr>
+        <tr><td>Echo</td><td>Acoustic feedback</td><td>Lower mic gain / use headset</td></tr>
+        <tr><td>Calls dropping</td><td>Session timeout</td><td>Set SIP keepalive / register interval</td></tr>
+        <tr><td>No dial tone</td><td>No power / config</td><td>Check PoE, reboot, re-provision</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- CABLE -->
+  <div id="panel-cable" class="panel">
+    <div class="card">
+      <h3>Ethernet wiring — T568A & T568B</h3>
+      <div class="grid2">
+        <div>
+          <div style="font-size:13px;font-weight:600;margin-bottom:10px;color:#94a3b8">T568A</div>
+          <div id="t568a"></div>
+        </div>
+        <div>
+          <div style="font-size:13px;font-weight:600;margin-bottom:10px;color:#3b82f6">T568B — most common</div>
+          <div id="t568b"></div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Cable type info</h3>
+      <div class="input-row">
+        <select id="cable-type" onchange="showCable()">
+          <option value="">Select cable type...</option>
+          <option value="straight">Straight-through</option>
+          <option value="crossover">Crossover</option>
+          <option value="rollover">Rollover (console)</option>
+          <option value="cat5e">Cat5e</option>
+          <option value="cat6">Cat6</option>
+          <option value="cat6a">Cat6a</option>
+          <option value="fiber">Fiber optic</option>
+        </select>
+      </div>
+      <div id="cable-result" class="result" style="min-height:0"></div>
+    </div>
+    <div class="card">
+      <h3>Troubleshooting guide</h3>
+      <table>
+        <tr><th>Issue</th><th>Check</th></tr>
+        <tr><td>No link light</td><td>Try different port first, then check cable and NIC</td></tr>
+        <tr><td>Intermittent drops</td><td>Damaged cable, bad crimp, or loose RJ45</td></tr>
+        <tr><td>Slow speeds</td><td>Duplex mismatch, Cat5 on Gigabit, or interference</td></tr>
+        <tr><td>CRC errors</td><td>Bad cable or connector — replace and retest</td></tr>
+        <tr><td>No IP assigned</td><td>DHCP server reachable? Check VLAN config</td></tr>
+        <tr><td>High latency</td><td>Check for loops, spanning tree issues, or overloaded port</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- CUSTOMERS -->
+  <div id="panel-customers" class="panel">
+    <div class="card">
+      <h3>New ticket</h3>
+      <div class="input-row">
+        <input type="text" id="cust-name" placeholder="Customer name" style="flex:2"/>
+        <input type="text" id="cust-phone" placeholder="Phone number" style="flex:1"/>
+      </div>
+      <div class="input-row">
+        <input type="text" id="cust-addr" placeholder="Address / site"/>
+      </div>
+      <div class="input-row">
+        <select id="cust-issue">
+          <option>No internet</option>
+          <option>Slow speeds</option>
+          <option>VoIP problem</option>
+          <option>Cable / port issue</option>
+          <option>Router config</option>
+          <option>New installation</option>
+          <option>WiFi issue</option>
+          <option>Other</option>
+        </select>
+        <select id="cust-priority">
+          <option value="normal">Normal</option>
+          <option value="urgent">Urgent</option>
+        </select>
+        <select id="cust-status">
+          <option value="open">Open</option>
+          <option value="inprogress">In progress</option>
+          <option value="resolved">Resolved</option>
+        </select>
+        <button class="btn btn-primary" onclick="addTicket()"><i class="ti ti-plus"></i> Add</button>
+      </div>
+      <input type="text" id="cust-notes" placeholder="Notes (optional)" style="margin-top:4px"/>
+    </div>
+    <div class="card">
+      <h3>Ticket tracker</h3>
+      <div class="grid3" style="margin-bottom:16px">
+        <div class="stat stat-open"><div class="stat-val" id="stat-open">0</div><div class="stat-lbl">Open</div></div>
+        <div class="stat stat-inp"><div class="stat-val" id="stat-inprog">0</div><div class="stat-lbl">In progress</div></div>
+        <div class="stat stat-res"><div class="stat-val" id="stat-resolved">0</div><div class="stat-lbl">Resolved</div></div>
+      </div>
+      <div id="ticket-list"><div class="empty"><i class="ti ti-clipboard" style="font-size:32px;display:block;margin-bottom:8px"></i>No tickets yet.</div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const tabs=['ping','subnet','voip','cable','customers'];
+function switchTab(t){
+  tabs.forEach((x,i)=>{
+    document.getElementById('panel-'+x).classList.toggle('active',x===t);
+    document.querySelectorAll('.tab')[i].classList.toggle('active',x===t);
+  });
+}
+
+function setHost(h){document.getElementById('ping-host').value=h;genPing();}
+function genPing(){
+  const h=document.getElementById('ping-host').value.trim();
+  if(!h){document.getElementById('ping-result').textContent='Please enter a host or IP.';return;}
+  document.getElementById('ping-result').textContent=
+`# Ping (4 packets)
+ping -c 4 ${h}
+
+# Traceroute
+traceroute ${h}
+
+# MTR (combined ping + traceroute)
+mtr ${h}
+
+# Port scan
+nmap -p 22,80,443,5060 ${h}
+
+# DNS lookup
+nslookup ${h}
+dig ${h}
+
+# Test specific port
+nc -zv ${h} 80
+nc -zv ${h} 5060`;
+}
+
+function calcSubnet(){
+  const ipStr=document.getElementById('sub-ip').value.trim();
+  const cidr=parseInt(document.getElementById('sub-cidr').value.replace('/',''));
+  if(!ipStr){document.getElementById('subnet-result').textContent='Please enter an IP address.';return;}
+  const parts=ipStr.split('.').map(Number);
+  if(parts.length!==4||parts.some(p=>isNaN(p)||p<0||p>255)){
+    document.getElementById('subnet-result').textContent='Invalid IP address.';return;
+  }
+  const mask=(0xFFFFFFFF<<(32-cidr))>>>0;
+  const ip=(parts[0]<<24|parts[1]<<16|parts[2]<<8|parts[3])>>>0;
+  const network=(ip&mask)>>>0;
+  const broadcast=(network|(~mask>>>0))>>>0;
+  const first=(network+1)>>>0;
+  const last=(broadcast-1)>>>0;
+  const hosts=Math.pow(2,32-cidr)-2;
+  function toIP(n){return[(n>>>24)&255,(n>>>16)&255,(n>>>8)&255,n&255].join('.');}
+  function toMask(m){return[(m>>>24)&255,(m>>>16)&255,(m>>>8)&255,m&255].join('.');}
+  document.getElementById('subnet-result').textContent=
+`Network address:  ${toIP(network)}/${cidr}
+Subnet mask:      ${toMask(mask)}
+First host:       ${toIP(first)}
+Last host:        ${toIP(last)}
+Broadcast:        ${toIP(broadcast)}
+Usable hosts:     ${hosts.toLocaleString()}`;
+}
+
+const voipChecks=[
+  'SIP server / proxy address configured',
+  'Port 5060 (UDP/TCP) open on firewall',
+  'QoS enabled — SIP/RTP traffic prioritized',
+  'NAT settings correct (STUN or SIP ALG)',
+  'Correct codec selected (G.711 / G.729)',
+  'Extension numbers and credentials verified',
+  'Inbound / outbound call test completed',
+  'Emergency number tested (100 / 101 / 102)',
+];
+(function(){
+  const c=document.getElementById('voip-checks');
+  voipChecks.forEach((item,i)=>{
+    const l=document.createElement('label');
+    l.className='check-item';
+    l.innerHTML=`<input type="checkbox" onchange="toggleCheck(this,${i})"/> ${item}`;
+    c.appendChild(l);
+  });
+})();
+function toggleCheck(el,i){el.closest('label').classList.toggle('done',el.checked);}
+
+function calcVoip(){
+  const calls=parseInt(document.getElementById('voip-calls').value)||1;
+  const kbps=parseFloat(document.getElementById('voip-codec').value);
+  const total=calls*kbps*2;
+  const recommended=Math.ceil(total*1.3);
+  document.getElementById('voip-result').textContent=
+`Calls: ${calls}  |  Per call: ${kbps} kbps (both directions)
+Raw bandwidth needed:    ${Math.round(total)} kbps  (${(total/1000).toFixed(2)} Mbps)
+Recommended (+30% overhead): ${recommended} kbps  (${(recommended/1000).toFixed(2)} Mbps)`;
+}
+
+const t568a=[['White/Green','#166534','#bbf7d0'],['Green','#14532d','#86efac'],['White/Orange','#7c2d12','#fed7aa'],['Blue','#1e3a8a','#bfdbfe'],['White/Blue','#1e3a8a','#dbeafe'],['Orange','#7c2d12','#fdba74'],['White/Brown','#451a03','#fde68a'],['Brown','#451a03','#d97706']];
+const t568b=[['White/Orange','#7c2d12','#fed7aa'],['Orange','#7c2d12','#fdba74'],['White/Green','#166534','#bbf7d0'],['Blue','#1e3a8a','#bfdbfe'],['White/Blue','#1e3a8a','#dbeafe'],['Green','#14532d','#86efac'],['White/Brown','#451a03','#fde68a'],['Brown','#451a03','#d97706']];
+function buildWiring(id,data){
+  const el=document.getElementById(id);
+  data.forEach(([name,bg,fg],i)=>{
+    const d=document.createElement('div');
+    d.className='wire';
+    d.innerHTML=`<span class="pin">${i+1}</span><span style="background:${bg};color:${fg};border-radius:6px;padding:4px 12px;flex:1;font-size:12px">${name}</span>`;
+    el.appendChild(d);
+  });
+}
+buildWiring('t568a',t568a);
+buildWiring('t568b',t568b);
+
+const cableInfo={
+  straight:`Used to connect DIFFERENT devices (PC to switch, PC to router).
+Both ends use the same standard: T568B — T568B.
+Most common cable in any network installation.`,
+  crossover:`Used to connect SIMILAR devices directly (PC to PC, switch to switch).
+One end T568A, other end T568B.
+Note: Modern switches use Auto-MDIX so crossover may not be needed.`,
+  rollover:`Cisco console cable (flat / rolled).
+Used for router and switch initial configuration via COM port.
+Connect to console port using DB9 or USB-to-serial adapter.`,
+  cat5e:`Max speed: 1 Gbps  |  Max length: 100m
+Frequency: 100 MHz
+Good for standard home and office use.`,
+  cat6:`Max speed: 10 Gbps (up to 55m), 1 Gbps to 100m
+Frequency: 250 MHz
+Better shielding and thicker conductor — recommended for new installs.`,
+  cat6a:`Max speed: 10 Gbps up to 100m
+Frequency: 500 MHz
+Best for high-density environments and data centers.`,
+  fiber:`Immune to EMI, supports very long distances (up to 80km+).
+Singlemode (OS2): long distance, yellow jacket.
+Multimode (OM3/OM4): short distance, aqua or purple jacket.
+Handle carefully — do not bend below minimum bend radius.`
+};
+function showCable(){
+  const v=document.getElementById('cable-type').value;
+  const el=document.getElementById('cable-result');
+  el.textContent=v?cableInfo[v]:'';
+  el.style.display=v?'block':'none';
+}
+
+let tickets=JSON.parse(localStorage.getItem('ntt_tickets')||'[]');
+function saveTickets(){localStorage.setItem('ntt_tickets',JSON.stringify(tickets));}
+function addTicket(){
+  const name=document.getElementById('cust-name').value.trim();
+  const phone=document.getElementById('cust-phone').value.trim();
+  const addr=document.getElementById('cust-addr').value.trim();
+  const issue=document.getElementById('cust-issue').value;
+  const priority=document.getElementById('cust-priority').value;
+  const status=document.getElementById('cust-status').value;
+  const notes=document.getElementById('cust-notes').value.trim();
+  if(!name){alert('Please enter customer name.');return;}
+  tickets.unshift({id:Date.now(),name,phone,addr,issue,priority,status,notes,time:new Date().toLocaleString()});
+  saveTickets();
+  ['cust-name','cust-phone','cust-addr','cust-notes'].forEach(id=>document.getElementById(id).value='');
+  renderTickets();
+}
+function removeTicket(id){if(confirm('Remove this ticket?')){tickets=tickets.filter(t=>t.id!==id);saveTickets();renderTickets();}}
+function updateStatus(id,val){const t=tickets.find(x=>x.id===id);if(t){t.status=val;saveTickets();renderTickets();}}
+function renderTickets(){
+  document.getElementById('stat-open').textContent=tickets.filter(t=>t.status==='open').length;
+  document.getElementById('stat-inprog').textContent=tickets.filter(t=>t.status==='inprogress').length;
+  document.getElementById('stat-resolved').textContent=tickets.filter(t=>t.status==='resolved').length;
+  const el=document.getElementById('ticket-list');
+  if(!tickets.length){el.innerHTML='<div class="empty"><i class="ti ti-clipboard" style="font-size:32px;display:block;margin-bottom:8px"></i>No tickets yet.</div>';return;}
+  el.innerHTML=tickets.map(t=>`
+    <div class="ticket">
+      <div class="ticket-header">
+        <span class="ticket-name">${t.name} ${t.priority==='urgent'?'<span class="badge badge-open">URGENT</span>':''}</span>
+        <div style="display:flex;gap:6px;align-items:center">
+          <select onchange="updateStatus(${t.id},this.value)" style="font-size:12px;padding:4px 8px;width:auto">
+            <option value="open"${t.status==='open'?' selected':''}>Open</option>
+            <option value="inprogress"${t.status==='inprogress'?' selected':''}>In progress</option>
+            <option value="resolved"${t.status==='resolved'?' selected':''}>Resolved</option>
+          </select>
+          <button onclick="removeTicket(${t.id})" style="background:none;border:none;cursor:pointer;color:#64748b;font-size:18px;padding:0 4px"><i class="ti ti-trash"></i></button>
+        </div>
+      </div>
+      <div class="ticket-meta">
+        ${t.phone?`<span><i class="ti ti-phone" style="font-size:12px"></i> ${t.phone}</span>`:''}
+        ${t.addr?`<span><i class="ti ti-map-pin" style="font-size:12px"></i> ${t.addr}</span>`:''}
+        <span><i class="ti ti-alert-circle" style="font-size:12px"></i> ${t.issue}</span>
+        <span><i class="ti ti-clock" style="font-size:12px"></i> ${t.time}</span>
+      </div>
+      ${t.notes?`<div style="font-size:12px;color:#94a3b8;margin-top:8px;padding-top:8px;border-top:1px solid #1e293b">${t.notes}</div>`:''}
+    </div>`).join('');
+}
+renderTickets();
+</script>
+</body>
+</html>
