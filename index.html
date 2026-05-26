@@ -225,6 +225,38 @@ label.check-item.done{color:#475569;text-decoration:line-through}
       </div>
       <div id="cable-result" class="result" style="min-height:0"></div>
     </div>
+
+    <div class="card">
+      <h3>Telephone line wiring — landline</h3>
+      <div class="grid2" style="gap:16px;margin-bottom:16px">
+        <div>
+          <div style="font-size:13px;font-weight:600;margin-bottom:10px;color:#94a3b8">RJ11 — Single line (most common)</div>
+          <div id="rj11-single"></div>
+        </div>
+        <div>
+          <div style="font-size:13px;font-weight:600;margin-bottom:10px;color:#94a3b8">RJ11 — Dual line</div>
+          <div id="rj11-dual"></div>
+        </div>
+      </div>
+      <div style="margin-bottom:16px">
+        <div style="font-size:13px;font-weight:600;margin-bottom:10px;color:#94a3b8">RJ45 — Telephone over Ethernet cable (4 pairs)</div>
+        <div id="rj45-tel"></div>
+      </div>
+      <div style="background:#0a0e18;border:1px solid #1e293b;border-radius:8px;padding:12px;font-size:12px;color:#64748b;line-height:1.8">
+        <div style="color:#94a3b8;font-weight:600;margin-bottom:6px">Important notes:</div>
+        <div>• <strong style="color:#e2e8f0">Line 1 (primary)</strong> — always Blue/White-Blue pair (pins 3 & 4 on RJ11)</div>
+        <div>• <strong style="color:#e2e8f0">Line 2 (secondary)</strong> — always Black/Yellow pair (pins 2 & 5 on RJ11)</div>
+        <div>• Telephone line carries <strong style="color:#f87171">48V DC</strong> — do not connect to network equipment</div>
+        <div>• Use RJ11 (6P2C or 6P4C) for phones, RJ45 only for structured cabling systems</div>
+        <div>• DSL/ADSL runs on the same pair as Line 1 — Blue/White-Blue</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>25-pair telephone cable — color code</h3>
+      <div style="font-size:13px;color:#94a3b8;margin-bottom:12px">Used in telephone distribution boxes and large installations.</div>
+      <div id="pairs-25" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:6px"></div>
+    </div>
     <div class="card">
       <h3>Troubleshooting guide</h3>
       <table>
@@ -784,6 +816,95 @@ function addTicket(){
   ['cust-name','cust-phone','cust-addr','cust-notes'].forEach(id=>document.getElementById(id).value='');
   renderTickets();
 
+// RJ11 Single line wiring
+const rj11Single = [
+  ['Pin 1', 'unused', '#374151', '#9ca3af'],
+  ['Pin 2', 'unused', '#374151', '#9ca3af'],
+  ['Pin 3', 'TIP — Line 1 (+)', '#1e3a8a', '#93c5fd'],
+  ['Pin 4', 'RING — Line 1 (−)', '#166534', '#86efac'],
+  ['Pin 5', 'unused', '#374151', '#9ca3af'],
+  ['Pin 6', 'unused', '#374151', '#9ca3af'],
+];
+(function(){
+  const el = document.getElementById('rj11-single');
+  rj11Single.forEach(([pin, name, bg, fg]) => {
+    const d = document.createElement('div');
+    d.className = 'wire';
+    d.innerHTML = '<span class="pin" style="font-size:10px;min-width:36px">' + pin + '</span><span style="background:' + bg + ';color:' + fg + ';border-radius:6px;padding:4px 10px;flex:1;font-size:12px">' + name + '</span>';
+    el.appendChild(d);
+  });
+})();
+
+// RJ11 Dual line wiring
+const rj11Dual = [
+  ['Pin 1', 'unused', '#374151', '#9ca3af'],
+  ['Pin 2', 'TIP — Line 2 (+)', '#7c2d12', '#fed7aa'],
+  ['Pin 3', 'TIP — Line 1 (+)', '#1e3a8a', '#93c5fd'],
+  ['Pin 4', 'RING — Line 1 (−)', '#166534', '#86efac'],
+  ['Pin 5', 'RING — Line 2 (−)', '#78350f', '#fcd34d'],
+  ['Pin 6', 'unused', '#374151', '#9ca3af'],
+];
+(function(){
+  const el = document.getElementById('rj11-dual');
+  rj11Dual.forEach(([pin, name, bg, fg]) => {
+    const d = document.createElement('div');
+    d.className = 'wire';
+    d.innerHTML = '<span class="pin" style="font-size:10px;min-width:36px">' + pin + '</span><span style="background:' + bg + ';color:' + fg + ';border-radius:6px;padding:4px 10px;flex:1;font-size:12px">' + name + '</span>';
+    el.appendChild(d);
+  });
+})();
+
+// RJ45 Telephone
+const rj45Tel = [
+  ['Pin 1', 'White/Blue — Line 4 TIP', '#1e3a8a', '#dbeafe'],
+  ['Pin 2', 'Blue — Line 1 RING (−)', '#1e3a8a', '#93c5fd'],
+  ['Pin 3', 'White/Orange — Line 3 RING', '#7c2d12', '#fed7aa'],
+  ['Pin 4', 'Orange — Line 2 RING (−)', '#7c2d12', '#fdba74'],
+  ['Pin 5', 'White/Green — Line 2 TIP (+)', '#166534', '#bbf7d0'],
+  ['Pin 6', 'Green — Line 3 TIP', '#14532d', '#86efac'],
+  ['Pin 7', 'White/Brown — Line 4 RING', '#451a03', '#fde68a'],
+  ['Pin 8', 'Brown — Line 1 TIP (+)', '#451a03', '#d97706'],
+];
+(function(){
+  const el = document.getElementById('rj45-tel');
+  el.style.display = 'grid';
+  el.style.gridTemplateColumns = '1fr 1fr';
+  el.style.gap = '4px';
+  rj45Tel.forEach(([pin, name, bg, fg]) => {
+    const d = document.createElement('div');
+    d.className = 'wire';
+    d.innerHTML = '<span class="pin" style="font-size:10px;min-width:36px">' + pin + '</span><span style="background:' + bg + ';color:' + fg + ';border-radius:6px;padding:4px 10px;flex:1;font-size:12px">' + name + '</span>';
+    el.appendChild(d);
+  });
+})();
+
+// 25-pair color code
+const tipColors = ['White','Red','Black','Yellow','Violet'];
+const ringColors = ['Blue','Orange','Green','Brown','Slate'];
+const tipBg = ['#e2e8f0','#991b1b','#111827','#78350f','#4c1d95'];
+const tipFg = ['#1e293b','#fca5a5','#d1d5db','#fde68a','#ddd6fe'];
+const ringBg = ['#1e3a8a','#7c2d12','#14532d','#451a03','#334155'];
+const ringFg = ['#93c5fd','#fdba74','#86efac','#d97706','#cbd5e1'];
+(function(){
+  const el = document.getElementById('pairs-25');
+  for (let pair = 1; pair <= 25; pair++) {
+    const ti = Math.floor((pair-1) / 5);
+    const ri = (pair-1) % 5;
+    const d = document.createElement('div');
+    d.style.cssText = 'background:#0f1117;border:1px solid #1e293b;border-radius:8px;padding:8px 10px;font-size:12px';
+    d.innerHTML =
+      '<div style="font-weight:600;color:#64748b;margin-bottom:6px">Pair ' + pair + '</div>' +
+      '<div style="display:flex;gap:4px;margin-bottom:4px">' +
+        '<span style="background:' + tipBg[ti] + ';color:' + tipFg[ti] + ';border-radius:4px;padding:2px 8px;font-size:11px;flex:1;text-align:center">TIP: ' + tipColors[ti] + '</span>' +
+      '</div>' +
+      '<div style="display:flex;gap:4px">' +
+        '<span style="background:' + ringBg[ri] + ';color:' + ringFg[ri] + ';border-radius:4px;padding:2px 8px;font-size:11px;flex:1;text-align:center">RING: ' + ringColors[ri] + '</span>' +
+      '</div>';
+    el.appendChild(d);
+  }
+})();
+
+
 let spdHistory = [];
 let spdGraphData = [];
 let spdCanvas2, spdCtx2;
@@ -1149,6 +1270,95 @@ function renderTickets(){
     </div>`).join('');
 }
 renderTickets();
+
+// RJ11 Single line wiring
+const rj11Single = [
+  ['Pin 1', 'unused', '#374151', '#9ca3af'],
+  ['Pin 2', 'unused', '#374151', '#9ca3af'],
+  ['Pin 3', 'TIP — Line 1 (+)', '#1e3a8a', '#93c5fd'],
+  ['Pin 4', 'RING — Line 1 (−)', '#166534', '#86efac'],
+  ['Pin 5', 'unused', '#374151', '#9ca3af'],
+  ['Pin 6', 'unused', '#374151', '#9ca3af'],
+];
+(function(){
+  const el = document.getElementById('rj11-single');
+  rj11Single.forEach(([pin, name, bg, fg]) => {
+    const d = document.createElement('div');
+    d.className = 'wire';
+    d.innerHTML = '<span class="pin" style="font-size:10px;min-width:36px">' + pin + '</span><span style="background:' + bg + ';color:' + fg + ';border-radius:6px;padding:4px 10px;flex:1;font-size:12px">' + name + '</span>';
+    el.appendChild(d);
+  });
+})();
+
+// RJ11 Dual line wiring
+const rj11Dual = [
+  ['Pin 1', 'unused', '#374151', '#9ca3af'],
+  ['Pin 2', 'TIP — Line 2 (+)', '#7c2d12', '#fed7aa'],
+  ['Pin 3', 'TIP — Line 1 (+)', '#1e3a8a', '#93c5fd'],
+  ['Pin 4', 'RING — Line 1 (−)', '#166534', '#86efac'],
+  ['Pin 5', 'RING — Line 2 (−)', '#78350f', '#fcd34d'],
+  ['Pin 6', 'unused', '#374151', '#9ca3af'],
+];
+(function(){
+  const el = document.getElementById('rj11-dual');
+  rj11Dual.forEach(([pin, name, bg, fg]) => {
+    const d = document.createElement('div');
+    d.className = 'wire';
+    d.innerHTML = '<span class="pin" style="font-size:10px;min-width:36px">' + pin + '</span><span style="background:' + bg + ';color:' + fg + ';border-radius:6px;padding:4px 10px;flex:1;font-size:12px">' + name + '</span>';
+    el.appendChild(d);
+  });
+})();
+
+// RJ45 Telephone
+const rj45Tel = [
+  ['Pin 1', 'White/Blue — Line 4 TIP', '#1e3a8a', '#dbeafe'],
+  ['Pin 2', 'Blue — Line 1 RING (−)', '#1e3a8a', '#93c5fd'],
+  ['Pin 3', 'White/Orange — Line 3 RING', '#7c2d12', '#fed7aa'],
+  ['Pin 4', 'Orange — Line 2 RING (−)', '#7c2d12', '#fdba74'],
+  ['Pin 5', 'White/Green — Line 2 TIP (+)', '#166534', '#bbf7d0'],
+  ['Pin 6', 'Green — Line 3 TIP', '#14532d', '#86efac'],
+  ['Pin 7', 'White/Brown — Line 4 RING', '#451a03', '#fde68a'],
+  ['Pin 8', 'Brown — Line 1 TIP (+)', '#451a03', '#d97706'],
+];
+(function(){
+  const el = document.getElementById('rj45-tel');
+  el.style.display = 'grid';
+  el.style.gridTemplateColumns = '1fr 1fr';
+  el.style.gap = '4px';
+  rj45Tel.forEach(([pin, name, bg, fg]) => {
+    const d = document.createElement('div');
+    d.className = 'wire';
+    d.innerHTML = '<span class="pin" style="font-size:10px;min-width:36px">' + pin + '</span><span style="background:' + bg + ';color:' + fg + ';border-radius:6px;padding:4px 10px;flex:1;font-size:12px">' + name + '</span>';
+    el.appendChild(d);
+  });
+})();
+
+// 25-pair color code
+const tipColors = ['White','Red','Black','Yellow','Violet'];
+const ringColors = ['Blue','Orange','Green','Brown','Slate'];
+const tipBg = ['#e2e8f0','#991b1b','#111827','#78350f','#4c1d95'];
+const tipFg = ['#1e293b','#fca5a5','#d1d5db','#fde68a','#ddd6fe'];
+const ringBg = ['#1e3a8a','#7c2d12','#14532d','#451a03','#334155'];
+const ringFg = ['#93c5fd','#fdba74','#86efac','#d97706','#cbd5e1'];
+(function(){
+  const el = document.getElementById('pairs-25');
+  for (let pair = 1; pair <= 25; pair++) {
+    const ti = Math.floor((pair-1) / 5);
+    const ri = (pair-1) % 5;
+    const d = document.createElement('div');
+    d.style.cssText = 'background:#0f1117;border:1px solid #1e293b;border-radius:8px;padding:8px 10px;font-size:12px';
+    d.innerHTML =
+      '<div style="font-weight:600;color:#64748b;margin-bottom:6px">Pair ' + pair + '</div>' +
+      '<div style="display:flex;gap:4px;margin-bottom:4px">' +
+        '<span style="background:' + tipBg[ti] + ';color:' + tipFg[ti] + ';border-radius:4px;padding:2px 8px;font-size:11px;flex:1;text-align:center">TIP: ' + tipColors[ti] + '</span>' +
+      '</div>' +
+      '<div style="display:flex;gap:4px">' +
+        '<span style="background:' + ringBg[ri] + ';color:' + ringFg[ri] + ';border-radius:4px;padding:2px 8px;font-size:11px;flex:1;text-align:center">RING: ' + ringColors[ri] + '</span>' +
+      '</div>';
+    el.appendChild(d);
+  }
+})();
+
 
 let spdHistory = [];
 let spdGraphData = [];
