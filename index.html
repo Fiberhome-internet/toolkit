@@ -76,8 +76,6 @@ label.check-item.done{color:#475569;text-decoration:line-through}
 <div class="container">
   <div class="tabs">
     <button class="tab active" onclick="switchTab('ping')"><i class="ti ti-radar"></i>Ping & Tests</button>
-    <button class="tab" onclick="switchTab('subnet')"><i class="ti ti-network"></i>Subnet Calc</button>
-    <button class="tab" onclick="switchTab('voip')"><i class="ti ti-phone"></i>VoIP Checker</button>
     <button class="tab" onclick="switchTab('cable')"><i class="ti ti-plug"></i>Cable Guide</button>
     <button class="tab" onclick="switchTab('customers')"><i class="ti ti-users"></i>Customers</button>
     <button class="tab" onclick="switchTab('mynet')"><i class="ti ti-wifi"></i>My Network</button>
@@ -124,7 +122,7 @@ label.check-item.done{color:#475569;text-decoration:line-through}
   </div>
 
   <!-- SUBNET -->
-  <div id="panel-subnet" class="panel">
+  <div id="panel-subnet" style="display:none">
     <div class="card">
       <h3>Subnet calculator</h3>
       <div class="input-row">
@@ -157,7 +155,7 @@ label.check-item.done{color:#475569;text-decoration:line-through}
   </div>
 
   <!-- VOIP -->
-  <div id="panel-voip" class="panel">
+  <div id="panel-voip" style="display:none">
     <div class="card">
       <h3>Setup checklist</h3>
       <div id="voip-checks"></div>
@@ -279,13 +277,26 @@ label.check-item.done{color:#475569;text-decoration:line-through}
       <button class="btn btn-primary" onclick="loadNetInfo()"><i class="ti ti-refresh"></i> Fetch my info</button>
       <div id="netinfo-result" class="result" style="margin-top:10px">Click "Fetch my info" to load your connection details.</div>
     </div>
-    <div class="card">
-      <h3>Speed test</h3>
-      <div style="font-size:13px;color:#94a3b8;margin-bottom:12px">Run a speed test directly in your browser — no install needed.</div>
+
+      <div class="card">
+      <h3>Israeli ISP speed tests</h3>
+      <div style="font-size:13px;color:#94a3b8;margin-bottom:12px">Official speed test servers from Israeli ISPs — most accurate for local connections.</div>
       <div style="display:flex;gap:10px;flex-wrap:wrap">
-        <a href="https://fast.com" target="_blank" class="btn btn-primary"><i class="ti ti-bolt"></i> Fast.com (Netflix)</a>
-        <a href="https://speedtest.net" target="_blank" class="btn"><i class="ti ti-gauge"></i> Speedtest.net</a>
-        <a href="https://speed.cloudflare.com" target="_blank" class="btn"><i class="ti ti-cloud"></i> Cloudflare Speed</a>
+        <a href="https://www.bezeq.co.il/internetandtv/internet/speedtest/" target="_blank" class="btn btn-primary" style="text-decoration:none">
+          <i class="ti ti-gauge"></i> Bezeq Speed Test
+        </a>
+        <a href="https://www.partner.co.il/en/private-customers/internet/internet-speed-test" target="_blank" class="btn" style="text-decoration:none;border-color:#f97316;color:#f97316">
+          <i class="ti ti-gauge"></i> Partner Speed Test
+        </a>
+        <a href="https://fast.com" target="_blank" class="btn" style="text-decoration:none">
+          <i class="ti ti-bolt"></i> Fast.com
+        </a>
+        <a href="https://speedtest.net" target="_blank" class="btn" style="text-decoration:none">
+          <i class="ti ti-world"></i> Speedtest.net
+        </a>
+        <a href="https://speed.cloudflare.com" target="_blank" class="btn" style="text-decoration:none">
+          <i class="ti ti-cloud"></i> Cloudflare
+        </a>
       </div>
     </div>
     <div class="card">
@@ -663,7 +674,7 @@ curl ifconfig.me</div>
 </div>
 
 <script>
-const tabs=['ping','subnet','voip','cable','mynet','downloads','latency','speedtest','customers'];
+const tabs=['ping','cable','mynet','downloads','latency','speedtest','customers'];
 function switchTab(t){
   tabs.forEach((x,i)=>{
     document.getElementById('panel-'+x).classList.toggle('active',x===t);
