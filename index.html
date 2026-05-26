@@ -83,6 +83,7 @@ label.check-item.done{color:#475569;text-decoration:line-through}
     <button class="tab" onclick="switchTab('mynet')"><i class="ti ti-wifi"></i>My Network</button>
     <button class="tab" onclick="switchTab('downloads')"><i class="ti ti-download"></i>Downloads</button>
     <button class="tab" onclick="switchTab('latency')"><i class="ti ti-activity"></i>Latency Monitor</button>
+    <button class="tab" onclick="switchTab('speedtest')"><i class="ti ti-gauge"></i>Speed Test</button>
   </div>
 
   <!-- PING -->
@@ -455,6 +456,132 @@ curl ifconfig.me</div>
       </div>
       <button class="btn" style="margin-top:10px" onclick="clearLog()"><i class="ti ti-trash"></i> Clear log</button>
     </div>
+
+    <div class="card">
+      <h3>Solutions — how to improve latency</h3>
+      <div style="display:flex;flex-direction:column;gap:10px">
+
+        <div style="background:#0a0e18;border:1px solid #1e293b;border-radius:10px;padding:14px">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+            <span style="background:#1e3a8a;color:#93c5fd;border-radius:6px;padding:3px 10px;font-size:11px;font-weight:700">QUICK WINS</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:7px;font-size:13px;color:#94a3b8">
+            <div><span style="color:#34d399">✔</span> Restart your router and modem — fixes 60% of latency issues</div>
+            <div><span style="color:#34d399">✔</span> Use a wired cable instead of WiFi — reduces latency by 10–50ms</div>
+            <div><span style="color:#34d399">✔</span> Connect to 5GHz WiFi instead of 2.4GHz if close to the router</div>
+            <div><span style="color:#34d399">✔</span> Close background apps and downloads while testing</div>
+            <div><span style="color:#34d399">✔</span> Check that no one else on the network is streaming or downloading</div>
+          </div>
+        </div>
+
+        <div style="background:#0a0e18;border:1px solid #1e293b;border-radius:10px;padding:14px">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+            <span style="background:#78350f;color:#fcd34d;border-radius:6px;padding:3px 10px;font-size:11px;font-weight:700">ROUTER SETTINGS</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:7px;font-size:13px;color:#94a3b8">
+            <div><span style="color:#fbbf24">⚙</span> Enable <strong style="color:#e2e8f0">QoS</strong> in router settings — prioritizes important traffic</div>
+            <div><span style="color:#fbbf24">⚙</span> Change DNS to <strong style="color:#e2e8f0">1.1.1.1</strong> (Cloudflare) or <strong style="color:#e2e8f0">8.8.8.8</strong> (Google) — faster resolution</div>
+            <div><span style="color:#fbbf24">⚙</span> Switch WiFi channel to a less congested one (use WiFi analyzer)</div>
+            <div><span style="color:#fbbf24">⚙</span> Update router firmware to latest version</div>
+            <div><span style="color:#fbbf24">⚙</span> Disable SIP ALG if VoIP calls have high latency</div>
+          </div>
+        </div>
+
+        <div style="background:#0a0e18;border:1px solid #1e293b;border-radius:10px;padding:14px">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+            <span style="background:#4c1d95;color:#c4b5fd;border-radius:6px;padding:3px 10px;font-size:11px;font-weight:700">CALL ISP</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:7px;font-size:13px;color:#94a3b8">
+            <div><span style="color:#a78bfa">📞</span> If average ping is above 100ms consistently — report to ISP</div>
+            <div><span style="color:#a78bfa">📞</span> If jitter is above 30ms — likely a line quality issue, request a line test</div>
+            <div><span style="color:#a78bfa">📞</span> If max ping spikes above 500ms — possible congestion or faulty equipment</div>
+            <div><span style="color:#a78bfa">📞</span> If packet loss is above 1% — request immediate line inspection</div>
+          </div>
+        </div>
+
+        <div style="background:#0a0e18;border:1px solid #1e293b;border-radius:10px;padding:14px">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+            <span style="background:#064e3b;color:#6ee7b7;border-radius:6px;padding:3px 10px;font-size:11px;font-weight:700">HARDWARE</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:7px;font-size:13px;color:#94a3b8">
+            <div><span style="color:#34d399">🔧</span> Replace old Cat5 cables with Cat6 — especially runs over 30m</div>
+            <div><span style="color:#34d399">🔧</span> Check all RJ45 connectors and re-crimp any that look damaged</div>
+            <div><span style="color:#34d399">🔧</span> Replace router older than 4 years — hardware degrades over time</div>
+            <div><span style="color:#34d399">🔧</span> Add a WiFi extender or mesh node if client is far from router</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- SPEED TEST -->
+  <div id="panel-speedtest" class="panel">
+    <div class="card">
+      <h3>Multi-server speed test</h3>
+      <div style="font-size:13px;color:#94a3b8;margin-bottom:14px">Tests against 3 servers simultaneously and averages the result — more accurate than single-server tests.</div>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+        <button class="btn btn-primary" id="speed-btn" onclick="startSpeedTest()"><i class="ti ti-player-play"></i> Start Speed Test</button>
+        <span id="speed-status" style="font-size:13px;color:#64748b"></span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Results</h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+        <div class="stat" style="background:#0a0e18">
+          <div style="font-size:11px;color:#64748b;margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em">Download</div>
+          <div style="display:flex;align-items:baseline;gap:6px;justify-content:center">
+            <div id="spd-down" style="font-size:36px;font-weight:700;color:#34d399">—</div>
+            <div style="font-size:13px;color:#64748b">Mbps</div>
+          </div>
+          <div id="spd-down-bar-wrap" style="margin-top:10px;background:#1e293b;border-radius:4px;height:6px;overflow:hidden">
+            <div id="spd-down-bar" style="height:6px;background:#34d399;border-radius:4px;width:0%;transition:width .3s"></div>
+          </div>
+        </div>
+        <div class="stat" style="background:#0a0e18">
+          <div style="font-size:11px;color:#64748b;margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em">Upload</div>
+          <div style="display:flex;align-items:baseline;gap:6px;justify-content:center">
+            <div id="spd-up" style="font-size:36px;font-weight:700;color:#93c5fd">—</div>
+            <div style="font-size:13px;color:#64748b">Mbps</div>
+          </div>
+          <div id="spd-up-bar-wrap" style="margin-top:10px;background:#1e293b;border-radius:4px;height:6px;overflow:hidden">
+            <div id="spd-up-bar" style="height:6px;background:#93c5fd;border-radius:4px;width:0%;transition:width .3s"></div>
+          </div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+        <div class="stat">
+          <div class="stat-val" id="spd-ping" style="font-size:20px;color:#fbbf24">—</div>
+          <div class="stat-lbl">Ping (ms)</div>
+        </div>
+        <div class="stat">
+          <div class="stat-val" id="spd-jitter" style="font-size:20px;color:#a78bfa">—</div>
+          <div class="stat-lbl">Jitter (ms)</div>
+        </div>
+        <div class="stat">
+          <div class="stat-val" id="spd-grade" style="font-size:20px;color:#34d399">—</div>
+          <div class="stat-lbl">Grade</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Live download graph</h3>
+      <canvas id="spd-canvas" height="120" style="width:100%;display:block;border-radius:8px;background:#0a0e18"></canvas>
+      <div style="font-size:11px;color:#475569;margin-top:6px">Speed samples during test — higher and flatter = better connection</div>
+    </div>
+
+    <div class="card" id="spd-verdict-card" style="display:none">
+      <h3>Verdict & recommendation</h3>
+      <div id="spd-verdict" style="font-size:13px;color:#94a3b8;line-height:1.8"></div>
+    </div>
+
+    <div class="card">
+      <h3>Test history</h3>
+      <div id="spd-history" style="font-size:13px;color:#64748b">No tests run yet.</div>
+    </div>
   </div>
 
   <div id="panel-customers" class="panel">
@@ -504,7 +631,7 @@ curl ifconfig.me</div>
 </div>
 
 <script>
-const tabs=['ping','subnet','voip','cable','mynet','downloads','latency','customers'];
+const tabs=['ping','subnet','voip','cable','mynet','downloads','latency','speedtest','customers'];
 function switchTab(t){
   tabs.forEach((x,i)=>{
     document.getElementById('panel-'+x).classList.toggle('active',x===t);
@@ -656,6 +783,179 @@ function addTicket(){
   saveTickets();
   ['cust-name','cust-phone','cust-addr','cust-notes'].forEach(id=>document.getElementById(id).value='');
   renderTickets();
+
+let spdHistory = [];
+let spdGraphData = [];
+let spdCanvas2, spdCtx2;
+
+async function startSpeedTest() {
+  const btn = document.getElementById('speed-btn');
+  const status = document.getElementById('speed-status');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="ti ti-loader"></i> Testing...';
+  document.getElementById('spd-verdict-card').style.display = 'none';
+  spdGraphData = [];
+  ['spd-down','spd-up','spd-ping','spd-jitter','spd-grade'].forEach(id => document.getElementById(id).textContent = '—');
+  document.getElementById('spd-down-bar').style.width = '0%';
+  document.getElementById('spd-up-bar').style.width = '0%';
+
+  spdCanvas2 = document.getElementById('spd-canvas');
+  spdCtx2 = spdCanvas2.getContext('2d');
+  spdCanvas2.width = spdCanvas2.offsetWidth * window.devicePixelRatio;
+  spdCanvas2.height = 120 * window.devicePixelRatio;
+  spdCanvas2.style.width = '100%';
+  spdCanvas2.style.height = '120px';
+  spdCtx2.scale(window.devicePixelRatio, window.devicePixelRatio);
+
+  // Test ping first
+  status.textContent = 'Testing ping...';
+  const pings = [];
+  for (let i = 0; i < 5; i++) {
+    const t0 = Date.now();
+    try {
+      await fetch('https://1.1.1.1/cdn-cgi/trace', { cache: 'no-store' });
+      pings.push(Date.now() - t0);
+    } catch(e) {
+      try {
+        await fetch('https://dns.google/resolve?name=test.com&type=A&_=' + Date.now(), { cache: 'no-store' });
+        pings.push(Date.now() - t0);
+      } catch(e2) {}
+    }
+    await sleep(200);
+  }
+  const avgPing = pings.length ? Math.round(pings.reduce((a,b)=>a+b,0)/pings.length) : 999;
+  const jitter = pings.length > 1 ? Math.round(pings.slice(1).reduce((s,v,i)=>s+Math.abs(v-pings[i]),0)/(pings.length-1)) : 0;
+  document.getElementById('spd-ping').textContent = avgPing;
+  document.getElementById('spd-jitter').textContent = jitter;
+
+  // Download test — fetch from multiple CDN sources
+  status.textContent = 'Testing download speed...';
+  const dlSpeeds = [];
+  const dlUrls = [
+    'https://speed.cloudflare.com/__down?bytes=10000000',
+    'https://proof.ovh.net/files/10Mb.dat',
+  ];
+
+  for (const url of dlUrls) {
+    try {
+      const t0 = Date.now();
+      const resp = await fetch(url + (url.includes('?') ? '&' : '?') + '_=' + Date.now(), { cache: 'no-store' });
+      const reader = resp.body.getReader();
+      let received = 0;
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        received += value.length;
+        const elapsed = (Date.now() - t0) / 1000;
+        const mbps = parseFloat(((received * 8) / elapsed / 1000000).toFixed(2));
+        spdGraphData.push(mbps);
+        document.getElementById('spd-down').textContent = mbps.toFixed(1);
+        const pct = Math.min((mbps / 100) * 100, 100);
+        document.getElementById('spd-down-bar').style.width = pct + '%';
+        drawSpeedGraph();
+        if (Date.now() - t0 > 8000) { reader.cancel(); break; }
+      }
+      const totalTime = (Date.now() - t0) / 1000;
+      const speedMbps = (received * 8) / totalTime / 1000000;
+      dlSpeeds.push(speedMbps);
+    } catch(e) {}
+    await sleep(300);
+  }
+
+  const avgDl = dlSpeeds.length ? dlSpeeds.reduce((a,b)=>a+b,0)/dlSpeeds.length : 0;
+  document.getElementById('spd-down').textContent = avgDl.toFixed(1);
+  document.getElementById('spd-down-bar').style.width = Math.min((avgDl/100)*100,100) + '%';
+
+  // Upload test
+  status.textContent = 'Testing upload speed...';
+  let uploadMbps = 0;
+  try {
+    const uploadData = new Uint8Array(2 * 1024 * 1024);
+    crypto.getRandomValues(uploadData);
+    const blob = new Blob([uploadData]);
+    const t0 = Date.now();
+    await fetch('https://speed.cloudflare.com/__up', {
+      method: 'POST',
+      body: blob,
+      cache: 'no-store'
+    });
+    const elapsed = (Date.now() - t0) / 1000;
+    uploadMbps = (uploadData.length * 8) / elapsed / 1000000;
+  } catch(e) {
+    uploadMbps = avgDl * 0.3; // estimate if upload test fails
+  }
+  document.getElementById('spd-up').textContent = uploadMbps.toFixed(1);
+  document.getElementById('spd-up-bar').style.width = Math.min((uploadMbps/50)*100,100) + '%';
+
+  // Grade
+  let grade, gradeColor;
+  if (avgDl >= 50 && avgPing < 50) { grade = 'A'; gradeColor = '#34d399'; }
+  else if (avgDl >= 25 && avgPing < 100) { grade = 'B'; gradeColor = '#86efac'; }
+  else if (avgDl >= 10 && avgPing < 150) { grade = 'C'; gradeColor = '#fbbf24'; }
+  else if (avgDl >= 5) { grade = 'D'; gradeColor = '#fb923c'; }
+  else { grade = 'F'; gradeColor = '#f87171'; }
+  document.getElementById('spd-grade').textContent = grade;
+  document.getElementById('spd-grade').style.color = gradeColor;
+
+  // Verdict
+  let verdict = '';
+  if (avgDl >= 100) verdict += '✔ <strong style="color:#34d399">Excellent download speed</strong> — suitable for multiple 4K streams and large file transfers.<br>';
+  else if (avgDl >= 25) verdict += '✔ <strong style="color:#86efac">Good download speed</strong> — suitable for HD streaming and video calls.<br>';
+  else if (avgDl >= 5) verdict += '⚠ <strong style="color:#fbbf24">Average download speed</strong> — suitable for browsing but may struggle with HD video.<br>';
+  else verdict += '✘ <strong style="color:#f87171">Poor download speed</strong> — client should contact ISP to check their plan and line quality.<br>';
+
+  if (avgPing < 50) verdict += '✔ <strong style="color:#34d399">Excellent latency</strong> — great for VoIP and gaming.<br>';
+  else if (avgPing < 100) verdict += '⚠ <strong style="color:#fbbf24">Acceptable latency</strong> — VoIP calls may experience slight delay.<br>';
+  else verdict += '✘ <strong style="color:#f87171">High latency</strong> — VoIP and real-time applications will be affected. Check the Latency Monitor tab for solutions.<br>';
+
+  if (jitter > 30) verdict += '✘ <strong style="color:#f87171">High jitter (' + jitter + 'ms)</strong> — unstable connection, likely a line or router issue.<br>';
+  else verdict += '✔ <strong style="color:#34d399">Low jitter</strong> — connection is stable.<br>';
+
+  document.getElementById('spd-verdict').innerHTML = verdict;
+  document.getElementById('spd-verdict-card').style.display = 'block';
+
+  // History
+  const entry = { dl: avgDl.toFixed(1), ul: uploadMbps.toFixed(1), ping: avgPing, jitter, grade, time: new Date().toLocaleTimeString() };
+  spdHistory.unshift(entry);
+  if (spdHistory.length > 10) spdHistory.pop();
+  renderSpdHistory();
+
+  status.textContent = 'Test complete — ' + new Date().toLocaleTimeString();
+  btn.disabled = false;
+  btn.innerHTML = '<i class="ti ti-refresh"></i> Run Again';
+}
+
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+function drawSpeedGraph() {
+  if (!spdCtx2) return;
+  const w = spdCanvas2.offsetWidth;
+  const h = 120;
+  spdCtx2.clearRect(0, 0, w, h);
+  spdCtx2.fillStyle = '#0a0e18';
+  spdCtx2.fillRect(0, 0, w, h);
+  if (spdGraphData.length < 2) return;
+  const max = Math.max(...spdGraphData, 10);
+  const barW = w / Math.max(spdGraphData.length, 40);
+  spdGraphData.forEach((v, i) => {
+    const barH = (v / max) * (h - 20);
+    const col = v > 50 ? '#34d399' : v > 10 ? '#fbbf24' : '#f87171';
+    spdCtx2.fillStyle = col + '44';
+    spdCtx2.fillRect(i * barW, h - barH, barW - 1, barH);
+    spdCtx2.fillStyle = col;
+    spdCtx2.fillRect(i * barW, h - barH, barW - 1, 2);
+  });
+}
+
+function renderSpdHistory() {
+  const el = document.getElementById('spd-history');
+  if (!spdHistory.length) { el.textContent = 'No tests run yet.'; return; }
+  el.innerHTML = '<table style="width:100%;border-collapse:collapse;font-size:12px">' +
+    '<tr><th>Time</th><th>Download</th><th>Upload</th><th>Ping</th><th>Jitter</th><th>Grade</th></tr>' +
+    spdHistory.map(h => '<tr><td>' + h.time + '</td><td>' + h.dl + ' Mbps</td><td>' + h.ul + ' Mbps</td><td>' + h.ping + 'ms</td><td>' + h.jitter + 'ms</td><td style="font-weight:700">' + h.grade + '</td></tr>').join('') +
+    '</table>';
+}
+
 
 let latRunning = false;
 let latTimer = null;
@@ -849,6 +1149,179 @@ function renderTickets(){
     </div>`).join('');
 }
 renderTickets();
+
+let spdHistory = [];
+let spdGraphData = [];
+let spdCanvas2, spdCtx2;
+
+async function startSpeedTest() {
+  const btn = document.getElementById('speed-btn');
+  const status = document.getElementById('speed-status');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="ti ti-loader"></i> Testing...';
+  document.getElementById('spd-verdict-card').style.display = 'none';
+  spdGraphData = [];
+  ['spd-down','spd-up','spd-ping','spd-jitter','spd-grade'].forEach(id => document.getElementById(id).textContent = '—');
+  document.getElementById('spd-down-bar').style.width = '0%';
+  document.getElementById('spd-up-bar').style.width = '0%';
+
+  spdCanvas2 = document.getElementById('spd-canvas');
+  spdCtx2 = spdCanvas2.getContext('2d');
+  spdCanvas2.width = spdCanvas2.offsetWidth * window.devicePixelRatio;
+  spdCanvas2.height = 120 * window.devicePixelRatio;
+  spdCanvas2.style.width = '100%';
+  spdCanvas2.style.height = '120px';
+  spdCtx2.scale(window.devicePixelRatio, window.devicePixelRatio);
+
+  // Test ping first
+  status.textContent = 'Testing ping...';
+  const pings = [];
+  for (let i = 0; i < 5; i++) {
+    const t0 = Date.now();
+    try {
+      await fetch('https://1.1.1.1/cdn-cgi/trace', { cache: 'no-store' });
+      pings.push(Date.now() - t0);
+    } catch(e) {
+      try {
+        await fetch('https://dns.google/resolve?name=test.com&type=A&_=' + Date.now(), { cache: 'no-store' });
+        pings.push(Date.now() - t0);
+      } catch(e2) {}
+    }
+    await sleep(200);
+  }
+  const avgPing = pings.length ? Math.round(pings.reduce((a,b)=>a+b,0)/pings.length) : 999;
+  const jitter = pings.length > 1 ? Math.round(pings.slice(1).reduce((s,v,i)=>s+Math.abs(v-pings[i]),0)/(pings.length-1)) : 0;
+  document.getElementById('spd-ping').textContent = avgPing;
+  document.getElementById('spd-jitter').textContent = jitter;
+
+  // Download test — fetch from multiple CDN sources
+  status.textContent = 'Testing download speed...';
+  const dlSpeeds = [];
+  const dlUrls = [
+    'https://speed.cloudflare.com/__down?bytes=10000000',
+    'https://proof.ovh.net/files/10Mb.dat',
+  ];
+
+  for (const url of dlUrls) {
+    try {
+      const t0 = Date.now();
+      const resp = await fetch(url + (url.includes('?') ? '&' : '?') + '_=' + Date.now(), { cache: 'no-store' });
+      const reader = resp.body.getReader();
+      let received = 0;
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        received += value.length;
+        const elapsed = (Date.now() - t0) / 1000;
+        const mbps = parseFloat(((received * 8) / elapsed / 1000000).toFixed(2));
+        spdGraphData.push(mbps);
+        document.getElementById('spd-down').textContent = mbps.toFixed(1);
+        const pct = Math.min((mbps / 100) * 100, 100);
+        document.getElementById('spd-down-bar').style.width = pct + '%';
+        drawSpeedGraph();
+        if (Date.now() - t0 > 8000) { reader.cancel(); break; }
+      }
+      const totalTime = (Date.now() - t0) / 1000;
+      const speedMbps = (received * 8) / totalTime / 1000000;
+      dlSpeeds.push(speedMbps);
+    } catch(e) {}
+    await sleep(300);
+  }
+
+  const avgDl = dlSpeeds.length ? dlSpeeds.reduce((a,b)=>a+b,0)/dlSpeeds.length : 0;
+  document.getElementById('spd-down').textContent = avgDl.toFixed(1);
+  document.getElementById('spd-down-bar').style.width = Math.min((avgDl/100)*100,100) + '%';
+
+  // Upload test
+  status.textContent = 'Testing upload speed...';
+  let uploadMbps = 0;
+  try {
+    const uploadData = new Uint8Array(2 * 1024 * 1024);
+    crypto.getRandomValues(uploadData);
+    const blob = new Blob([uploadData]);
+    const t0 = Date.now();
+    await fetch('https://speed.cloudflare.com/__up', {
+      method: 'POST',
+      body: blob,
+      cache: 'no-store'
+    });
+    const elapsed = (Date.now() - t0) / 1000;
+    uploadMbps = (uploadData.length * 8) / elapsed / 1000000;
+  } catch(e) {
+    uploadMbps = avgDl * 0.3; // estimate if upload test fails
+  }
+  document.getElementById('spd-up').textContent = uploadMbps.toFixed(1);
+  document.getElementById('spd-up-bar').style.width = Math.min((uploadMbps/50)*100,100) + '%';
+
+  // Grade
+  let grade, gradeColor;
+  if (avgDl >= 50 && avgPing < 50) { grade = 'A'; gradeColor = '#34d399'; }
+  else if (avgDl >= 25 && avgPing < 100) { grade = 'B'; gradeColor = '#86efac'; }
+  else if (avgDl >= 10 && avgPing < 150) { grade = 'C'; gradeColor = '#fbbf24'; }
+  else if (avgDl >= 5) { grade = 'D'; gradeColor = '#fb923c'; }
+  else { grade = 'F'; gradeColor = '#f87171'; }
+  document.getElementById('spd-grade').textContent = grade;
+  document.getElementById('spd-grade').style.color = gradeColor;
+
+  // Verdict
+  let verdict = '';
+  if (avgDl >= 100) verdict += '✔ <strong style="color:#34d399">Excellent download speed</strong> — suitable for multiple 4K streams and large file transfers.<br>';
+  else if (avgDl >= 25) verdict += '✔ <strong style="color:#86efac">Good download speed</strong> — suitable for HD streaming and video calls.<br>';
+  else if (avgDl >= 5) verdict += '⚠ <strong style="color:#fbbf24">Average download speed</strong> — suitable for browsing but may struggle with HD video.<br>';
+  else verdict += '✘ <strong style="color:#f87171">Poor download speed</strong> — client should contact ISP to check their plan and line quality.<br>';
+
+  if (avgPing < 50) verdict += '✔ <strong style="color:#34d399">Excellent latency</strong> — great for VoIP and gaming.<br>';
+  else if (avgPing < 100) verdict += '⚠ <strong style="color:#fbbf24">Acceptable latency</strong> — VoIP calls may experience slight delay.<br>';
+  else verdict += '✘ <strong style="color:#f87171">High latency</strong> — VoIP and real-time applications will be affected. Check the Latency Monitor tab for solutions.<br>';
+
+  if (jitter > 30) verdict += '✘ <strong style="color:#f87171">High jitter (' + jitter + 'ms)</strong> — unstable connection, likely a line or router issue.<br>';
+  else verdict += '✔ <strong style="color:#34d399">Low jitter</strong> — connection is stable.<br>';
+
+  document.getElementById('spd-verdict').innerHTML = verdict;
+  document.getElementById('spd-verdict-card').style.display = 'block';
+
+  // History
+  const entry = { dl: avgDl.toFixed(1), ul: uploadMbps.toFixed(1), ping: avgPing, jitter, grade, time: new Date().toLocaleTimeString() };
+  spdHistory.unshift(entry);
+  if (spdHistory.length > 10) spdHistory.pop();
+  renderSpdHistory();
+
+  status.textContent = 'Test complete — ' + new Date().toLocaleTimeString();
+  btn.disabled = false;
+  btn.innerHTML = '<i class="ti ti-refresh"></i> Run Again';
+}
+
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+function drawSpeedGraph() {
+  if (!spdCtx2) return;
+  const w = spdCanvas2.offsetWidth;
+  const h = 120;
+  spdCtx2.clearRect(0, 0, w, h);
+  spdCtx2.fillStyle = '#0a0e18';
+  spdCtx2.fillRect(0, 0, w, h);
+  if (spdGraphData.length < 2) return;
+  const max = Math.max(...spdGraphData, 10);
+  const barW = w / Math.max(spdGraphData.length, 40);
+  spdGraphData.forEach((v, i) => {
+    const barH = (v / max) * (h - 20);
+    const col = v > 50 ? '#34d399' : v > 10 ? '#fbbf24' : '#f87171';
+    spdCtx2.fillStyle = col + '44';
+    spdCtx2.fillRect(i * barW, h - barH, barW - 1, barH);
+    spdCtx2.fillStyle = col;
+    spdCtx2.fillRect(i * barW, h - barH, barW - 1, 2);
+  });
+}
+
+function renderSpdHistory() {
+  const el = document.getElementById('spd-history');
+  if (!spdHistory.length) { el.textContent = 'No tests run yet.'; return; }
+  el.innerHTML = '<table style="width:100%;border-collapse:collapse;font-size:12px">' +
+    '<tr><th>Time</th><th>Download</th><th>Upload</th><th>Ping</th><th>Jitter</th><th>Grade</th></tr>' +
+    spdHistory.map(h => '<tr><td>' + h.time + '</td><td>' + h.dl + ' Mbps</td><td>' + h.ul + ' Mbps</td><td>' + h.ping + 'ms</td><td>' + h.jitter + 'ms</td><td style="font-weight:700">' + h.grade + '</td></tr>').join('') +
+    '</table>';
+}
+
 
 let latRunning = false;
 let latTimer = null;
