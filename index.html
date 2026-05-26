@@ -8,6 +8,13 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Segoe UI',system-ui,sans-serif;background:#0f1117;color:#e2e8f0;min-height:100vh}
+body.rtl{direction:rtl;text-align:right}
+body.rtl .topbar-sub{margin-left:0;margin-right:auto}
+body.rtl .input-row{flex-direction:row-reverse}
+body.rtl td,body.rtl th{text-align:right}
+.lang-btn{padding:5px 12px;border-radius:6px;font-size:12px;cursor:pointer;border:1px solid #2d3748;background:#161b27;color:#94a3b8;transition:all .15s;font-weight:600}
+.lang-btn:hover{background:#1e293b;color:#e2e8f0}
+.lang-btn.active{background:#1e3a8a;color:#93c5fd;border-color:#3b82f6}
 .topbar{background:#161b27;border-bottom:1px solid #2d3748;padding:14px 24px;display:flex;align-items:center;gap:12px}
 .topbar-icon{width:36px;height:36px;border-radius:8px;background:#1e40af;display:flex;align-items:center;justify-content:center}
 .topbar-icon i{font-size:20px;color:#93c5fd}
@@ -70,7 +77,12 @@ label.check-item.done{color:#475569;text-decoration:line-through}
 <div class="topbar">
   <div class="topbar-icon"><i class="ti ti-tool"></i></div>
   <div class="topbar-title">Network Technician Toolkit</div>
-  <div class="topbar-sub">Ping · Subnet · VoIP · Cable · Customers</div>
+  <div class="topbar-sub" id="topbar-sub">Ping · Cable · My Network · Downloads</div>
+  <div style="display:flex;gap:4px;margin-left:16px">
+    <button class="lang-btn active" onclick="setLang('en')">EN</button>
+    <button class="lang-btn" onclick="setLang('ar')">عر</button>
+    <button class="lang-btn" onclick="setLang('he')">עב</button>
+  </div>
 </div>
 
 <div class="container">
@@ -827,6 +839,286 @@ function addTicket(){
   ['cust-name','cust-phone','cust-addr','cust-notes'].forEach(id=>document.getElementById(id).value='');
   renderTickets();
 
+const translations = {
+  en: {
+    dir: 'ltr',
+    topbarTitle: 'Network Technician Toolkit',
+    topbarSub: 'Ping · Cable · My Network · Downloads',
+    tabs: ['Ping & Tests','Cable Guide','My Network','Downloads','Latency Monitor','Speed Test','Customers'],
+    ping_title: 'Generate commands',
+    ping_placeholder: 'IP or hostname e.g. 192.168.1.1',
+    ping_btn: 'Generate',
+    ping_quick: 'Quick targets',
+    ping_default: 'Enter a host above to generate commands.',
+    port_ref: 'Port reference',
+    cable_wiring: 'Ethernet wiring — T568A & T568B',
+    cable_type_title: 'Cable type info',
+    cable_select: 'Select cable type...',
+    cable_trouble: 'Troubleshooting guide',
+    tel_single: 'RJ11 — Single line (most common)',
+    tel_dual: 'RJ11 — Dual line',
+    tel_rj45: 'RJ45 — Telephone over Ethernet cable (4 pairs)',
+    pairs25: '25-pair telephone cable — color code',
+    mynet_ip: 'Public IP & connection info',
+    mynet_fetch: 'Fetch my info',
+    mynet_isp: 'Israeli ISP speed tests',
+    mynet_dns: 'DNS lookup',
+    mynet_dns_ph: 'Domain e.g. google.com',
+    mynet_reach: 'Reachability check',
+    mynet_reach_ph: 'Domain or IP e.g. google.com',
+    mynet_reach_desc: 'Tests if a host responds from your browser.',
+    mynet_terminal: 'Linux terminal commands',
+    mynet_terminal_desc: 'Copy and run on your Linux Mint PC for full network diagnostics.',
+    dl_title: 'Official Fiberhome apps — click the download button to get the APK from Google Drive.',
+    dl_install: 'How to install APK on Android',
+    lat_host: 'Target host',
+    lat_stats: 'Live stats',
+    lat_graph: 'Latency graph — last 60 pings',
+    lat_log: 'Connection quality log',
+    lat_clear: 'Clear log',
+    lat_solutions: 'Solutions — how to improve latency',
+    spd_title: 'Multi-server speed test',
+    spd_desc: 'Tests against 3 servers simultaneously and averages the result — more accurate than single-server tests.',
+    spd_start: 'Start Speed Test',
+    spd_results: 'Results',
+    spd_graph: 'Live download graph',
+    spd_verdict: 'Verdict & recommendation',
+    spd_history: 'Test history',
+    cust_new: 'New ticket',
+    cust_tracker: 'Ticket tracker',
+    cust_name_ph: 'Customer name',
+    cust_phone_ph: 'Phone number',
+    cust_addr_ph: 'Address / site',
+    cust_notes_ph: 'Notes (optional)',
+    cust_add: 'Add',
+    download_btn: 'Download',
+  },
+  ar: {
+    dir: 'rtl',
+    topbarTitle: 'أدوات فني الشبكات',
+    topbarSub: 'بينج · كابل · شبكتي · تنزيلات',
+    tabs: ['اختبار البينج','دليل الكابل','شبكتي','التنزيلات','مراقب الزمن','اختبار السرعة','العملاء'],
+    ping_title: 'توليد الأوامر',
+    ping_placeholder: 'عنوان IP أو اسم المضيف مثل 192.168.1.1',
+    ping_btn: 'توليد',
+    ping_quick: 'أهداف سريعة',
+    ping_default: 'أدخل مضيفاً أعلاه لتوليد الأوامر.',
+    port_ref: 'مرجع المنافذ',
+    cable_wiring: 'توصيل الإيثرنت — T568A و T568B',
+    cable_type_title: 'معلومات نوع الكابل',
+    cable_select: 'اختر نوع الكابل...',
+    cable_trouble: 'دليل استكشاف الأخطاء',
+    tel_single: 'RJ11 — خط واحد (الأكثر شيوعاً)',
+    tel_dual: 'RJ11 — خطان',
+    tel_rj45: 'RJ45 — هاتف عبر كابل إيثرنت (4 أزواج)',
+    pairs25: 'كابل 25 زوجاً — كود الألوان',
+    mynet_ip: 'IP العام ومعلومات الاتصال',
+    mynet_fetch: 'جلب معلوماتي',
+    mynet_isp: 'اختبارات سرعة مزودي الإنترنت الإسرائيليين',
+    mynet_dns: 'بحث DNS',
+    mynet_dns_ph: 'نطاق مثل google.com',
+    mynet_reach: 'فحص إمكانية الوصول',
+    mynet_reach_ph: 'نطاق أو IP مثل google.com',
+    mynet_reach_desc: 'يختبر ما إذا كان المضيف يستجيب من متصفحك.',
+    mynet_terminal: 'أوامر الطرفية على Linux',
+    mynet_terminal_desc: 'انسخ وشغّل على جهاز Linux Mint الخاص بك.',
+    dl_title: 'تطبيقات Fiberhome الرسمية — انقر على زر التنزيل للحصول على APK من Google Drive.',
+    dl_install: 'كيفية تثبيت APK على Android',
+    lat_host: 'المضيف المستهدف',
+    lat_stats: 'إحصائيات مباشرة',
+    lat_graph: 'رسم بياني للزمن — آخر 60 بينج',
+    lat_log: 'سجل جودة الاتصال',
+    lat_clear: 'مسح السجل',
+    lat_solutions: 'حلول — كيفية تحسين زمن الاستجابة',
+    spd_title: 'اختبار سرعة متعدد الخوادم',
+    spd_desc: 'يختبر 3 خوادم في وقت واحد ويحسب المتوسط — أكثر دقة من الاختبارات أحادية الخادم.',
+    spd_start: 'بدء اختبار السرعة',
+    spd_results: 'النتائج',
+    spd_graph: 'رسم بياني للتنزيل المباشر',
+    spd_verdict: 'الحكم والتوصية',
+    spd_history: 'سجل الاختبارات',
+    cust_new: 'تذكرة جديدة',
+    cust_tracker: 'متتبع التذاكر',
+    cust_name_ph: 'اسم العميل',
+    cust_phone_ph: 'رقم الهاتف',
+    cust_addr_ph: 'العنوان / الموقع',
+    cust_notes_ph: 'ملاحظات (اختياري)',
+    cust_add: 'إضافة',
+    download_btn: 'تنزيل',
+  },
+  he: {
+    dir: 'rtl',
+    topbarTitle: 'ערכת כלים לטכנאי רשת',
+    topbarSub: 'פינג · כבל · הרשת שלי · הורדות',
+    tabs: ['פינג ובדיקות','מדריך כבלים','הרשת שלי','הורדות','מוניטור השהיה','בדיקת מהירות','לקוחות'],
+    ping_title: 'יצירת פקודות',
+    ping_placeholder: 'כתובת IP או שם מארח למשל 192.168.1.1',
+    ping_btn: 'צור',
+    ping_quick: 'יעדים מהירים',
+    ping_default: 'הכנס מארח למעלה כדי ליצור פקודות.',
+    port_ref: 'עזר פורטים',
+    cable_wiring: 'חיווט Ethernet — T568A ו-T568B',
+    cable_type_title: 'מידע על סוג הכבל',
+    cable_select: 'בחר סוג כבל...',
+    cable_trouble: 'מדריך פתרון תקלות',
+    tel_single: 'RJ11 — קו בודד (הנפוץ ביותר)',
+    tel_dual: 'RJ11 — שני קווים',
+    tel_rj45: 'RJ45 — טלפון דרך כבל Ethernet (4 זוגות)',
+    pairs25: 'כבל 25 זוגות — קוד צבעים',
+    mynet_ip: 'IP ציבורי ומידע חיבור',
+    mynet_fetch: 'טען את המידע שלי',
+    mynet_isp: 'בדיקות מהירות של ספקי אינטרנט ישראליים',
+    mynet_dns: 'בדיקת DNS',
+    mynet_dns_ph: 'דומיין למשל google.com',
+    mynet_reach: 'בדיקת נגישות',
+    mynet_reach_ph: 'דומיין או IP למשל google.com',
+    mynet_reach_desc: 'בודק אם מארח מגיב מהדפדפן שלך.',
+    mynet_terminal: 'פקודות טרמינל Linux',
+    mynet_terminal_desc: 'העתק והפעל על מחשב Linux Mint שלך לאבחון מלא.',
+    dl_title: 'אפליקציות Fiberhome הרשמיות — לחץ על כפתור ההורדה לקבלת APK מ-Google Drive.',
+    dl_install: 'כיצד להתקין APK על Android',
+    lat_host: 'מארח יעד',
+    lat_stats: 'נתונים בזמן אמת',
+    lat_graph: 'גרף השהיה — 60 פינגים אחרונים',
+    lat_log: 'יומן איכות חיבור',
+    lat_clear: 'נקה יומן',
+    lat_solutions: 'פתרונות — כיצד לשפר השהיה',
+    spd_title: 'בדיקת מהירות רב-שרתית',
+    spd_desc: 'בודק 3 שרתים במקביל ומחשב ממוצע — מדויק יותר מבדיקות שרת בודד.',
+    spd_start: 'התחל בדיקת מהירות',
+    spd_results: 'תוצאות',
+    spd_graph: 'גרף הורדה בזמן אמת',
+    spd_verdict: 'פסיקה והמלצה',
+    spd_history: 'היסטוריית בדיקות',
+    cust_new: 'כרטיס חדש',
+    cust_tracker: 'מעקב כרטיסים',
+    cust_name_ph: 'שם לקוח',
+    cust_phone_ph: 'מספר טלפון',
+    cust_addr_ph: 'כתובת / אתר',
+    cust_notes_ph: 'הערות (אופציונלי)',
+    cust_add: 'הוסף',
+    download_btn: 'הורד',
+  }
+};
+
+let currentLang = 'en';
+
+function setLang(lang) {
+  currentLang = lang;
+  const t = translations[lang];
+  document.body.classList.toggle('rtl', t.dir === 'rtl');
+  document.documentElement.setAttribute('dir', t.dir);
+
+  // Lang buttons
+  document.querySelectorAll('.lang-btn').forEach((b, i) => {
+    b.classList.toggle('active', ['en','ar','he'][i] === lang);
+  });
+
+  // Topbar
+  document.querySelector('.topbar-title').textContent = t.topbarTitle;
+  document.getElementById('topbar-sub').textContent = t.topbarSub;
+
+  // Tab labels
+  const tabOrder = ['ping','cable','mynet','downloads','latency','speedtest','customers'];
+  document.querySelectorAll('.tab').forEach((tab, i) => {
+    const icon = tab.querySelector('i').outerHTML;
+    tab.innerHTML = icon + t.tabs[i];
+  });
+
+  // Ping panel
+  safeText('ping-host', null, t.ping_placeholder, true);
+  safeText('ping-result', t.ping_default);
+  safeH3('panel-ping', 0, t.ping_title);
+  safeH3('panel-ping', 1, t.ping_quick);
+  safeH3('panel-ping', 2, t.port_ref);
+  safeBtnText('panel-ping', 0, t.ping_btn);
+
+  // Cable panel
+  safeH3('panel-cable', 0, t.cable_wiring);
+  safeH3('panel-cable', 1, t.cable_type_title);
+  safeH3('panel-cable', 2, t.cable_trouble);
+  safeH3('panel-cable', 3, t.tel_single.replace('RJ11 — ','RJ11 — '));
+  safeH3('panel-cable', 4, t.tel_dual);
+  safeH3('panel-cable', 5, t.tel_rj45);
+  safeH3('panel-cable', 6, t.pairs25);
+  const cableSelect = document.getElementById('cable-type');
+  if (cableSelect) cableSelect.options[0].text = t.cable_select;
+
+  // My network panel
+  safeH3('panel-mynet', 0, t.mynet_ip);
+  safeH3('panel-mynet', 1, t.mynet_isp);
+  safeH3('panel-mynet', 2, t.mynet_dns);
+  safeH3('panel-mynet', 3, t.mynet_reach);
+  safeH3('panel-mynet', 4, t.mynet_terminal);
+  safeText('dns-host', null, t.mynet_dns_ph, true);
+  safeText('reach-host', null, t.mynet_reach_ph, true);
+  const fetchBtn = document.getElementById('btn-netinfo');
+  if (fetchBtn) fetchBtn.innerHTML = '<i class="ti ti-refresh"></i> ' + t.mynet_fetch;
+
+  // Downloads
+  const dlDesc = document.querySelector('#panel-downloads > div');
+  if (dlDesc) dlDesc.textContent = t.dl_title;
+  safeH3('panel-downloads', 0, t.dl_install);
+  document.querySelectorAll('#panel-downloads a.btn').forEach(a => {
+    if (a.textContent.includes('Download') || a.textContent.includes('تنزيل') || a.textContent.includes('הורד')) {
+      a.innerHTML = '<i class="ti ti-download"></i> ' + t.download_btn;
+    }
+  });
+
+  // Latency
+  safeH3('panel-latency', 0, t.lat_host);
+  safeH3('panel-latency', 1, t.lat_stats);
+  safeH3('panel-latency', 2, t.lat_graph);
+  safeH3('panel-latency', 3, t.lat_log);
+  safeH3('panel-latency', 4, t.lat_solutions);
+  const clearBtn = document.querySelector('#panel-latency .btn');
+  if (clearBtn) clearBtn.innerHTML = '<i class="ti ti-trash"></i> ' + t.lat_clear;
+
+  // Speed test
+  safeH3('panel-speedtest', 0, t.spd_title);
+  safeH3('panel-speedtest', 1, t.spd_results);
+  safeH3('panel-speedtest', 2, t.spd_graph);
+  safeH3('panel-speedtest', 3, t.spd_verdict);
+  safeH3('panel-speedtest', 4, t.spd_history);
+  const spdBtn = document.getElementById('speed-btn');
+  if (spdBtn && !spdBtn.disabled) spdBtn.innerHTML = '<i class="ti ti-player-play"></i> ' + t.spd_start;
+
+  // Customers
+  safeH3('panel-customers', 0, t.cust_new);
+  safeH3('panel-customers', 1, t.cust_tracker);
+  safeText('cust-name', null, t.cust_name_ph, true);
+  safeText('cust-phone', null, t.cust_phone_ph, true);
+  safeText('cust-addr', null, t.cust_addr_ph, true);
+  safeText('cust-notes', null, t.cust_notes_ph, true);
+  const addBtn = document.querySelector('#panel-customers .btn-primary');
+  if (addBtn) addBtn.innerHTML = '<i class="ti ti-plus"></i> ' + t.cust_add;
+}
+
+function safeH3(panelId, index, text) {
+  const panel = document.getElementById(panelId);
+  if (!panel) return;
+  const h3s = panel.querySelectorAll('h3');
+  if (h3s[index]) h3s[index].textContent = text;
+}
+
+function safeText(id, text, placeholder, isPlaceholder) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  if (isPlaceholder) el.placeholder = placeholder;
+  else if (text) el.textContent = text;
+}
+
+function safeBtnText(panelId, index, text) {
+  const panel = document.getElementById(panelId);
+  if (!panel) return;
+  const btns = panel.querySelectorAll('button.btn');
+  if (btns[index]) {
+    const icon = btns[index].querySelector('i');
+    btns[index].innerHTML = (icon ? icon.outerHTML + ' ' : '') + text;
+  }
+}
+
+
 // RJ11 Single line wiring
 const rj11Single = [
   ['Pin 1', 'unused', '#374151', '#9ca3af'],
@@ -1281,6 +1573,286 @@ function renderTickets(){
     </div>`).join('');
 }
 renderTickets();
+
+const translations = {
+  en: {
+    dir: 'ltr',
+    topbarTitle: 'Network Technician Toolkit',
+    topbarSub: 'Ping · Cable · My Network · Downloads',
+    tabs: ['Ping & Tests','Cable Guide','My Network','Downloads','Latency Monitor','Speed Test','Customers'],
+    ping_title: 'Generate commands',
+    ping_placeholder: 'IP or hostname e.g. 192.168.1.1',
+    ping_btn: 'Generate',
+    ping_quick: 'Quick targets',
+    ping_default: 'Enter a host above to generate commands.',
+    port_ref: 'Port reference',
+    cable_wiring: 'Ethernet wiring — T568A & T568B',
+    cable_type_title: 'Cable type info',
+    cable_select: 'Select cable type...',
+    cable_trouble: 'Troubleshooting guide',
+    tel_single: 'RJ11 — Single line (most common)',
+    tel_dual: 'RJ11 — Dual line',
+    tel_rj45: 'RJ45 — Telephone over Ethernet cable (4 pairs)',
+    pairs25: '25-pair telephone cable — color code',
+    mynet_ip: 'Public IP & connection info',
+    mynet_fetch: 'Fetch my info',
+    mynet_isp: 'Israeli ISP speed tests',
+    mynet_dns: 'DNS lookup',
+    mynet_dns_ph: 'Domain e.g. google.com',
+    mynet_reach: 'Reachability check',
+    mynet_reach_ph: 'Domain or IP e.g. google.com',
+    mynet_reach_desc: 'Tests if a host responds from your browser.',
+    mynet_terminal: 'Linux terminal commands',
+    mynet_terminal_desc: 'Copy and run on your Linux Mint PC for full network diagnostics.',
+    dl_title: 'Official Fiberhome apps — click the download button to get the APK from Google Drive.',
+    dl_install: 'How to install APK on Android',
+    lat_host: 'Target host',
+    lat_stats: 'Live stats',
+    lat_graph: 'Latency graph — last 60 pings',
+    lat_log: 'Connection quality log',
+    lat_clear: 'Clear log',
+    lat_solutions: 'Solutions — how to improve latency',
+    spd_title: 'Multi-server speed test',
+    spd_desc: 'Tests against 3 servers simultaneously and averages the result — more accurate than single-server tests.',
+    spd_start: 'Start Speed Test',
+    spd_results: 'Results',
+    spd_graph: 'Live download graph',
+    spd_verdict: 'Verdict & recommendation',
+    spd_history: 'Test history',
+    cust_new: 'New ticket',
+    cust_tracker: 'Ticket tracker',
+    cust_name_ph: 'Customer name',
+    cust_phone_ph: 'Phone number',
+    cust_addr_ph: 'Address / site',
+    cust_notes_ph: 'Notes (optional)',
+    cust_add: 'Add',
+    download_btn: 'Download',
+  },
+  ar: {
+    dir: 'rtl',
+    topbarTitle: 'أدوات فني الشبكات',
+    topbarSub: 'بينج · كابل · شبكتي · تنزيلات',
+    tabs: ['اختبار البينج','دليل الكابل','شبكتي','التنزيلات','مراقب الزمن','اختبار السرعة','العملاء'],
+    ping_title: 'توليد الأوامر',
+    ping_placeholder: 'عنوان IP أو اسم المضيف مثل 192.168.1.1',
+    ping_btn: 'توليد',
+    ping_quick: 'أهداف سريعة',
+    ping_default: 'أدخل مضيفاً أعلاه لتوليد الأوامر.',
+    port_ref: 'مرجع المنافذ',
+    cable_wiring: 'توصيل الإيثرنت — T568A و T568B',
+    cable_type_title: 'معلومات نوع الكابل',
+    cable_select: 'اختر نوع الكابل...',
+    cable_trouble: 'دليل استكشاف الأخطاء',
+    tel_single: 'RJ11 — خط واحد (الأكثر شيوعاً)',
+    tel_dual: 'RJ11 — خطان',
+    tel_rj45: 'RJ45 — هاتف عبر كابل إيثرنت (4 أزواج)',
+    pairs25: 'كابل 25 زوجاً — كود الألوان',
+    mynet_ip: 'IP العام ومعلومات الاتصال',
+    mynet_fetch: 'جلب معلوماتي',
+    mynet_isp: 'اختبارات سرعة مزودي الإنترنت الإسرائيليين',
+    mynet_dns: 'بحث DNS',
+    mynet_dns_ph: 'نطاق مثل google.com',
+    mynet_reach: 'فحص إمكانية الوصول',
+    mynet_reach_ph: 'نطاق أو IP مثل google.com',
+    mynet_reach_desc: 'يختبر ما إذا كان المضيف يستجيب من متصفحك.',
+    mynet_terminal: 'أوامر الطرفية على Linux',
+    mynet_terminal_desc: 'انسخ وشغّل على جهاز Linux Mint الخاص بك.',
+    dl_title: 'تطبيقات Fiberhome الرسمية — انقر على زر التنزيل للحصول على APK من Google Drive.',
+    dl_install: 'كيفية تثبيت APK على Android',
+    lat_host: 'المضيف المستهدف',
+    lat_stats: 'إحصائيات مباشرة',
+    lat_graph: 'رسم بياني للزمن — آخر 60 بينج',
+    lat_log: 'سجل جودة الاتصال',
+    lat_clear: 'مسح السجل',
+    lat_solutions: 'حلول — كيفية تحسين زمن الاستجابة',
+    spd_title: 'اختبار سرعة متعدد الخوادم',
+    spd_desc: 'يختبر 3 خوادم في وقت واحد ويحسب المتوسط — أكثر دقة من الاختبارات أحادية الخادم.',
+    spd_start: 'بدء اختبار السرعة',
+    spd_results: 'النتائج',
+    spd_graph: 'رسم بياني للتنزيل المباشر',
+    spd_verdict: 'الحكم والتوصية',
+    spd_history: 'سجل الاختبارات',
+    cust_new: 'تذكرة جديدة',
+    cust_tracker: 'متتبع التذاكر',
+    cust_name_ph: 'اسم العميل',
+    cust_phone_ph: 'رقم الهاتف',
+    cust_addr_ph: 'العنوان / الموقع',
+    cust_notes_ph: 'ملاحظات (اختياري)',
+    cust_add: 'إضافة',
+    download_btn: 'تنزيل',
+  },
+  he: {
+    dir: 'rtl',
+    topbarTitle: 'ערכת כלים לטכנאי רשת',
+    topbarSub: 'פינג · כבל · הרשת שלי · הורדות',
+    tabs: ['פינג ובדיקות','מדריך כבלים','הרשת שלי','הורדות','מוניטור השהיה','בדיקת מהירות','לקוחות'],
+    ping_title: 'יצירת פקודות',
+    ping_placeholder: 'כתובת IP או שם מארח למשל 192.168.1.1',
+    ping_btn: 'צור',
+    ping_quick: 'יעדים מהירים',
+    ping_default: 'הכנס מארח למעלה כדי ליצור פקודות.',
+    port_ref: 'עזר פורטים',
+    cable_wiring: 'חיווט Ethernet — T568A ו-T568B',
+    cable_type_title: 'מידע על סוג הכבל',
+    cable_select: 'בחר סוג כבל...',
+    cable_trouble: 'מדריך פתרון תקלות',
+    tel_single: 'RJ11 — קו בודד (הנפוץ ביותר)',
+    tel_dual: 'RJ11 — שני קווים',
+    tel_rj45: 'RJ45 — טלפון דרך כבל Ethernet (4 זוגות)',
+    pairs25: 'כבל 25 זוגות — קוד צבעים',
+    mynet_ip: 'IP ציבורי ומידע חיבור',
+    mynet_fetch: 'טען את המידע שלי',
+    mynet_isp: 'בדיקות מהירות של ספקי אינטרנט ישראליים',
+    mynet_dns: 'בדיקת DNS',
+    mynet_dns_ph: 'דומיין למשל google.com',
+    mynet_reach: 'בדיקת נגישות',
+    mynet_reach_ph: 'דומיין או IP למשל google.com',
+    mynet_reach_desc: 'בודק אם מארח מגיב מהדפדפן שלך.',
+    mynet_terminal: 'פקודות טרמינל Linux',
+    mynet_terminal_desc: 'העתק והפעל על מחשב Linux Mint שלך לאבחון מלא.',
+    dl_title: 'אפליקציות Fiberhome הרשמיות — לחץ על כפתור ההורדה לקבלת APK מ-Google Drive.',
+    dl_install: 'כיצד להתקין APK על Android',
+    lat_host: 'מארח יעד',
+    lat_stats: 'נתונים בזמן אמת',
+    lat_graph: 'גרף השהיה — 60 פינגים אחרונים',
+    lat_log: 'יומן איכות חיבור',
+    lat_clear: 'נקה יומן',
+    lat_solutions: 'פתרונות — כיצד לשפר השהיה',
+    spd_title: 'בדיקת מהירות רב-שרתית',
+    spd_desc: 'בודק 3 שרתים במקביל ומחשב ממוצע — מדויק יותר מבדיקות שרת בודד.',
+    spd_start: 'התחל בדיקת מהירות',
+    spd_results: 'תוצאות',
+    spd_graph: 'גרף הורדה בזמן אמת',
+    spd_verdict: 'פסיקה והמלצה',
+    spd_history: 'היסטוריית בדיקות',
+    cust_new: 'כרטיס חדש',
+    cust_tracker: 'מעקב כרטיסים',
+    cust_name_ph: 'שם לקוח',
+    cust_phone_ph: 'מספר טלפון',
+    cust_addr_ph: 'כתובת / אתר',
+    cust_notes_ph: 'הערות (אופציונלי)',
+    cust_add: 'הוסף',
+    download_btn: 'הורד',
+  }
+};
+
+let currentLang = 'en';
+
+function setLang(lang) {
+  currentLang = lang;
+  const t = translations[lang];
+  document.body.classList.toggle('rtl', t.dir === 'rtl');
+  document.documentElement.setAttribute('dir', t.dir);
+
+  // Lang buttons
+  document.querySelectorAll('.lang-btn').forEach((b, i) => {
+    b.classList.toggle('active', ['en','ar','he'][i] === lang);
+  });
+
+  // Topbar
+  document.querySelector('.topbar-title').textContent = t.topbarTitle;
+  document.getElementById('topbar-sub').textContent = t.topbarSub;
+
+  // Tab labels
+  const tabOrder = ['ping','cable','mynet','downloads','latency','speedtest','customers'];
+  document.querySelectorAll('.tab').forEach((tab, i) => {
+    const icon = tab.querySelector('i').outerHTML;
+    tab.innerHTML = icon + t.tabs[i];
+  });
+
+  // Ping panel
+  safeText('ping-host', null, t.ping_placeholder, true);
+  safeText('ping-result', t.ping_default);
+  safeH3('panel-ping', 0, t.ping_title);
+  safeH3('panel-ping', 1, t.ping_quick);
+  safeH3('panel-ping', 2, t.port_ref);
+  safeBtnText('panel-ping', 0, t.ping_btn);
+
+  // Cable panel
+  safeH3('panel-cable', 0, t.cable_wiring);
+  safeH3('panel-cable', 1, t.cable_type_title);
+  safeH3('panel-cable', 2, t.cable_trouble);
+  safeH3('panel-cable', 3, t.tel_single.replace('RJ11 — ','RJ11 — '));
+  safeH3('panel-cable', 4, t.tel_dual);
+  safeH3('panel-cable', 5, t.tel_rj45);
+  safeH3('panel-cable', 6, t.pairs25);
+  const cableSelect = document.getElementById('cable-type');
+  if (cableSelect) cableSelect.options[0].text = t.cable_select;
+
+  // My network panel
+  safeH3('panel-mynet', 0, t.mynet_ip);
+  safeH3('panel-mynet', 1, t.mynet_isp);
+  safeH3('panel-mynet', 2, t.mynet_dns);
+  safeH3('panel-mynet', 3, t.mynet_reach);
+  safeH3('panel-mynet', 4, t.mynet_terminal);
+  safeText('dns-host', null, t.mynet_dns_ph, true);
+  safeText('reach-host', null, t.mynet_reach_ph, true);
+  const fetchBtn = document.getElementById('btn-netinfo');
+  if (fetchBtn) fetchBtn.innerHTML = '<i class="ti ti-refresh"></i> ' + t.mynet_fetch;
+
+  // Downloads
+  const dlDesc = document.querySelector('#panel-downloads > div');
+  if (dlDesc) dlDesc.textContent = t.dl_title;
+  safeH3('panel-downloads', 0, t.dl_install);
+  document.querySelectorAll('#panel-downloads a.btn').forEach(a => {
+    if (a.textContent.includes('Download') || a.textContent.includes('تنزيل') || a.textContent.includes('הורד')) {
+      a.innerHTML = '<i class="ti ti-download"></i> ' + t.download_btn;
+    }
+  });
+
+  // Latency
+  safeH3('panel-latency', 0, t.lat_host);
+  safeH3('panel-latency', 1, t.lat_stats);
+  safeH3('panel-latency', 2, t.lat_graph);
+  safeH3('panel-latency', 3, t.lat_log);
+  safeH3('panel-latency', 4, t.lat_solutions);
+  const clearBtn = document.querySelector('#panel-latency .btn');
+  if (clearBtn) clearBtn.innerHTML = '<i class="ti ti-trash"></i> ' + t.lat_clear;
+
+  // Speed test
+  safeH3('panel-speedtest', 0, t.spd_title);
+  safeH3('panel-speedtest', 1, t.spd_results);
+  safeH3('panel-speedtest', 2, t.spd_graph);
+  safeH3('panel-speedtest', 3, t.spd_verdict);
+  safeH3('panel-speedtest', 4, t.spd_history);
+  const spdBtn = document.getElementById('speed-btn');
+  if (spdBtn && !spdBtn.disabled) spdBtn.innerHTML = '<i class="ti ti-player-play"></i> ' + t.spd_start;
+
+  // Customers
+  safeH3('panel-customers', 0, t.cust_new);
+  safeH3('panel-customers', 1, t.cust_tracker);
+  safeText('cust-name', null, t.cust_name_ph, true);
+  safeText('cust-phone', null, t.cust_phone_ph, true);
+  safeText('cust-addr', null, t.cust_addr_ph, true);
+  safeText('cust-notes', null, t.cust_notes_ph, true);
+  const addBtn = document.querySelector('#panel-customers .btn-primary');
+  if (addBtn) addBtn.innerHTML = '<i class="ti ti-plus"></i> ' + t.cust_add;
+}
+
+function safeH3(panelId, index, text) {
+  const panel = document.getElementById(panelId);
+  if (!panel) return;
+  const h3s = panel.querySelectorAll('h3');
+  if (h3s[index]) h3s[index].textContent = text;
+}
+
+function safeText(id, text, placeholder, isPlaceholder) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  if (isPlaceholder) el.placeholder = placeholder;
+  else if (text) el.textContent = text;
+}
+
+function safeBtnText(panelId, index, text) {
+  const panel = document.getElementById(panelId);
+  if (!panel) return;
+  const btns = panel.querySelectorAll('button.btn');
+  if (btns[index]) {
+    const icon = btns[index].querySelector('i');
+    btns[index].innerHTML = (icon ? icon.outerHTML + ' ' : '') + text;
+  }
+}
+
 
 // RJ11 Single line wiring
 const rj11Single = [
