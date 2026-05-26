@@ -82,6 +82,7 @@ label.check-item.done{color:#475569;text-decoration:line-through}
     <button class="tab" onclick="switchTab('customers')"><i class="ti ti-users"></i>Customers</button>
     <button class="tab" onclick="switchTab('mynet')"><i class="ti ti-wifi"></i>My Network</button>
     <button class="tab" onclick="switchTab('downloads')"><i class="ti ti-download"></i>Downloads</button>
+    <button class="tab" onclick="switchTab('latency')"><i class="ti ti-activity"></i>Latency Monitor</button>
   </div>
 
   <!-- PING -->
@@ -379,6 +380,83 @@ curl ifconfig.me</div>
     </div>
   </div>
 
+  <!-- LATENCY MONITOR -->
+  <div id="panel-latency" class="panel">
+    <div class="card">
+      <h3>Target host</h3>
+      <div class="input-row">
+        <input type="text" id="lat-host" value="8.8.8.8" placeholder="Domain or IP"/>
+        <select id="lat-interval" style="width:auto;flex:none">
+          <option value="1000">Every 1s</option>
+          <option value="2000" selected>Every 2s</option>
+          <option value="5000">Every 5s</option>
+        </select>
+        <button class="btn btn-primary" id="lat-btn" onclick="toggleLatency()"><i class="ti ti-player-play"></i> Start</button>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+        <button class="btn" onclick="setLatHost('8.8.8.8')">Google DNS</button>
+        <button class="btn" onclick="setLatHost('1.1.1.1')">Cloudflare</button>
+        <button class="btn" onclick="setLatHost('google.com')">Google.com</button>
+        <button class="btn" onclick="setLatHost('facebook.com')">Facebook</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Live stats</h3>
+      <div class="grid3" style="margin-bottom:0">
+        <div class="stat">
+          <div class="stat-val" id="lat-current" style="color:#93c5fd">—</div>
+          <div class="stat-lbl">Current (ms)</div>
+        </div>
+        <div class="stat">
+          <div class="stat-val" id="lat-avg" style="color:#34d399">—</div>
+          <div class="stat-lbl">Average (ms)</div>
+        </div>
+        <div class="stat">
+          <div class="stat-val" id="lat-jitter" style="color:#fbbf24">—</div>
+          <div class="stat-lbl">Jitter (ms)</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:10px">
+        <div class="stat" style="flex:1">
+          <div class="stat-val" id="lat-min" style="color:#34d399;font-size:18px">—</div>
+          <div class="stat-lbl">Min (ms)</div>
+        </div>
+        <div class="stat" style="flex:1">
+          <div class="stat-val" id="lat-max" style="color:#f87171;font-size:18px">—</div>
+          <div class="stat-lbl">Max (ms)</div>
+        </div>
+        <div class="stat" style="flex:1">
+          <div class="stat-val" id="lat-loss" style="color:#f87171;font-size:18px">0%</div>
+          <div class="stat-lbl">Packet loss</div>
+        </div>
+        <div class="stat" style="flex:1">
+          <div class="stat-val" id="lat-count" style="color:#94a3b8;font-size:18px">0</div>
+          <div class="stat-lbl">Pings sent</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Latency graph — last 60 pings</h3>
+      <canvas id="lat-canvas" height="140" style="width:100%;display:block;border-radius:8px;background:#0a0e18"></canvas>
+      <div style="display:flex;gap:16px;margin-top:8px;font-size:11px;color:#475569">
+        <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:3px;background:#34d399;display:inline-block;border-radius:2px"></span>Good (&lt;50ms)</span>
+        <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:3px;background:#fbbf24;display:inline-block;border-radius:2px"></span>Fair (50–150ms)</span>
+        <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:3px;background:#f87171;display:inline-block;border-radius:2px"></span>Poor (&gt;150ms)</span>
+        <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:3px;background:#475569;display:inline-block;border-radius:2px"></span>Timeout</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Connection quality log</h3>
+      <div id="lat-log" style="max-height:180px;overflow-y:auto;font-size:12px;font-family:monospace;color:#64748b;line-height:1.8">
+        <div style="color:#475569;text-align:center;padding:1rem">Start monitoring to see the log.</div>
+      </div>
+      <button class="btn" style="margin-top:10px" onclick="clearLog()"><i class="ti ti-trash"></i> Clear log</button>
+    </div>
+  </div>
+
   <div id="panel-customers" class="panel">
     <div class="card">
       <h3>New ticket</h3>
@@ -426,7 +504,7 @@ curl ifconfig.me</div>
 </div>
 
 <script>
-const tabs=['ping','subnet','voip','cable','mynet','downloads','customers'];
+const tabs=['ping','subnet','voip','cable','mynet','downloads','latency','customers'];
 function switchTab(t){
   tabs.forEach((x,i)=>{
     document.getElementById('panel-'+x).classList.toggle('active',x===t);
@@ -578,6 +656,167 @@ function addTicket(){
   saveTickets();
   ['cust-name','cust-phone','cust-addr','cust-notes'].forEach(id=>document.getElementById(id).value='');
   renderTickets();
+
+let latRunning = false;
+let latTimer = null;
+let latData = [];
+let latSent = 0;
+let latFailed = 0;
+let latCanvas, latCtx;
+
+function setLatHost(h) { document.getElementById('lat-host').value = h; }
+
+function toggleLatency() {
+  if (latRunning) {
+    stopLatency();
+  } else {
+    startLatency();
+  }
+}
+
+function startLatency() {
+  latRunning = true;
+  latData = []; latSent = 0; latFailed = 0;
+  document.getElementById('lat-btn').innerHTML = '<i class="ti ti-player-stop"></i> Stop';
+  document.getElementById('lat-btn').style.background = '#7f1d1d';
+  document.getElementById('lat-btn').style.borderColor = '#ef4444';
+  document.getElementById('lat-log').innerHTML = '';
+  latCanvas = document.getElementById('lat-canvas');
+  latCtx = latCanvas.getContext('2d');
+  latCanvas.width = latCanvas.offsetWidth * window.devicePixelRatio;
+  latCanvas.height = 140 * window.devicePixelRatio;
+  latCanvas.style.width = '100%';
+  latCanvas.style.height = '140px';
+  latCtx.scale(window.devicePixelRatio, window.devicePixelRatio);
+  doPing();
+  const interval = parseInt(document.getElementById('lat-interval').value);
+  latTimer = setInterval(doPing, interval);
+}
+
+function stopLatency() {
+  latRunning = false;
+  clearInterval(latTimer);
+  document.getElementById('lat-btn').innerHTML = '<i class="ti ti-player-play"></i> Start';
+  document.getElementById('lat-btn').style.background = '';
+  document.getElementById('lat-btn').style.borderColor = '';
+  addLog('--- Monitoring stopped ---', '#475569');
+}
+
+function doPing() {
+  const host = document.getElementById('lat-host').value.trim() || '8.8.8.8';
+  const t0 = Date.now();
+  latSent++;
+  document.getElementById('lat-count').textContent = latSent;
+  const url = 'https://' + host + '/favicon.ico?_=' + t0;
+  fetch(url, { mode: 'no-cors', cache: 'no-store' })
+    .then(() => {
+      const ms = Date.now() - t0;
+      recordPing(ms, host);
+    })
+    .catch(() => {
+      // try again with no-cors HEAD
+      const t1 = Date.now();
+      fetch('https://dns.google/resolve?name=' + encodeURIComponent(host) + '&type=A&_=' + t1, { cache: 'no-store' })
+        .then(() => { recordPing(Date.now() - t1, host); })
+        .catch(() => {
+          latFailed++;
+          latData.push(null);
+          if (latData.length > 60) latData.shift();
+          const loss = Math.round((latFailed / latSent) * 100);
+          document.getElementById('lat-loss').textContent = loss + '%';
+          document.getElementById('lat-loss').style.color = loss > 5 ? '#f87171' : '#34d399';
+          document.getElementById('lat-current').textContent = 'TIMEOUT';
+          document.getElementById('lat-current').style.color = '#f87171';
+          addLog('[' + new Date().toLocaleTimeString() + ']  ' + host + '  →  TIMEOUT', '#f87171');
+          drawGraph();
+        });
+    });
+}
+
+function recordPing(ms, host) {
+  latData.push(ms);
+  if (latData.length > 60) latData.shift();
+  const valid = latData.filter(x => x !== null);
+  const avg = Math.round(valid.reduce((a,b) => a+b, 0) / valid.length);
+  const mn = Math.min(...valid);
+  const mx = Math.max(...valid);
+  const jitter = valid.length > 1 ? Math.round(valid.slice(1).reduce((s,v,i) => s + Math.abs(v - valid[i]), 0) / (valid.length - 1)) : 0;
+  const loss = Math.round((latFailed / latSent) * 100);
+  const col = ms < 50 ? '#34d399' : ms < 150 ? '#fbbf24' : '#f87171';
+  document.getElementById('lat-current').textContent = ms;
+  document.getElementById('lat-current').style.color = col;
+  document.getElementById('lat-avg').textContent = avg;
+  document.getElementById('lat-avg').style.color = avg < 50 ? '#34d399' : avg < 150 ? '#fbbf24' : '#f87171';
+  document.getElementById('lat-jitter').textContent = jitter;
+  document.getElementById('lat-jitter').style.color = jitter < 10 ? '#34d399' : jitter < 30 ? '#fbbf24' : '#f87171';
+  document.getElementById('lat-min').textContent = mn;
+  document.getElementById('lat-max').textContent = mx;
+  document.getElementById('lat-loss').textContent = loss + '%';
+  document.getElementById('lat-loss').style.color = loss > 5 ? '#f87171' : '#34d399';
+  const quality = ms < 50 ? '✔ Good' : ms < 150 ? '~ Fair' : '✘ Poor';
+  const qcol = ms < 50 ? '#34d399' : ms < 150 ? '#fbbf24' : '#f87171';
+  addLog('[' + new Date().toLocaleTimeString() + ']  ' + host + '  →  ' + ms + 'ms  ' + quality, qcol);
+  drawGraph();
+}
+
+function drawGraph() {
+  if (!latCtx) return;
+  const w = latCanvas.offsetWidth;
+  const h = 140;
+  latCtx.clearRect(0, 0, w, h);
+  latCtx.fillStyle = '#0a0e18';
+  latCtx.fillRect(0, 0, w, h);
+
+  // Grid lines
+  [50, 100, 150, 200].forEach(ms => {
+    const y = h - (ms / 250 * h);
+    latCtx.strokeStyle = '#1e293b';
+    latCtx.lineWidth = 0.5;
+    latCtx.beginPath(); latCtx.moveTo(0, y); latCtx.lineTo(w, y); latCtx.stroke();
+    latCtx.fillStyle = '#334155';
+    latCtx.font = '10px monospace';
+    latCtx.fillText(ms + 'ms', 4, y - 3);
+  });
+
+  if (latData.length < 2) return;
+  const barW = w / 60;
+
+  latData.forEach((ms, i) => {
+    const x = i * barW;
+    if (ms === null) {
+      latCtx.fillStyle = '#374151';
+      latCtx.fillRect(x + 1, 0, barW - 2, h);
+      return;
+    }
+    const barH = Math.min((ms / 250) * h, h);
+    const col = ms < 50 ? '#34d399' : ms < 150 ? '#fbbf24' : '#f87171';
+    latCtx.fillStyle = col + '33';
+    latCtx.fillRect(x + 1, h - barH, barW - 2, barH);
+    latCtx.fillStyle = col;
+    latCtx.fillRect(x + 1, h - barH, barW - 2, 2);
+  });
+}
+
+function addLog(msg, color) {
+  const el = document.getElementById('lat-log');
+  const line = document.createElement('div');
+  line.style.color = color || '#64748b';
+  line.textContent = msg;
+  el.appendChild(line);
+  el.scrollTop = el.scrollHeight;
+  // Keep max 200 lines
+  while (el.children.length > 200) el.removeChild(el.firstChild);
+}
+
+function clearLog() {
+  document.getElementById('lat-log').innerHTML = '';
+  latData = []; latSent = 0; latFailed = 0;
+  ['lat-current','lat-avg','lat-jitter','lat-min','lat-max'].forEach(id => document.getElementById(id).textContent = '—');
+  document.getElementById('lat-loss').textContent = '0%';
+  document.getElementById('lat-count').textContent = '0';
+  if (latCtx) { latCtx.clearRect(0, 0, latCanvas.width, latCanvas.height); }
+}
+
 }
 function removeTicket(id){if(confirm('Remove this ticket?')){tickets=tickets.filter(t=>t.id!==id);saveTickets();renderTickets();}}
 function updateStatus(id,val){const t=tickets.find(x=>x.id===id);if(t){t.status=val;saveTickets();renderTickets();}}
@@ -610,6 +849,167 @@ function renderTickets(){
     </div>`).join('');
 }
 renderTickets();
+
+let latRunning = false;
+let latTimer = null;
+let latData = [];
+let latSent = 0;
+let latFailed = 0;
+let latCanvas, latCtx;
+
+function setLatHost(h) { document.getElementById('lat-host').value = h; }
+
+function toggleLatency() {
+  if (latRunning) {
+    stopLatency();
+  } else {
+    startLatency();
+  }
+}
+
+function startLatency() {
+  latRunning = true;
+  latData = []; latSent = 0; latFailed = 0;
+  document.getElementById('lat-btn').innerHTML = '<i class="ti ti-player-stop"></i> Stop';
+  document.getElementById('lat-btn').style.background = '#7f1d1d';
+  document.getElementById('lat-btn').style.borderColor = '#ef4444';
+  document.getElementById('lat-log').innerHTML = '';
+  latCanvas = document.getElementById('lat-canvas');
+  latCtx = latCanvas.getContext('2d');
+  latCanvas.width = latCanvas.offsetWidth * window.devicePixelRatio;
+  latCanvas.height = 140 * window.devicePixelRatio;
+  latCanvas.style.width = '100%';
+  latCanvas.style.height = '140px';
+  latCtx.scale(window.devicePixelRatio, window.devicePixelRatio);
+  doPing();
+  const interval = parseInt(document.getElementById('lat-interval').value);
+  latTimer = setInterval(doPing, interval);
+}
+
+function stopLatency() {
+  latRunning = false;
+  clearInterval(latTimer);
+  document.getElementById('lat-btn').innerHTML = '<i class="ti ti-player-play"></i> Start';
+  document.getElementById('lat-btn').style.background = '';
+  document.getElementById('lat-btn').style.borderColor = '';
+  addLog('--- Monitoring stopped ---', '#475569');
+}
+
+function doPing() {
+  const host = document.getElementById('lat-host').value.trim() || '8.8.8.8';
+  const t0 = Date.now();
+  latSent++;
+  document.getElementById('lat-count').textContent = latSent;
+  const url = 'https://' + host + '/favicon.ico?_=' + t0;
+  fetch(url, { mode: 'no-cors', cache: 'no-store' })
+    .then(() => {
+      const ms = Date.now() - t0;
+      recordPing(ms, host);
+    })
+    .catch(() => {
+      // try again with no-cors HEAD
+      const t1 = Date.now();
+      fetch('https://dns.google/resolve?name=' + encodeURIComponent(host) + '&type=A&_=' + t1, { cache: 'no-store' })
+        .then(() => { recordPing(Date.now() - t1, host); })
+        .catch(() => {
+          latFailed++;
+          latData.push(null);
+          if (latData.length > 60) latData.shift();
+          const loss = Math.round((latFailed / latSent) * 100);
+          document.getElementById('lat-loss').textContent = loss + '%';
+          document.getElementById('lat-loss').style.color = loss > 5 ? '#f87171' : '#34d399';
+          document.getElementById('lat-current').textContent = 'TIMEOUT';
+          document.getElementById('lat-current').style.color = '#f87171';
+          addLog('[' + new Date().toLocaleTimeString() + ']  ' + host + '  →  TIMEOUT', '#f87171');
+          drawGraph();
+        });
+    });
+}
+
+function recordPing(ms, host) {
+  latData.push(ms);
+  if (latData.length > 60) latData.shift();
+  const valid = latData.filter(x => x !== null);
+  const avg = Math.round(valid.reduce((a,b) => a+b, 0) / valid.length);
+  const mn = Math.min(...valid);
+  const mx = Math.max(...valid);
+  const jitter = valid.length > 1 ? Math.round(valid.slice(1).reduce((s,v,i) => s + Math.abs(v - valid[i]), 0) / (valid.length - 1)) : 0;
+  const loss = Math.round((latFailed / latSent) * 100);
+  const col = ms < 50 ? '#34d399' : ms < 150 ? '#fbbf24' : '#f87171';
+  document.getElementById('lat-current').textContent = ms;
+  document.getElementById('lat-current').style.color = col;
+  document.getElementById('lat-avg').textContent = avg;
+  document.getElementById('lat-avg').style.color = avg < 50 ? '#34d399' : avg < 150 ? '#fbbf24' : '#f87171';
+  document.getElementById('lat-jitter').textContent = jitter;
+  document.getElementById('lat-jitter').style.color = jitter < 10 ? '#34d399' : jitter < 30 ? '#fbbf24' : '#f87171';
+  document.getElementById('lat-min').textContent = mn;
+  document.getElementById('lat-max').textContent = mx;
+  document.getElementById('lat-loss').textContent = loss + '%';
+  document.getElementById('lat-loss').style.color = loss > 5 ? '#f87171' : '#34d399';
+  const quality = ms < 50 ? '✔ Good' : ms < 150 ? '~ Fair' : '✘ Poor';
+  const qcol = ms < 50 ? '#34d399' : ms < 150 ? '#fbbf24' : '#f87171';
+  addLog('[' + new Date().toLocaleTimeString() + ']  ' + host + '  →  ' + ms + 'ms  ' + quality, qcol);
+  drawGraph();
+}
+
+function drawGraph() {
+  if (!latCtx) return;
+  const w = latCanvas.offsetWidth;
+  const h = 140;
+  latCtx.clearRect(0, 0, w, h);
+  latCtx.fillStyle = '#0a0e18';
+  latCtx.fillRect(0, 0, w, h);
+
+  // Grid lines
+  [50, 100, 150, 200].forEach(ms => {
+    const y = h - (ms / 250 * h);
+    latCtx.strokeStyle = '#1e293b';
+    latCtx.lineWidth = 0.5;
+    latCtx.beginPath(); latCtx.moveTo(0, y); latCtx.lineTo(w, y); latCtx.stroke();
+    latCtx.fillStyle = '#334155';
+    latCtx.font = '10px monospace';
+    latCtx.fillText(ms + 'ms', 4, y - 3);
+  });
+
+  if (latData.length < 2) return;
+  const barW = w / 60;
+
+  latData.forEach((ms, i) => {
+    const x = i * barW;
+    if (ms === null) {
+      latCtx.fillStyle = '#374151';
+      latCtx.fillRect(x + 1, 0, barW - 2, h);
+      return;
+    }
+    const barH = Math.min((ms / 250) * h, h);
+    const col = ms < 50 ? '#34d399' : ms < 150 ? '#fbbf24' : '#f87171';
+    latCtx.fillStyle = col + '33';
+    latCtx.fillRect(x + 1, h - barH, barW - 2, barH);
+    latCtx.fillStyle = col;
+    latCtx.fillRect(x + 1, h - barH, barW - 2, 2);
+  });
+}
+
+function addLog(msg, color) {
+  const el = document.getElementById('lat-log');
+  const line = document.createElement('div');
+  line.style.color = color || '#64748b';
+  line.textContent = msg;
+  el.appendChild(line);
+  el.scrollTop = el.scrollHeight;
+  // Keep max 200 lines
+  while (el.children.length > 200) el.removeChild(el.firstChild);
+}
+
+function clearLog() {
+  document.getElementById('lat-log').innerHTML = '';
+  latData = []; latSent = 0; latFailed = 0;
+  ['lat-current','lat-avg','lat-jitter','lat-min','lat-max'].forEach(id => document.getElementById(id).textContent = '—');
+  document.getElementById('lat-loss').textContent = '0%';
+  document.getElementById('lat-count').textContent = '0';
+  if (latCtx) { latCtx.clearRect(0, 0, latCanvas.width, latCanvas.height); }
+}
+
 
 function loadNetInfo() {
   const el = document.getElementById('netinfo-result');
