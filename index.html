@@ -80,6 +80,7 @@ label.check-item.done{color:#475569;text-decoration:line-through}
     <button class="tab" onclick="switchTab('voip')"><i class="ti ti-phone"></i>VoIP Checker</button>
     <button class="tab" onclick="switchTab('cable')"><i class="ti ti-plug"></i>Cable Guide</button>
     <button class="tab" onclick="switchTab('customers')"><i class="ti ti-users"></i>Customers</button>
+    <button class="tab" onclick="switchTab('mynet')"><i class="ti ti-wifi"></i>My Network</button>
   </div>
 
   <!-- PING -->
@@ -236,6 +237,73 @@ label.check-item.done{color:#475569;text-decoration:line-through}
   </div>
 
   <!-- CUSTOMERS -->
+  <!-- MY NETWORK -->
+  <div id="panel-mynet" class="panel">
+    <div class="card">
+      <h3>Public IP &amp; connection info</h3>
+      <button class="btn btn-primary" onclick="loadNetInfo()"><i class="ti ti-refresh"></i> Fetch my info</button>
+      <div id="netinfo-result" class="result" style="margin-top:10px">Click "Fetch my info" to load your connection details.</div>
+    </div>
+    <div class="card">
+      <h3>Speed test</h3>
+      <div style="font-size:13px;color:#94a3b8;margin-bottom:12px">Run a speed test directly in your browser — no install needed.</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <a href="https://fast.com" target="_blank" class="btn btn-primary"><i class="ti ti-bolt"></i> Fast.com (Netflix)</a>
+        <a href="https://speedtest.net" target="_blank" class="btn"><i class="ti ti-gauge"></i> Speedtest.net</a>
+        <a href="https://speed.cloudflare.com" target="_blank" class="btn"><i class="ti ti-cloud"></i> Cloudflare Speed</a>
+      </div>
+    </div>
+    <div class="card">
+      <h3>DNS lookup</h3>
+      <div class="input-row">
+        <input type="text" id="dns-host" placeholder="Domain e.g. google.com"/>
+        <button class="btn btn-primary" onclick="dnsLookup()"><i class="ti ti-search"></i> Lookup</button>
+      </div>
+      <div id="dns-result" class="result" style="margin-top:8px;min-height:0;display:none"></div>
+    </div>
+    <div class="card">
+      <h3>Reachability check</h3>
+      <div style="font-size:13px;color:#94a3b8;margin-bottom:10px">Tests if a host responds from your browser.</div>
+      <div class="input-row">
+        <input type="text" id="reach-host" placeholder="Domain or IP e.g. google.com"/>
+        <button class="btn btn-primary" onclick="reachTest()"><i class="ti ti-radar"></i> Test</button>
+      </div>
+      <div id="reach-result" class="result" style="margin-top:8px;min-height:0;display:none"></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+        <button class="btn" onclick="setReach('8.8.8.8')">Google DNS</button>
+        <button class="btn" onclick="setReach('1.1.1.1')">Cloudflare</button>
+        <button class="btn" onclick="setReach('google.com')">Google.com</button>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Linux terminal commands</h3>
+      <div style="font-size:13px;color:#94a3b8;margin-bottom:10px">Copy and run on your Linux Mint PC for full network diagnostics.</div>
+      <div class="result"># Show all interfaces
+ip link show
+
+# Show IP addresses
+ip addr show
+
+# Scan all devices on network (change subnet if needed)
+sudo nmap -sn 192.168.1.0/24
+
+# Live bandwidth monitor
+sudo apt install nload -y &amp;&amp; nload
+
+# Per-connection bandwidth
+sudo apt install iftop -y &amp;&amp; sudo iftop
+
+# Speed test in terminal
+sudo apt install speedtest-cli -y &amp;&amp; speedtest
+
+# DNS check
+nslookup google.com
+
+# Show your public IP
+curl ifconfig.me</div>
+    </div>
+  </div>
+
   <div id="panel-customers" class="panel">
     <div class="card">
       <h3>New ticket</h3>
@@ -283,7 +351,7 @@ label.check-item.done{color:#475569;text-decoration:line-through}
 </div>
 
 <script>
-const tabs=['ping','subnet','voip','cable','customers'];
+const tabs=['ping','subnet','voip','cable','mynet','customers'];
 function switchTab(t){
   tabs.forEach((x,i)=>{
     document.getElementById('panel-'+x).classList.toggle('active',x===t);
@@ -467,6 +535,56 @@ function renderTickets(){
     </div>`).join('');
 }
 renderTickets();
+
+function loadNetInfo() {
+  const el = document.getElementById('netinfo-result');
+  el.textContent = 'Fetching...';
+  fetch('https://ipapi.co/json/')
+    .then(r => r.json())
+    .then(d => {
+      el.textContent =
+        'Public IP:    ' + d.ip + '\n' +
+        'ISP:          ' + d.org + '\n' +
+        'City:         ' + d.city + '\n' +
+        'Region:       ' + d.region + '\n' +
+        'Country:      ' + d.country_name + '\n' +
+        'Timezone:     ' + d.timezone + '\n' +
+        'ASN:          ' + d.asn;
+    })
+    .catch(() => { el.textContent = 'Could not fetch IP info. Check your connection.'; });
+}
+
+function dnsLookup() {
+  const host = document.getElementById('dns-host').value.trim();
+  const el = document.getElementById('dns-result');
+  if (!host) return;
+  el.style.display = 'block';
+  el.textContent = 'Looking up ' + host + '...';
+  fetch('https://dns.google/resolve?name=' + encodeURIComponent(host) + '&type=A')
+    .then(r => r.json())
+    .then(d => {
+      if (d.Answer) {
+        el.textContent = d.Answer.map(a => a.type + '  ' + a.name + '  →  ' + a.data).join('\n');
+      } else {
+        el.textContent = 'No DNS records found for ' + host;
+      }
+    })
+    .catch(() => { el.textContent = 'DNS lookup failed.'; });
+}
+
+function setReach(h) { document.getElementById('reach-host').value = h; reachTest(); }
+function reachTest() {
+  const host = document.getElementById('reach-host').value.trim();
+  const el = document.getElementById('reach-result');
+  if (!host) return;
+  el.style.display = 'block';
+  el.textContent = 'Testing reachability of ' + host + '...';
+  const t0 = Date.now();
+  fetch('https://' + host, { mode: 'no-cors', cache: 'no-store' })
+    .then(() => { el.textContent = '✔  ' + host + ' is reachable  (' + (Date.now()-t0) + 'ms response time)'; el.style.color='#34d399'; })
+    .catch(() => { el.textContent = '✘  ' + host + ' did not respond (may be blocked or offline)'; el.style.color='#f87171'; });
+}
+
 </script>
 </body>
 </html>
