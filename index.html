@@ -421,11 +421,12 @@ const CONFIG = {
   mosqueName: "مسجد سلمان الفارسي",  // اسم المسجد
   cityLabel:  "عسفيا",              // اسم المدينة للعرض
   mawaqitSlug:"masjid-salman-lfarissi-asfia-3009000-israel", // معرّف المسجد على mawaqit.net
-  latitude:   32.7194,              // خط العرض  (لعرض الخريطة فقط)
-  longitude:  35.0633,              // خط الطول
+  latitude:   32.7335835,           // خط العرض  (موقع المسجد)
+  longitude:  35.051677,            // خط الطول
   address:    "عسفيا، جبل الكرمل",
-  phone:      "+972000000000",      // ← ضع رقم الهاتف الحقيقي
+  phone:      "+972-52-824-0002",
   email:      "salman.alfarisi.isfiya@gmail.com",
+  mapsLink:   "https://www.google.com/maps/place/Mosque/@32.7332526,35.0497026,17.84z/data=!4m15!1m8!3m7!1s0x151dafeaf153cbe9:0x51eb9b8891c33f07!2sIsfiya,+Israel!3b1!8m2!3d32.720737!4d35.059087!16s%2Fm%2F05p79rk!3m5!1s0x151dafe31f096bd1:0xb765bdf0d58ab10!8m2!3d32.7335835!4d35.051677!16s%2Fg%2F11l9zxb1qr",
 };
 
 /* ---------- أدوات مساعدة ---------- */
@@ -444,18 +445,17 @@ document.getElementById("heroName").innerHTML = CONFIG.mosqueName;
 document.getElementById("footName").textContent = "© " + CONFIG.mosqueName + " — جميع الحقوق محفوظة";
 document.getElementById("addrLine").textContent = CONFIG.address;
 const phoneLink = document.getElementById("phoneLink");
-phoneLink.href = "tel:"+CONFIG.phone; document.getElementById("phoneText").textContent = CONFIG.phone;
+phoneLink.href = "tel:"+CONFIG.phone.replace(/[^+\d]/g,""); document.getElementById("phoneText").textContent = CONFIG.phone;
 const mailLink = document.getElementById("mailLink");
 mailLink.href = "mailto:"+CONFIG.email; document.getElementById("mailText").textContent = CONFIG.email;
 
 /* ---------- الخريطة ---------- */
 (function(){
-  const d = 0.008, la = CONFIG.latitude, lo = CONFIG.longitude;
+  const d = 0.006, la = CONFIG.latitude, lo = CONFIG.longitude;
   const bbox = (lo-d)+","+(la-d)+","+(lo+d)+","+(la+d);
   document.getElementById("mapFrame").src =
     "https://www.openstreetmap.org/export/embed.html?bbox="+bbox+"&layer=mapnik&marker="+la+","+lo;
-  document.getElementById("dirBtn").href =
-    "https://www.google.com/maps/dir/?api=1&destination="+la+","+lo;
+  document.getElementById("dirBtn").href = CONFIG.mapsLink;
 })();
 
 /* ---------- الساعة الحية ---------- */
