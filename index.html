@@ -234,6 +234,69 @@
   .loader{text-align:center;color:var(--muted);padding:2rem;font-size:1rem}
   .err{text-align:center;color:#a23b2d;padding:1.4rem;font-size:.95rem}
 
+  /* ---------- PILLS (shared) ---------- */
+  .pill-row{display:flex;justify-content:center;gap:.6rem;flex-wrap:wrap;margin-bottom:1.6rem}
+  .pill{
+    font-family:'Cairo';font-size:.98rem;font-weight:600;cursor:pointer;
+    padding:.55rem 1.3rem;border-radius:999px;border:1px solid var(--line);
+    background:var(--cream-card);color:var(--emerald-700);transition:.25s;
+  }
+  .pill:hover{border-color:var(--gold)}
+  .pill.active{background:var(--emerald-700);color:var(--gold-bright);border-color:var(--emerald-700)}
+
+  /* ---------- AZKAR ---------- */
+  .azkar-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.1rem}
+  .azkar-card{
+    background:var(--cream-card);border:1px solid var(--line);border-radius:18px;
+    padding:1.4rem 1.4rem 1rem;box-shadow:var(--shadow);cursor:pointer;
+    transition:.25s;position:relative;user-select:none;display:flex;flex-direction:column;
+  }
+  .azkar-card::before{content:"";position:absolute;top:0;right:0;left:0;height:4px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+  .azkar-card:active{transform:scale(.99)}
+  .azkar-card .az-text{font-family:'Amiri';font-size:1.45rem;line-height:2.1;color:var(--ink);flex:1}
+  .azkar-card .az-foot{display:flex;align-items:center;justify-content:space-between;gap:.6rem;margin-top:1rem;padding-top:.8rem;border-top:1px dashed var(--line)}
+  .azkar-card .az-ref{font-size:.8rem;color:var(--muted)}
+  .azkar-card .az-count{
+    background:var(--emerald-700);color:var(--gold-bright);font-weight:700;font-family:'Cairo';
+    border-radius:999px;padding:.35rem 1rem;font-size:1rem;min-width:74px;text-align:center;
+    font-variant-numeric:tabular-nums;transition:.25s;flex:none;
+  }
+  .azkar-card.done{background:linear-gradient(160deg,#0e4a34,#06281d);border-color:var(--gold)}
+  .azkar-card.done .az-text{color:#f3ecd8}
+  .azkar-card.done .az-ref{color:#bdb393}
+  .azkar-card.done .az-count{background:var(--gold);color:var(--emerald-900)}
+  .azkar-card.done .az-count::after{content:" ✓"}
+  .azkar-reset{display:block;margin:1.6rem auto 0;background:none;border:1px solid var(--line);color:var(--muted);
+    border-radius:999px;padding:.5rem 1.4rem;font-family:'Cairo';cursor:pointer;transition:.25s}
+  .azkar-reset:hover{border-color:var(--gold);color:var(--emerald-700)}
+
+  /* ---------- HADITH ---------- */
+  .hadith-search{display:flex;justify-content:center;gap:.6rem;flex-wrap:wrap;margin-bottom:1.2rem}
+  .hadith-search input{
+    width:min(440px,80%);padding:.8rem 1.2rem;border-radius:999px;border:1px solid var(--line);
+    background:var(--cream-card);font-family:'Cairo';font-size:1rem;text-align:center;color:var(--ink);outline:none;transition:.25s;
+  }
+  .hadith-search input:focus{border-color:var(--gold);box-shadow:0 0 0 4px rgba(201,165,90,.15)}
+  .hadith-search button{
+    background:var(--gold);color:var(--emerald-900);font-weight:700;font-family:'Cairo';font-size:1rem;
+    border:0;border-radius:999px;padding:.8rem 1.8rem;cursor:pointer;transition:.25s;
+  }
+  .hadith-search button:hover{background:var(--gold-bright)}
+  .hadith-status{text-align:center;color:var(--muted);font-size:.92rem;margin-bottom:1.4rem}
+  .hadith-results{display:flex;flex-direction:column;gap:1rem;max-width:820px;margin:0 auto}
+  .hadith-card{
+    background:var(--cream-card);border:1px solid var(--line);border-radius:16px;padding:1.3rem 1.5rem;
+    box-shadow:var(--shadow);cursor:pointer;transition:.25s;
+  }
+  .hadith-card:hover{transform:translateY(-3px);border-color:var(--gold)}
+  .hadith-card .hh{display:flex;align-items:center;justify-content:space-between;gap:.6rem;margin-bottom:.7rem}
+  .hadith-card .hsrc{font-weight:700;color:var(--emerald-700);font-size:.92rem}
+  .hadith-card .hno{font-size:.8rem;color:var(--muted);background:rgba(201,165,90,.16);padding:.2rem .7rem;border-radius:999px}
+  .hadith-card .htext{font-family:'Amiri';font-size:1.4rem;line-height:2.1;color:var(--ink)}
+  .hadith-full{font-family:'Amiri';font-size:1.7rem;line-height:2.5;text-align:justify;color:var(--ink)}
+  .hadith-meta{margin-top:1.2rem;padding-top:1rem;border-top:1px dashed var(--line);font-family:'Cairo';font-size:.9rem;color:var(--muted)}
+  .hadith-meta b{color:var(--emerald-700)}
+
   /* ---------- LOCATION ---------- */
   .loc-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:1.6rem}
   @media(max-width:760px){.loc-grid{grid-template-columns:1fr}}
@@ -288,6 +351,8 @@
     <a href="#prayers">المواقيت</a>
     <a href="#news">الأخبار</a>
     <a href="#quran">القرآن</a>
+    <a href="#azkar">الأذكار</a>
+    <a href="#hadith">الحديث</a>
     <a href="#location">الموقع</a>
   </div>
 </nav>
@@ -361,6 +426,40 @@
   </div>
 </section>
 
+<!-- ============ AZKAR ============ -->
+<section id="azkar">
+  <div class="sec-head reveal">
+    <div class="orn">۞ ۞ ۞</div>
+    <h2>الأذكار</h2>
+    <p>أذكار الصباح والمساء وأذكار بعد الصلاة — اضغط على الذِّكر للعدّ</p>
+  </div>
+  <div class="pill-row reveal" id="azkarTabs">
+    <button class="pill active" data-az="morning">أذكار الصباح</button>
+    <button class="pill" data-az="evening">أذكار المساء</button>
+    <button class="pill" data-az="after">أذكار بعد الصلاة</button>
+  </div>
+  <div class="azkar-grid reveal" id="azkarGrid"></div>
+</section>
+
+<!-- ============ HADITH ============ -->
+<section id="hadith">
+  <div class="sec-head reveal">
+    <div class="orn">۞ ۞ ۞</div>
+    <h2>الأحاديث النبوية الصحيحة</h2>
+    <p>ابحث في صحيح البخاري وصحيح مسلم بالكلمة أو الموضوع</p>
+  </div>
+  <div class="pill-row reveal">
+    <button class="pill active" data-col="bukhari">صحيح البخاري</button>
+    <button class="pill" data-col="muslim">صحيح مسلم</button>
+  </div>
+  <div class="hadith-search reveal">
+    <input type="text" id="hadithInput" placeholder="اكتب كلمة للبحث… مثال: النية، الصدق، الجار">
+    <button id="hadithBtn">بحث</button>
+  </div>
+  <div class="hadith-status reveal" id="hadithStatus">اكتب كلمة ثم اضغط «بحث». تُحمَّل المجموعة لأول مرة فقط ثم تصبح البحث فوريًا.</div>
+  <div class="hadith-results reveal" id="hadithResults"></div>
+</section>
+
 <!-- ============ LOCATION ============ -->
 <section id="location">
   <div class="sec-head reveal">
@@ -408,7 +507,7 @@
       </div>
       <button class="close" id="rClose" aria-label="إغلاق">✕</button>
     </div>
-    <div class="reader-audio"><audio id="rAudio" controls preload="none"></audio></div>
+    <div class="reader-audio" id="rAudioWrap"><audio id="rAudio" controls preload="none"></audio></div>
     <div class="reader-body" id="rBody"></div>
   </div>
 </div>
@@ -545,6 +644,7 @@ async function openSurah(num){
   const body = document.getElementById("rBody");
   body.innerHTML = '<div class="loader">جارٍ تحميل الآيات…</div>';
   const audio = document.getElementById("rAudio");
+  document.getElementById("rAudioWrap").style.display = "";
   audio.src = "https://cdn.islamic.network/quran/audio-surah/128/ar.alafasy/"+num+".mp3";
   overlay.classList.add("show");
   try{
@@ -570,6 +670,144 @@ function closeReader(){
 document.getElementById("rClose").addEventListener("click", closeReader);
 overlay.addEventListener("click", e => { if(e.target===overlay) closeReader(); });
 document.addEventListener("keydown", e => { if(e.key==="Escape") closeReader(); });
+
+/* ---------- الأذكار ---------- */
+const AZKAR = {
+  morning: [
+    {t:"اللَّهُ لَا إِلَهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ ۚ لَهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ ۗ مَنْ ذَا الَّذِي يَشْفَعُ عِنْدَهُ إِلَّا بِإِذْنِهِ ۚ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ ۖ وَلَا يُحِيطُونَ بِشَيْءٍ مِنْ عِلْمِهِ إِلَّا بِمَا شَاءَ ۚ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالْأَرْضَ ۖ وَلَا يَئُودُهُ حِفْظُهُمَا ۚ وَهُوَ الْعَلِيُّ الْعَظِيمُ", r:"آية الكرسي — البقرة ٢٥٥", c:1},
+    {t:"قُلْ هُوَ اللَّهُ أَحَدٌ ۝ اللَّهُ الصَّمَدُ ۝ لَمْ يَلِدْ وَلَمْ يُولَدْ ۝ وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ — ومثلها الفلق والناس", r:"الإخلاص والمعوذتان", c:3},
+    {t:"أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، رَبِّ أَسْأَلُكَ خَيْرَ مَا فِي هَذَا الْيَوْمِ وَخَيْرَ مَا بَعْدَهُ، وَأَعُوذُ بِكَ مِنْ شَرِّ مَا فِي هَذَا الْيَوْمِ وَشَرِّ مَا بَعْدَهُ", r:"رواه مسلم", c:1},
+    {t:"اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَهَ إِلَّا أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ، أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ، أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ، وَأَبُوءُ بِذَنْبِي فَاغْفِرْ لِي، فَإِنَّهُ لَا يَغْفِرُ الذُّنُوبَ إِلَّا أَنْتَ", r:"سيد الاستغفار — رواه البخاري", c:1},
+    {t:"اللَّهُمَّ بِكَ أَصْبَحْنَا، وَبِكَ أَمْسَيْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ، وَإِلَيْكَ النُّشُورُ", r:"رواه الترمذي", c:1},
+    {t:"اللَّهُمَّ عَافِنِي فِي بَدَنِي، اللَّهُمَّ عَافِنِي فِي سَمْعِي، اللَّهُمَّ عَافِنِي فِي بَصَرِي، لَا إِلَهَ إِلَّا أَنْتَ", r:"رواه أبو داود", c:3},
+    {t:"حَسْبِيَ اللَّهُ لَا إِلَهَ إِلَّا هُوَ، عَلَيْهِ تَوَكَّلْتُ، وَهُوَ رَبُّ الْعَرْشِ الْعَظِيمِ", r:"رواه أبو داود", c:7},
+    {t:"بِسْمِ اللَّهِ الَّذِي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الْأَرْضِ وَلَا فِي السَّمَاءِ وَهُوَ السَّمِيعُ الْعَلِيمُ", r:"رواه أبو داود والترمذي", c:3},
+    {t:"رَضِيتُ بِاللَّهِ رَبًّا، وَبِالْإِسْلَامِ دِينًا، وَبِمُحَمَّدٍ ﷺ نَبِيًّا", r:"رواه أحمد", c:3},
+    {t:"يَا حَيُّ يَا قَيُّومُ بِرَحْمَتِكَ أَسْتَغِيثُ، أَصْلِحْ لِي شَأْنِي كُلَّهُ، وَلَا تَكِلْنِي إِلَى نَفْسِي طَرْفَةَ عَيْنٍ", r:"رواه النسائي", c:1},
+    {t:"سُبْحَانَ اللَّهِ وَبِحَمْدِهِ", r:"رواه مسلم", c:100},
+    {t:"لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ", r:"رواه البخاري ومسلم", c:10},
+    {t:"أَسْتَغْفِرُ اللَّهَ وَأَتُوبُ إِلَيْهِ", r:"رواه البخاري ومسلم", c:100},
+    {t:"اللَّهُمَّ صَلِّ وَسَلِّمْ عَلَى نَبِيِّنَا مُحَمَّدٍ", r:"الصلاة على النبي ﷺ", c:10},
+  ],
+  evening: [
+    {t:"اللَّهُ لَا إِلَهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ ۚ لَهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ ۗ مَنْ ذَا الَّذِي يَشْفَعُ عِنْدَهُ إِلَّا بِإِذْنِهِ ۚ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ ۖ وَلَا يُحِيطُونَ بِشَيْءٍ مِنْ عِلْمِهِ إِلَّا بِمَا شَاءَ ۚ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالْأَرْضَ ۖ وَلَا يَئُودُهُ حِفْظُهُمَا ۚ وَهُوَ الْعَلِيُّ الْعَظِيمُ", r:"آية الكرسي — البقرة ٢٥٥", c:1},
+    {t:"قُلْ هُوَ اللَّهُ أَحَدٌ ۝ اللَّهُ الصَّمَدُ ۝ لَمْ يَلِدْ وَلَمْ يُولَدْ ۝ وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ — ومثلها الفلق والناس", r:"الإخلاص والمعوذتان", c:3},
+    {t:"أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، رَبِّ أَسْأَلُكَ خَيْرَ مَا فِي هَذِهِ اللَّيْلَةِ وَخَيْرَ مَا بَعْدَهَا، وَأَعُوذُ بِكَ مِنْ شَرِّ مَا فِي هَذِهِ اللَّيْلَةِ وَشَرِّ مَا بَعْدَهَا", r:"رواه مسلم", c:1},
+    {t:"اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَهَ إِلَّا أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ، أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ، أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ، وَأَبُوءُ بِذَنْبِي فَاغْفِرْ لِي، فَإِنَّهُ لَا يَغْفِرُ الذُّنُوبَ إِلَّا أَنْتَ", r:"سيد الاستغفار — رواه البخاري", c:1},
+    {t:"اللَّهُمَّ بِكَ أَمْسَيْنَا، وَبِكَ أَصْبَحْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ، وَإِلَيْكَ الْمَصِيرُ", r:"رواه الترمذي", c:1},
+    {t:"أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ", r:"رواه مسلم", c:3},
+    {t:"اللَّهُمَّ عَافِنِي فِي بَدَنِي، اللَّهُمَّ عَافِنِي فِي سَمْعِي، اللَّهُمَّ عَافِنِي فِي بَصَرِي، لَا إِلَهَ إِلَّا أَنْتَ", r:"رواه أبو داود", c:3},
+    {t:"حَسْبِيَ اللَّهُ لَا إِلَهَ إِلَّا هُوَ، عَلَيْهِ تَوَكَّلْتُ، وَهُوَ رَبُّ الْعَرْشِ الْعَظِيمِ", r:"رواه أبو داود", c:7},
+    {t:"بِسْمِ اللَّهِ الَّذِي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الْأَرْضِ وَلَا فِي السَّمَاءِ وَهُوَ السَّمِيعُ الْعَلِيمُ", r:"رواه أبو داود والترمذي", c:3},
+    {t:"رَضِيتُ بِاللَّهِ رَبًّا، وَبِالْإِسْلَامِ دِينًا، وَبِمُحَمَّدٍ ﷺ نَبِيًّا", r:"رواه أحمد", c:3},
+    {t:"سُبْحَانَ اللَّهِ وَبِحَمْدِهِ", r:"رواه مسلم", c:100},
+    {t:"أَسْتَغْفِرُ اللَّهَ وَأَتُوبُ إِلَيْهِ", r:"رواه البخاري ومسلم", c:100},
+    {t:"اللَّهُمَّ صَلِّ وَسَلِّمْ عَلَى نَبِيِّنَا مُحَمَّدٍ", r:"الصلاة على النبي ﷺ", c:10},
+  ],
+  after: [
+    {t:"أَسْتَغْفِرُ اللَّهَ", r:"بعد السلام من الصلاة", c:3},
+    {t:"اللَّهُمَّ أَنْتَ السَّلَامُ، وَمِنْكَ السَّلَامُ، تَبَارَكْتَ يَا ذَا الْجَلَالِ وَالْإِكْرَامِ", r:"رواه مسلم", c:1},
+    {t:"سُبْحَانَ اللَّهِ", r:"رواه البخاري ومسلم", c:33},
+    {t:"الْحَمْدُ لِلَّهِ", r:"رواه البخاري ومسلم", c:33},
+    {t:"اللَّهُ أَكْبَرُ", r:"رواه البخاري ومسلم", c:33},
+    {t:"لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ", r:"تمام المائة — رواه مسلم", c:1},
+    {t:"اللَّهُ لَا إِلَهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ … وَهُوَ الْعَلِيُّ الْعَظِيمُ", r:"آية الكرسي — بعد كل صلاة مفروضة", c:1},
+  ],
+};
+let azCounts = {};
+let azCurrent = "morning";
+function renderAzkar(){
+  const g = document.getElementById("azkarGrid");
+  const list = AZKAR[azCurrent];
+  g.innerHTML = list.map((z,i) => {
+    const cur = (azCounts[azCurrent] && azCounts[azCurrent][i]) || 0;
+    const done = cur >= z.c ? " done" : "";
+    return '<div class="azkar-card'+done+'" data-i="'+i+'">'+
+      '<div class="az-text">'+z.t+'</div>'+
+      '<div class="az-foot"><span class="az-ref">'+z.r+'</span>'+
+      '<span class="az-count">'+arNum(cur)+' / '+arNum(z.c)+'</span></div></div>';
+  }).join("") + '<button class="azkar-reset" id="azReset">↺ إعادة التعيين</button>';
+  g.querySelectorAll(".azkar-card").forEach(card => card.addEventListener("click", () => {
+    const i = +card.dataset.i, z = list[i];
+    azCounts[azCurrent] = azCounts[azCurrent] || {};
+    let cur = azCounts[azCurrent][i] || 0;
+    cur = cur >= z.c ? 0 : cur + 1;          // tap to count; tapping when done resets that card
+    azCounts[azCurrent][i] = cur;
+    card.querySelector(".az-count").textContent = arNum(cur)+" / "+arNum(z.c);
+    card.classList.toggle("done", cur >= z.c);
+  }));
+  document.getElementById("azReset").addEventListener("click", () => {
+    azCounts[azCurrent] = {}; renderAzkar();
+  });
+}
+document.querySelectorAll("#azkarTabs .pill").forEach(p => p.addEventListener("click", () => {
+  document.querySelectorAll("#azkarTabs .pill").forEach(x => x.classList.remove("active"));
+  p.classList.add("active"); azCurrent = p.dataset.az; renderAzkar();
+}));
+renderAzkar();
+
+/* ---------- الأحاديث النبوية الصحيحة (fawazahmed0/hadith-api) ---------- */
+const HADITH = {
+  bukhari:{name:"صحيح البخاري", url:"https://cdn.jsdelivr.net/gh/fawazahmed0/hadith-api@1/editions/ara-bukhari.min.json"},
+  muslim: {name:"صحيح مسلم",   url:"https://cdn.jsdelivr.net/gh/fawazahmed0/hadith-api@1/editions/ara-muslim.min.json"},
+};
+let hadithCache = {}, hadithCol = "bukhari", lastMatches = [];
+const stripTashkeel = s => s
+  .replace(/[\u0610-\u061A\u064B-\u065F\u0670\u06D6-\u06ED\u08D4-\u08E1\u08E3-\u08FF]/g,"")
+  .replace(/\u0640/g,"")
+  .replace(/[إأآا]/g,"ا").replace(/ى/g,"ي").replace(/ؤ/g,"و").replace(/ئ/g,"ي").replace(/ة/g,"ه");
+
+async function ensureCollection(col){
+  if(hadithCache[col]) return hadithCache[col];
+  const st = document.getElementById("hadithStatus");
+  st.textContent = "جارٍ تحميل " + HADITH[col].name + " لأول مرة… قد يستغرق لحظات.";
+  const res = await fetch(HADITH[col].url);
+  const j = await res.json();
+  hadithCache[col] = j.hadiths.map(h => ({n:h.hadithnumber, text:h.text, norm:stripTashkeel(h.text)}));
+  return hadithCache[col];
+}
+async function runHadithSearch(){
+  const q = document.getElementById("hadithInput").value.trim();
+  const st = document.getElementById("hadithStatus");
+  const out = document.getElementById("hadithResults");
+  if(q.length < 2){ st.textContent = "اكتب كلمتين على الأقل للبحث."; out.innerHTML=""; return; }
+  try{
+    const list = await ensureCollection(hadithCol);
+    const nq = stripTashkeel(q);
+    const matches = list.filter(h => h.norm.includes(nq));
+    lastMatches = matches;
+    if(!matches.length){ st.textContent = "لا توجد نتائج لكلمة «"+q+"» في "+HADITH[hadithCol].name+"."; out.innerHTML=""; return; }
+    const show = matches.slice(0,40);
+    st.textContent = "وُجد "+arNum(matches.length)+" حديثًا"+(matches.length>40?" — عرض أول ٤٠":"")+" في "+HADITH[hadithCol].name;
+    out.innerHTML = show.map((h,idx) => {
+      let snip = h.text.length > 240 ? h.text.slice(0,240)+" …" : h.text;
+      return '<div class="hadith-card" data-i="'+idx+'">'+
+        '<div class="hh"><span class="hsrc">'+HADITH[hadithCol].name+'</span>'+
+        '<span class="hno">حديث رقم '+arNum(h.n)+'</span></div>'+
+        '<div class="htext">'+snip+'</div></div>';
+    }).join("");
+    out.querySelectorAll(".hadith-card").forEach(c =>
+      c.addEventListener("click", () => openHadith(show[+c.dataset.i])));
+  }catch(e){
+    st.textContent = "تعذّر تحميل الأحاديث. تأكّد من الاتصال بالإنترنت.";
+  }
+}
+function openHadith(h){
+  document.getElementById("rTitle").textContent = HADITH[hadithCol].name;
+  document.getElementById("rSub").textContent = "حديث رقم " + arNum(h.n);
+  document.getElementById("rAudioWrap").style.display = "none";
+  document.getElementById("rBody").innerHTML =
+    '<div class="hadith-full">'+h.text+'</div>'+
+    '<div class="hadith-meta">المصدر: <b>'+HADITH[hadithCol].name+'</b> — رقم الحديث '+arNum(h.n)+'</div>';
+  overlay.classList.add("show");
+}
+document.getElementById("hadithBtn").addEventListener("click", runHadithSearch);
+document.getElementById("hadithInput").addEventListener("keydown", e => { if(e.key==="Enter") runHadithSearch(); });
+document.querySelectorAll("#hadith .pill[data-col]").forEach(p => p.addEventListener("click", () => {
+  document.querySelectorAll("#hadith .pill[data-col]").forEach(x => x.classList.remove("active"));
+  p.classList.add("active"); hadithCol = p.dataset.col;
+  if(document.getElementById("hadithInput").value.trim().length >= 2) runHadithSearch();
+}));
 
 /* ---------- ظهور العناصر عند التمرير ---------- */
 const io = new IntersectionObserver(es => es.forEach(en => {
