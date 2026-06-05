@@ -1,2331 +1,584 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Network Technician Toolkit</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>المسجد — مواقيت الصلاة والقرآن الكريم</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cairo:wght@300;400;600;700;900&family=Reem+Kufi:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Segoe UI',system-ui,sans-serif;background:#0f1117;color:#e2e8f0;min-height:100vh}
-body.rtl{direction:rtl;text-align:right}
-body.rtl .topbar-sub{margin-left:0;margin-right:auto}
-body.rtl .input-row{flex-direction:row-reverse}
-body.rtl td,body.rtl th{text-align:right}
-.lang-btn{padding:5px 12px;border-radius:6px;font-size:12px;cursor:pointer;border:1px solid #2d3748;background:#161b27;color:#94a3b8;transition:all .15s;font-weight:600}
-.lang-btn:hover{background:#1e293b;color:#e2e8f0}
-.lang-btn.active{background:#1e3a8a;color:#93c5fd;border-color:#3b82f6}
-.topbar{background:#161b27;border-bottom:1px solid #2d3748;padding:14px 24px;display:flex;align-items:center;gap:12px}
-.topbar-icon{width:36px;height:36px;border-radius:8px;background:#1e40af;display:flex;align-items:center;justify-content:center}
-.topbar-icon i{font-size:20px;color:#93c5fd}
-.topbar-title{font-size:18px;font-weight:600;color:#f1f5f9}
-.topbar-sub{font-size:13px;color:#64748b;margin-left:auto}
-.container{max-width:960px;margin:0 auto;padding:24px 16px}
-.tabs{display:flex;gap:6px;margin-bottom:24px;flex-wrap:wrap}
-.tab{padding:8px 16px;border:1px solid #2d3748;border-radius:8px;font-size:13px;cursor:pointer;background:#161b27;color:#94a3b8;display:flex;align-items:center;gap:7px;transition:all .15s}
-.tab:hover{background:#1e293b;color:#e2e8f0}
-.tab.active{background:#1e3a8a;color:#93c5fd;border-color:#3b82f6}
-.tab i{font-size:15px}
-.panel{display:none}
-.panel.active{display:block}
-.card{background:#161b27;border:1px solid #2d3748;border-radius:12px;padding:18px 20px;margin-bottom:16px}
-.card h3{font-size:11px;font-weight:600;margin-bottom:14px;color:#475569;text-transform:uppercase;letter-spacing:.08em}
-input[type=text],input[type=number],select,textarea{background:#0f1117;border:1px solid #2d3748;border-radius:8px;padding:8px 12px;font-size:13px;color:#e2e8f0;width:100%;outline:none;transition:border .15s}
-input:focus,select:focus,textarea:focus{border-color:#3b82f6}
-select option{background:#0f1117}
-.row{display:flex;gap:8px;margin-bottom:8px;align-items:center;flex-wrap:wrap}
-.btn{padding:8px 16px;border-radius:8px;font-size:13px;cursor:pointer;border:1px solid #2d3748;background:#1e293b;color:#e2e8f0;display:flex;align-items:center;gap:6px;transition:all .15s;white-space:nowrap}
-.btn:hover{background:#334155}
-.btn-primary{background:#1e3a8a;color:#93c5fd;border-color:#3b82f6}
-.btn-primary:hover{background:#1e40af}
-.result{background:#0a0e18;border:1px solid #1e293b;border-radius:8px;padding:14px;font-size:13px;font-family:'Courier New',monospace;white-space:pre-wrap;min-height:48px;color:#7dd3fc;line-height:1.8;margin-top:8px}
-.input-row{display:flex;gap:8px;margin-bottom:8px;align-items:center}
-.input-row input,.input-row select{flex:1}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.stat{background:#0f1117;border:1px solid #2d3748;border-radius:10px;padding:14px;text-align:center}
-.stat-val{font-size:26px;font-weight:700}
-.stat-lbl{font-size:12px;color:#64748b;margin-top:3px}
-.stat-open .stat-val{color:#f87171}
-.stat-inp .stat-val{color:#fbbf24}
-.stat-res .stat-val{color:#34d399}
-table{width:100%;border-collapse:collapse;font-size:13px}
-td,th{padding:9px 12px;text-align:left;border-bottom:1px solid #1e293b}
-th{color:#64748b;font-weight:500;font-size:12px;text-transform:uppercase;letter-spacing:.05em}
-tr:last-child td{border-bottom:none}
-tr:hover td{background:#1a2234}
-.ticket{background:#0f1117;border:1px solid #2d3748;border-radius:10px;padding:14px;margin-bottom:10px}
-.ticket-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
-.ticket-name{font-size:14px;font-weight:600;color:#f1f5f9}
-.ticket-meta{font-size:12px;color:#64748b;display:flex;gap:12px;flex-wrap:wrap;margin-top:4px}
-.badge{display:inline-block;padding:3px 10px;border-radius:6px;font-size:11px;font-weight:600}
-.badge-open{background:#7f1d1d;color:#fca5a5}
-.badge-inprogress{background:#78350f;color:#fcd34d}
-.badge-resolved{background:#064e3b;color:#6ee7b7}
-.wire{display:flex;align-items:center;gap:8px;margin-bottom:4px;font-size:12px}
-.pin{background:#374151;color:#9ca3af;border-radius:4px;padding:2px 7px;min-width:22px;text-align:center;font-weight:600}
-.quick-btns{display:flex;flex-wrap:wrap;gap:8px}
-.empty{text-align:center;padding:2rem;color:#475569;font-size:13px}
-label.check-item{display:flex;align-items:center;gap:10px;font-size:13px;cursor:pointer;padding:8px 10px;border-radius:8px;transition:background .1s;color:#cbd5e1}
-label.check-item:hover{background:#1e293b}
-label.check-item input{width:16px;height:16px;accent-color:#3b82f6;cursor:pointer}
-label.check-item.done{color:#475569;text-decoration:line-through}
+  :root{
+    --emerald-900:#06281d;
+    --emerald-800:#0a3727;
+    --emerald-700:#0d4632;
+    --emerald-600:#13593f;
+    --gold:#c9a55a;
+    --gold-bright:#e3c47e;
+    --gold-deep:#a8843d;
+    --cream:#f5efe1;
+    --cream-card:#fbf7ee;
+    --ink:#211d15;
+    --muted:#6b6450;
+    --line:rgba(168,132,61,.28);
+    --shadow:0 18px 45px -22px rgba(6,40,29,.55);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Cairo',sans-serif;
+    background:var(--cream);
+    color:var(--ink);
+    line-height:1.7;
+    overflow-x:hidden;
+    background-image:
+      radial-gradient(circle at 12% -5%, rgba(201,165,90,.10), transparent 35%),
+      radial-gradient(circle at 88% 4%, rgba(19,89,63,.08), transparent 40%);
+  }
+  h1,h2,h3,.amiri{font-family:'Amiri',serif}
+  .kufi{font-family:'Reem Kufi',sans-serif}
+  a{color:inherit;text-decoration:none}
+
+  /* ---------- TOP BAR ---------- */
+  .topbar{
+    background:var(--emerald-900);
+    color:var(--gold-bright);
+    font-size:.82rem;
+    padding:.5rem 1.4rem;
+    display:flex;justify-content:space-between;align-items:center;
+    gap:1rem;flex-wrap:wrap;
+    border-bottom:1px solid rgba(201,165,90,.2);
+  }
+  .topbar .clock{font-variant-numeric:tabular-nums;letter-spacing:.5px}
+  .topbar .hijri{color:#e9e0c8}
+
+  /* ---------- NAV ---------- */
+  nav{
+    position:sticky;top:0;z-index:50;
+    background:rgba(245,239,225,.88);
+    backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--line);
+    display:flex;align-items:center;justify-content:space-between;
+    padding:.7rem 1.4rem;
+  }
+  .brand{display:flex;align-items:center;gap:.6rem;font-weight:700;color:var(--emerald-700)}
+  .brand .mark{
+    width:38px;height:38px;flex:none;
+    display:grid;place-items:center;
+    border:1.5px solid var(--gold);border-radius:50%;
+    color:var(--gold-deep);
+  }
+  .brand .mark svg{width:22px;height:22px}
+  .navlinks{display:flex;gap:.3rem;flex-wrap:wrap}
+  .navlinks a{
+    padding:.45rem .9rem;border-radius:999px;
+    font-size:.95rem;font-weight:600;color:var(--emerald-700);
+    transition:.25s;
+  }
+  .navlinks a:hover{background:var(--emerald-700);color:var(--gold-bright)}
+
+  /* ---------- HERO ---------- */
+  header.hero{
+    position:relative;
+    background:linear-gradient(160deg,var(--emerald-900),var(--emerald-700) 60%,var(--emerald-800));
+    color:#fff;
+    padding:4.5rem 1.4rem 5.5rem;
+    text-align:center;overflow:hidden;
+  }
+  .hero-pattern{position:absolute;inset:0;opacity:.5;pointer-events:none}
+  .hero-glow{position:absolute;inset:0;background:radial-gradient(circle at 50% 0%, rgba(201,165,90,.22), transparent 55%);pointer-events:none}
+  .hero-inner{position:relative;z-index:2;max-width:760px;margin:0 auto}
+  .hero .eyebrow{
+    color:var(--gold-bright);letter-spacing:3px;font-size:.8rem;
+    font-weight:600;margin-bottom:1rem;opacity:0;animation:rise .8s .1s forwards;
+  }
+  .hero h1{
+    font-size:clamp(2.4rem,6vw,4.2rem);font-weight:700;line-height:1.15;
+    text-shadow:0 4px 30px rgba(0,0,0,.35);
+    opacity:0;animation:rise .8s .25s forwards;
+  }
+  .hero h1 .accent{color:var(--gold-bright)}
+  .hero .verse{
+    font-family:'Amiri',serif;font-size:1.25rem;color:#ece4d0;margin:1.2rem auto 0;max-width:560px;
+    opacity:0;animation:rise .8s .4s forwards;
+  }
+  .hero .verse small{display:block;color:var(--gold);font-size:.85rem;margin-top:.4rem;font-family:'Cairo'}
+  .next-banner{
+    margin:2.4rem auto 0;display:inline-flex;flex-direction:column;align-items:center;
+    background:rgba(255,255,255,.06);border:1px solid rgba(201,165,90,.35);
+    border-radius:20px;padding:1.1rem 2.4rem;backdrop-filter:blur(4px);
+    opacity:0;animation:rise .8s .55s forwards;
+  }
+  .next-banner .lbl{font-size:.85rem;color:var(--gold-bright);letter-spacing:1px}
+  .next-banner .pname{font-family:'Amiri';font-size:1.9rem;font-weight:700;line-height:1.1}
+  .next-banner .cd{font-size:2.1rem;font-weight:700;color:#fff;font-variant-numeric:tabular-nums;letter-spacing:2px}
+
+  /* ---------- SECTIONS ---------- */
+  section{padding:4rem 1.4rem;max-width:1120px;margin:0 auto}
+  .sec-head{text-align:center;margin-bottom:2.6rem}
+  .sec-head .orn{color:var(--gold);font-size:1.4rem;letter-spacing:6px}
+  .sec-head h2{font-size:clamp(1.9rem,4vw,2.7rem);color:var(--emerald-700);margin:.2rem 0}
+  .sec-head p{color:var(--muted);max-width:560px;margin:0 auto}
+
+  .reveal{opacity:0;transform:translateY(24px);transition:.7s cubic-bezier(.2,.7,.2,1)}
+  .reveal.in{opacity:1;transform:none}
+
+  /* ---------- PRAYER CARDS ---------- */
+  .prayers{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1rem}
+  .prayer-card{
+    background:var(--cream-card);border:1px solid var(--line);
+    border-radius:18px;padding:1.6rem 1rem;text-align:center;position:relative;
+    box-shadow:var(--shadow);transition:.35s;overflow:hidden;
+  }
+  .prayer-card::before{content:"";position:absolute;top:0;right:0;left:0;height:4px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+  .prayer-card:hover{transform:translateY(-6px)}
+  .prayer-card .icn{color:var(--gold-deep);font-size:1.5rem;margin-bottom:.3rem}
+  .prayer-card .pn{font-family:'Amiri';font-size:1.7rem;font-weight:700;color:var(--emerald-700)}
+  .prayer-card .pt{font-size:1.15rem;font-weight:700;color:var(--ink);margin-top:.25rem;font-variant-numeric:tabular-nums}
+  .prayer-card.next{
+    background:linear-gradient(160deg,var(--emerald-700),var(--emerald-900));
+    border-color:var(--gold);
+  }
+  .prayer-card.next .pn{color:var(--gold-bright)}
+  .prayer-card.next .pt,.prayer-card.next .icn{color:#fff}
+  .prayer-card.next::after{content:"الصلاة القادمة";position:absolute;bottom:.6rem;left:0;right:0;font-size:.7rem;color:var(--gold-bright);letter-spacing:1px}
+  .place-note{text-align:center;color:var(--muted);font-size:.9rem;margin-top:1.4rem}
+  .place-note b{color:var(--emerald-700)}
+  .hero-cta{
+    display:inline-flex;align-items:center;gap:.5rem;margin-top:2.4rem;
+    background:var(--gold);color:var(--emerald-900);font-weight:700;font-size:1.05rem;
+    padding:.85rem 1.8rem;border-radius:999px;transition:.3s;
+    opacity:0;animation:rise .8s .55s forwards;box-shadow:0 12px 30px -12px rgba(201,165,90,.6);
+  }
+  .hero-cta:hover{background:var(--gold-bright);transform:translateY(-3px)}
+  .mawaqit-frame{
+    max-width:680px;margin:0 auto;border-radius:22px;overflow:hidden;
+    border:1px solid var(--gold);box-shadow:var(--shadow);background:var(--emerald-900);
+  }
+  .mawaqit-frame iframe{width:100%;height:430px;display:block;border:0}
+  @media(max-width:520px){.mawaqit-frame iframe{height:520px}}
+
+  /* ---------- ANNOUNCEMENTS ---------- */
+  #news{background:linear-gradient(180deg,transparent,rgba(201,165,90,.06));max-width:none;width:100%}
+  #news .wrap{max-width:1120px;margin:0 auto}
+  .news-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.4rem}
+  .news-card{
+    background:var(--cream-card);border:1px solid var(--line);border-radius:18px;
+    padding:1.6rem;box-shadow:var(--shadow);position:relative;transition:.35s;
+  }
+  .news-card:hover{transform:translateY(-5px);border-color:var(--gold)}
+  .news-card .date{
+    display:inline-block;background:var(--emerald-700);color:var(--gold-bright);
+    font-size:.78rem;font-weight:600;padding:.25rem .8rem;border-radius:999px;margin-bottom:.8rem;
+  }
+  .news-card h3{font-size:1.4rem;color:var(--emerald-700);margin-bottom:.4rem}
+  .news-card p{color:var(--muted);font-size:.96rem}
+
+  /* ---------- QURAN ---------- */
+  .quran-tools{display:flex;justify-content:center;margin-bottom:1.8rem}
+  .quran-tools input{
+    width:min(420px,90%);padding:.8rem 1.2rem;border-radius:999px;
+    border:1px solid var(--line);background:var(--cream-card);font-family:'Cairo';font-size:1rem;
+    text-align:center;color:var(--ink);outline:none;transition:.25s;
+  }
+  .quran-tools input:focus{border-color:var(--gold);box-shadow:0 0 0 4px rgba(201,165,90,.15)}
+  .surah-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:.9rem}
+  .surah-card{
+    display:flex;align-items:center;gap:.9rem;cursor:pointer;
+    background:var(--cream-card);border:1px solid var(--line);border-radius:14px;
+    padding:.85rem 1rem;transition:.3s;text-align:right;
+  }
+  .surah-card:hover{transform:translateY(-3px);border-color:var(--gold);box-shadow:var(--shadow)}
+  .surah-card .num{
+    flex:none;width:40px;height:40px;display:grid;place-items:center;
+    color:var(--gold-deep);font-weight:700;font-family:'Reem Kufi';position:relative;
+  }
+  .surah-card .num svg{position:absolute;inset:0;width:100%;height:100%;color:var(--gold)}
+  .surah-card .num span{position:relative;z-index:1;font-size:.9rem}
+  .surah-card .meta .nm{font-family:'Amiri';font-size:1.35rem;font-weight:700;color:var(--emerald-700);line-height:1.2}
+  .surah-card .meta .sub{font-size:.78rem;color:var(--muted)}
+
+  /* ---------- READER MODAL ---------- */
+  .overlay{
+    position:fixed;inset:0;z-index:100;background:rgba(6,40,29,.55);
+    backdrop-filter:blur(6px);display:none;align-items:flex-start;justify-content:center;
+    padding:2.5vh 1rem;overflow:auto;
+  }
+  .overlay.show{display:flex}
+  .reader{
+    background:var(--cream);width:min(760px,100%);border-radius:22px;
+    border:1px solid var(--gold);box-shadow:0 30px 80px -20px rgba(0,0,0,.5);
+    overflow:hidden;animation:rise .4s forwards;
+  }
+  .reader-head{
+    background:linear-gradient(160deg,var(--emerald-900),var(--emerald-700));
+    color:#fff;padding:1.4rem 1.6rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;
+  }
+  .reader-head .t{font-family:'Amiri';font-size:1.9rem;font-weight:700;color:var(--gold-bright)}
+  .reader-head .s{font-size:.85rem;color:#e3dcc6}
+  .reader-head .close{
+    background:rgba(255,255,255,.1);border:1px solid rgba(201,165,90,.4);color:#fff;
+    width:38px;height:38px;border-radius:50%;cursor:pointer;font-size:1.2rem;flex:none;transition:.25s;
+  }
+  .reader-head .close:hover{background:var(--gold);color:var(--emerald-900)}
+  .reader-audio{padding:1rem 1.6rem 0}
+  .reader-audio audio{width:100%}
+  .reader-body{padding:1.6rem 1.8rem 2.2rem;max-height:60vh;overflow:auto}
+  .basmala{font-family:'Amiri';font-size:1.8rem;text-align:center;color:var(--emerald-700);margin-bottom:1.4rem}
+  .ayat{font-family:'Amiri';font-size:1.85rem;line-height:2.6;text-align:justify;color:var(--ink)}
+  .ayah-num{
+    display:inline-grid;place-items:center;width:1.7em;height:1.7em;font-size:.62em;
+    color:var(--gold-deep);font-family:'Reem Kufi';margin:0 .15em;vertical-align:middle;
+    background:radial-gradient(circle,rgba(201,165,90,.18),transparent 70%);border-radius:50%;
+  }
+  .loader{text-align:center;color:var(--muted);padding:2rem;font-size:1rem}
+  .err{text-align:center;color:#a23b2d;padding:1.4rem;font-size:.95rem}
+
+  /* ---------- LOCATION ---------- */
+  .loc-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:1.6rem}
+  @media(max-width:760px){.loc-grid{grid-template-columns:1fr}}
+  .map-frame{border-radius:20px;overflow:hidden;border:1px solid var(--line);box-shadow:var(--shadow);min-height:340px}
+  .map-frame iframe{width:100%;height:100%;min-height:340px;border:0;display:block}
+  .contact-card{background:var(--cream-card);border:1px solid var(--line);border-radius:20px;padding:1.8rem;box-shadow:var(--shadow)}
+  .contact-card h3{font-size:1.6rem;color:var(--emerald-700);margin-bottom:1rem}
+  .contact-row{display:flex;align-items:flex-start;gap:.9rem;padding:.8rem 0;border-bottom:1px dashed var(--line)}
+  .contact-row:last-of-type{border-bottom:0}
+  .contact-row .ci{flex:none;width:38px;height:38px;display:grid;place-items:center;border-radius:10px;background:var(--emerald-700);color:var(--gold-bright)}
+  .contact-row .cv b{display:block;color:var(--ink)}
+  .contact-row .cv span{font-size:.9rem;color:var(--muted)}
+  .dir-btn{
+    display:inline-flex;align-items:center;gap:.5rem;margin-top:1.2rem;
+    background:var(--gold);color:var(--emerald-900);font-weight:700;
+    padding:.7rem 1.4rem;border-radius:999px;transition:.3s;
+  }
+  .dir-btn:hover{background:var(--emerald-700);color:var(--gold-bright)}
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    background:var(--emerald-900);color:#d9d0b8;text-align:center;
+    padding:2.6rem 1.4rem;margin-top:2rem;
+    border-top:3px solid var(--gold);
+  }
+  footer .fb{font-family:'Amiri';font-size:1.6rem;color:var(--gold-bright);margin-bottom:.5rem}
+  footer .fs{font-size:.85rem;opacity:.8}
+
+  @keyframes rise{to{opacity:1;transform:none}}
+  ::-webkit-scrollbar{width:10px}
+  ::-webkit-scrollbar-thumb{background:var(--gold);border-radius:5px}
+  ::-webkit-scrollbar-track{background:var(--cream)}
 </style>
 </head>
 <body>
 
+<!-- ============ TOP BAR ============ -->
 <div class="topbar">
-  <div class="topbar-icon"><i class="ti ti-tool"></i></div>
-  <div class="topbar-title">Network Technician Toolkit</div>
-  <div class="topbar-sub" id="topbar-sub">Ping · Cable · My Network · Downloads</div>
-  <div style="display:flex;gap:4px;margin-left:16px">
-    <button class="lang-btn active" onclick="setLang('en')">English</button>
-    <button class="lang-btn" onclick="setLang('ar')">عربي</button>
-    <button class="lang-btn" onclick="setLang('he')">עברית</button>
-  </div>
+  <span class="clock" id="liveClock">—</span>
+  <span class="hijri" id="hijriDate">جارٍ التحميل…</span>
 </div>
 
-<div class="container">
-  <div class="tabs">
-    <button class="tab active" onclick="switchTab('ping')"><i class="ti ti-radar"></i>Ping & Tests</button>
-    <button class="tab" onclick="switchTab('cable')"><i class="ti ti-plug"></i>Cable Guide</button>
-    <button class="tab" onclick="switchTab('mynet')"><i class="ti ti-wifi"></i>My Network</button>
-    <button class="tab" onclick="switchTab('downloads')"><i class="ti ti-download"></i>Downloads</button>
-    <button class="tab" onclick="switchTab('latency')"><i class="ti ti-activity"></i>Latency Monitor</button>
-    <button class="tab" onclick="switchTab('speedtest')"><i class="ti ti-gauge"></i>Speed Test</button>
-    <button class="tab" onclick="switchTab('customers')"><i class="ti ti-users"></i>Customers</button>
+<!-- ============ NAV ============ -->
+<nav>
+  <div class="brand">
+    <span class="mark">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2c2 2.2 2 4.2 0 6-2-1.8-2-3.8 0-6Z"/><path d="M4 21V11c0-3 3.6-5 8-5s8 2 8 5v10"/><path d="M4 21h16M9 21v-4a3 3 0 0 1 6 0v4"/></svg>
+    </span>
+    <span id="brandName">المسجد</span>
   </div>
-
-  <!-- PING -->
-  <div id="panel-ping" class="panel active">
-    <div class="card">
-      <h3>Generate commands</h3>
-      <div class="input-row">
-        <input type="text" id="ping-host" placeholder="IP or hostname e.g. 192.168.1.1"/>
-        <button class="btn btn-primary" onclick="genPing()"><i class="ti ti-terminal"></i> Generate</button>
-      </div>
-      <div id="ping-result" class="result">Enter a host above to generate commands.</div>
-    </div>
-    <div class="card">
-      <h3>Quick targets</h3>
-      <div class="quick-btns">
-        <button class="btn" onclick="setHost('8.8.8.8')"><i class="ti ti-brand-google"></i> Google DNS</button>
-        <button class="btn" onclick="setHost('1.1.1.1')"><i class="ti ti-cloud"></i> Cloudflare</button>
-        <button class="btn" onclick="setHost('192.168.1.1')"><i class="ti ti-router"></i> Default GW</button>
-        <button class="btn" onclick="setHost('10.0.0.1')"><i class="ti ti-router"></i> Router 10.x</button>
-      </div>
-    </div>
-    <div class="card">
-      <h3>Port reference</h3>
-      <table>
-        <tr><th>Port</th><th>Service</th><th>Use</th></tr>
-        <tr><td>21</td><td>FTP</td><td>File transfer</td></tr>
-        <tr><td>22</td><td>SSH</td><td>Remote management</td></tr>
-        <tr><td>23</td><td>Telnet</td><td>Router config (legacy)</td></tr>
-        <tr><td>53</td><td>DNS</td><td>Name resolution</td></tr>
-        <tr><td>80 / 443</td><td>HTTP/S</td><td>Web traffic</td></tr>
-        <tr><td>5060</td><td>SIP</td><td>VoIP signaling</td></tr>
-        <tr><td>5061</td><td>SIP TLS</td><td>Secure VoIP</td></tr>
-        <tr><td>3389</td><td>RDP</td><td>Remote desktop</td></tr>
-        <tr><td>67 / 68</td><td>DHCP</td><td>IP assignment</td></tr>
-        <tr><td>161</td><td>SNMP</td><td>Device monitoring</td></tr>
-      </table>
-    </div>
+  <div class="navlinks">
+    <a href="#prayers">المواقيت</a>
+    <a href="#news">الأخبار</a>
+    <a href="#quran">القرآن</a>
+    <a href="#location">الموقع</a>
   </div>
+</nav>
 
-  <!-- SUBNET -->
-  <div id="panel-subnet" style="display:none">
-    <div class="card">
-      <h3>Subnet calculator</h3>
-      <div class="input-row">
-        <input type="text" id="sub-ip" placeholder="IP address e.g. 192.168.1.0" style="flex:2"/>
-        <select id="sub-cidr" style="flex:1">
-          <option>/30</option><option>/29</option><option>/28</option><option>/27</option>
-          <option>/26</option><option>/25</option><option>/24</option><option>/23</option>
-          <option>/22</option><option>/21</option><option>/20</option><option>/19</option>
-          <option>/18</option><option>/16</option>
-        </select>
-        <button class="btn btn-primary" onclick="calcSubnet()">Calculate</button>
-      </div>
-      <div id="subnet-result" class="result">Enter an IP and select a prefix to calculate.</div>
-    </div>
-    <div class="card">
-      <h3>CIDR cheat sheet</h3>
-      <table>
-        <tr><th>CIDR</th><th>Subnet mask</th><th>Usable hosts</th><th>Use case</th></tr>
-        <tr><td>/30</td><td>255.255.255.252</td><td>2</td><td>Point-to-point link</td></tr>
-        <tr><td>/29</td><td>255.255.255.248</td><td>6</td><td>Small office</td></tr>
-        <tr><td>/28</td><td>255.255.255.240</td><td>14</td><td>Small LAN</td></tr>
-        <tr><td>/27</td><td>255.255.255.224</td><td>30</td><td>Small segment</td></tr>
-        <tr><td>/26</td><td>255.255.255.192</td><td>62</td><td>Medium LAN</td></tr>
-        <tr><td>/25</td><td>255.255.255.128</td><td>126</td><td>Half subnet</td></tr>
-        <tr><td>/24</td><td>255.255.255.0</td><td>254</td><td>Standard LAN</td></tr>
-        <tr><td>/23</td><td>255.255.254.0</td><td>510</td><td>Medium network</td></tr>
-        <tr><td>/16</td><td>255.255.0.0</td><td>65534</td><td>Large network</td></tr>
-      </table>
-    </div>
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <svg class="hero-pattern" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <pattern id="stars" width="84" height="84" patternUnits="userSpaceOnUse">
+        <g fill="none" stroke="#c9a55a" stroke-width="1">
+          <rect x="22" y="22" width="40" height="40"/>
+          <rect x="22" y="22" width="40" height="40" transform="rotate(45 42 42)"/>
+        </g>
+      </pattern>
+    </defs>
+    <rect width="100%" height="100%" fill="url(#stars)"/>
+  </svg>
+  <div class="hero-glow"></div>
+  <div class="hero-inner">
+    <div class="eyebrow">أهلاً وسهلاً بكم في بيت من بيوت الله</div>
+    <h1 id="heroName">المسجد <span class="accent">الكبير</span></h1>
+    <p class="verse">إِنَّمَا يَعْمُرُ مَسَاجِدَ اللَّهِ مَنْ آمَنَ بِاللَّهِ وَالْيَوْمِ الآخِرِ
+      <small>سورة التوبة — الآية ١٨</small>
+    </p>
+    <a href="#prayers" class="hero-cta">
+      مواقيت الصلاة اليوم
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+    </a>
   </div>
+</header>
 
-  <!-- VOIP -->
-  <div id="panel-voip" style="display:none">
-    <div class="card">
-      <h3>Setup checklist</h3>
-      <div id="voip-checks"></div>
+<!-- ============ PRAYER TIMES (MAWAQIT) ============ -->
+<section id="prayers">
+  <div class="sec-head reveal">
+    <div class="orn">۞ ۞ ۞</div>
+    <h2>مواقيت الصلاة</h2>
+    <p>المواقيت الرسمية للمسجد — تشمل وقت الإقامة وصلاة الجمعة</p>
+  </div>
+  <div class="mawaqit-frame reveal">
+    <iframe id="mawaqitFrame" frameborder="0" scrolling="no" title="مواقيت الصلاة"></iframe>
+  </div>
+  <div class="place-note reveal">
+    🕌 المواقيت تُدار رسميًا من إدارة المسجد عبر منصّة
+    <a href="https://mawaqit.net" target="_blank" rel="noopener"><b>mawaqit.net</b></a>
+</section>
+
+<!-- ============ ANNOUNCEMENTS ============ -->
+<section id="news">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="orn">۞ ۞ ۞</div>
+      <h2>الأخبار والفعاليات</h2>
+      <p>آخر إعلانات المسجد ومواعيد الدروس والمناسبات</p>
     </div>
-    <div class="card">
-      <h3>Bandwidth estimator</h3>
-      <div class="input-row">
-        <label style="min-width:130px;font-size:13px;color:#94a3b8">Concurrent calls</label>
-        <input type="number" id="voip-calls" value="5" min="1" max="500" style="width:80px;flex:none"/>
+    <div class="news-grid reveal" id="newsGrid"></div>
+  </div>
+</section>
+
+<!-- ============ QURAN ============ -->
+<section id="quran">
+  <div class="sec-head reveal">
+    <div class="orn">۞ ۞ ۞</div>
+    <h2>القرآن الكريم</h2>
+    <p>تصفّح السور واقرأ الآيات واستمع إلى التلاوة</p>
+  </div>
+  <div class="quran-tools reveal">
+    <input type="text" id="surahSearch" placeholder="ابحث عن سورة…">
+  </div>
+  <div class="surah-grid reveal" id="surahGrid">
+    <div class="loader">جارٍ تحميل سور القرآن…</div>
+  </div>
+</section>
+
+<!-- ============ LOCATION ============ -->
+<section id="location">
+  <div class="sec-head reveal">
+    <div class="orn">۞ ۞ ۞</div>
+    <h2>الموقع والتواصل</h2>
+    <p>تفضّلوا بزيارتنا أو تواصلوا معنا في أي وقت</p>
+  </div>
+  <div class="loc-grid reveal">
+    <div class="map-frame"><iframe id="mapFrame" loading="lazy" title="موقع المسجد"></iframe></div>
+    <div class="contact-card">
+      <h3>تواصلوا معنا</h3>
+      <div class="contact-row">
+        <span class="ci"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg></span>
+        <div class="cv"><b id="addrLine">العنوان</b><span>اضغط زر الاتجاهات للوصول إلينا</span></div>
       </div>
-      <div class="input-row">
-        <label style="min-width:130px;font-size:13px;color:#94a3b8">Codec</label>
-        <select id="voip-codec">
-          <option value="87.2">G.711 (87.2 kbps)</option>
-          <option value="31.2">G.729 (31.2 kbps)</option>
-          <option value="55.2">G.722 (55.2 kbps)</option>
-          <option value="11.2">G.723 (11.2 kbps)</option>
-        </select>
+      <div class="contact-row">
+        <span class="ci"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 2 .7 2.9a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.2-1.2a2 2 0 0 1 2.1-.5c.9.3 1.9.6 2.9.7a2 2 0 0 1 1.7 2Z"/></svg></span>
+        <div class="cv"><a id="phoneLink"><b id="phoneText">الهاتف</b></a><span>للاستفسارات والتواصل</span></div>
       </div>
-      <button class="btn btn-primary" onclick="calcVoip()"><i class="ti ti-calculator"></i> Calculate</button>
-      <div id="voip-result" class="result" style="margin-top:10px"></div>
-    </div>
-    <div class="card">
-      <h3>Common VoIP issues</h3>
-      <table>
-        <tr><th>Symptom</th><th>Likely cause</th><th>Fix</th></tr>
-        <tr><td>One-way audio</td><td>NAT / firewall</td><td>Enable SIP ALG or configure STUN</td></tr>
-        <tr><td>Choppy audio</td><td>Jitter / packet loss</td><td>Enable QoS, prioritize SIP/RTP</td></tr>
-        <tr><td>No registration</td><td>Wrong SIP server</td><td>Check SIP proxy & port 5060</td></tr>
-        <tr><td>Echo</td><td>Acoustic feedback</td><td>Lower mic gain / use headset</td></tr>
-        <tr><td>Calls dropping</td><td>Session timeout</td><td>Set SIP keepalive / register interval</td></tr>
-        <tr><td>No dial tone</td><td>No power / config</td><td>Check PoE, reboot, re-provision</td></tr>
-      </table>
+      <div class="contact-row">
+        <span class="ci"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></span>
+        <div class="cv"><a id="mailLink"><b id="mailText">البريد الإلكتروني</b></a><span>راسلونا عبر البريد</span></div>
+      </div>
+      <a class="dir-btn" id="dirBtn" target="_blank" rel="noopener">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 11 19-9-9 19-2-8-8-2Z"/></svg>
+        احصل على الاتجاهات
+      </a>
     </div>
   </div>
+</section>
 
-  <!-- CABLE -->
-  <div id="panel-cable" class="panel">
-    <div class="card">
-      <h3>Ethernet wiring — T568A & T568B</h3>
-      <div class="grid2">
-        <div>
-          <div style="font-size:13px;font-weight:600;margin-bottom:10px;color:#94a3b8">T568A</div>
-          <div id="t568a"></div>
-        </div>
-        <div>
-          <div style="font-size:13px;font-weight:600;margin-bottom:10px;color:#3b82f6">T568B — most common</div>
-          <div id="t568b"></div>
-        </div>
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="fb">رَبَّنَا تَقَبَّلْ مِنَّا إِنَّكَ أَنتَ السَّمِيعُ الْعَلِيمُ</div>
+  <div class="fs" id="footName">© المسجد — جميع الحقوق محفوظة</div>
+</footer>
+
+<!-- ============ READER MODAL ============ -->
+<div class="overlay" id="overlay">
+  <div class="reader">
+    <div class="reader-head">
+      <div>
+        <div class="t" id="rTitle">—</div>
+        <div class="s" id="rSub"></div>
       </div>
+      <button class="close" id="rClose" aria-label="إغلاق">✕</button>
     </div>
-    <div class="card">
-      <h3>Cable type info</h3>
-      <div class="input-row">
-        <select id="cable-type" onchange="showCable()">
-          <option value="">Select cable type...</option>
-          <option value="straight">Straight-through</option>
-          <option value="crossover">Crossover</option>
-          <option value="rollover">Rollover (console)</option>
-          <option value="cat5e">Cat5e</option>
-          <option value="cat6">Cat6</option>
-          <option value="cat6a">Cat6a</option>
-          <option value="fiber">Fiber optic</option>
-        </select>
-      </div>
-      <div id="cable-result" class="result" style="min-height:0"></div>
-    </div>
-
-    <div class="card">
-      <h3>Telephone line wiring — landline</h3>
-      <div class="grid2" style="gap:16px;margin-bottom:16px">
-        <div>
-          <div style="font-size:13px;font-weight:600;margin-bottom:10px;color:#94a3b8">RJ11 — Single line (most common)</div>
-          <div id="rj11-single"></div>
-        </div>
-        <div>
-          <div style="font-size:13px;font-weight:600;margin-bottom:10px;color:#94a3b8">RJ11 — Dual line</div>
-          <div id="rj11-dual"></div>
-        </div>
-      </div>
-      <div style="margin-bottom:16px">
-        <div style="font-size:13px;font-weight:600;margin-bottom:10px;color:#94a3b8">RJ45 — Telephone over Ethernet cable (4 pairs)</div>
-        <div id="rj45-tel"></div>
-      </div>
-      <div style="background:#0a0e18;border:1px solid #1e293b;border-radius:8px;padding:12px;font-size:12px;color:#64748b;line-height:1.8">
-        <div style="color:#94a3b8;font-weight:600;margin-bottom:6px">Important notes:</div>
-        <div>• <strong style="color:#e2e8f0">Line 1 (primary)</strong> — always Blue/White-Blue pair (pins 3 & 4 on RJ11)</div>
-        <div>• <strong style="color:#e2e8f0">Line 2 (secondary)</strong> — always Black/Yellow pair (pins 2 & 5 on RJ11)</div>
-        <div>• Telephone line carries <strong style="color:#f87171">48V DC</strong> — do not connect to network equipment</div>
-        <div>• Use RJ11 (6P2C or 6P4C) for phones, RJ45 only for structured cabling systems</div>
-        <div>• DSL/ADSL runs on the same pair as Line 1 — Blue/White-Blue</div>
-      </div>
-    </div>
-
-    <div class="card">
-      <h3>25-pair telephone cable — color code</h3>
-      <div style="font-size:13px;color:#94a3b8;margin-bottom:12px">Used in telephone distribution boxes and large installations.</div>
-      <div id="pairs-25" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:6px"></div>
-    </div>
-    <div class="card">
-      <h3>Troubleshooting guide</h3>
-      <table>
-        <tr><th>Issue</th><th>Check</th></tr>
-        <tr><td>No link light</td><td>Try different port first, then check cable and NIC</td></tr>
-        <tr><td>Intermittent drops</td><td>Damaged cable, bad crimp, or loose RJ45</td></tr>
-        <tr><td>Slow speeds</td><td>Duplex mismatch, Cat5 on Gigabit, or interference</td></tr>
-        <tr><td>CRC errors</td><td>Bad cable or connector — replace and retest</td></tr>
-        <tr><td>No IP assigned</td><td>DHCP server reachable? Check VLAN config</td></tr>
-        <tr><td>High latency</td><td>Check for loops, spanning tree issues, or overloaded port</td></tr>
-      </table>
-    </div>
-  </div>
-
-  <!-- CUSTOMERS -->
-  <!-- MY NETWORK -->
-  <div id="panel-mynet" class="panel">
-    <div class="card">
-      <h3>Public IP &amp; connection info</h3>
-      <button class="btn btn-primary" onclick="loadNetInfo()"><i class="ti ti-refresh"></i> Fetch my info</button>
-      <div id="netinfo-result" class="result" style="margin-top:10px">Click "Fetch my info" to load your connection details.</div>
-    </div>
-
-      <div class="card">
-      <h3>Israeli ISP speed tests</h3>
-      <div style="font-size:13px;color:#94a3b8;margin-bottom:12px">Official speed test servers from Israeli ISPs — most accurate for local connections.</div>
-      <div style="display:flex;gap:10px;flex-wrap:wrap">
-        <a href="https://www.bezeq.co.il/internetandtv/internet/speedtest/" target="_blank" class="btn btn-primary" style="text-decoration:none">
-          <i class="ti ti-gauge"></i> Bezeq Speed Test
-        </a>
-        <a href="https://www.partner.co.il/en/private-customers/internet/internet-speed-test" target="_blank" class="btn" style="text-decoration:none;border-color:#f97316;color:#f97316">
-          <i class="ti ti-gauge"></i> Partner Speed Test
-        </a>
-        <a href="https://fast.com" target="_blank" class="btn" style="text-decoration:none">
-          <i class="ti ti-bolt"></i> Fast.com
-        </a>
-        <a href="https://speedtest.net" target="_blank" class="btn" style="text-decoration:none">
-          <i class="ti ti-world"></i> Speedtest.net
-        </a>
-        <a href="https://speed.cloudflare.com" target="_blank" class="btn" style="text-decoration:none">
-          <i class="ti ti-cloud"></i> Cloudflare
-        </a>
-      </div>
-    </div>
-    <div class="card">
-      <h3>DNS lookup</h3>
-      <div class="input-row">
-        <input type="text" id="dns-host" placeholder="Domain e.g. google.com"/>
-        <button class="btn btn-primary" onclick="dnsLookup()"><i class="ti ti-search"></i> Lookup</button>
-      </div>
-      <div id="dns-result" class="result" style="margin-top:8px;min-height:0;display:none"></div>
-    </div>
-    <div class="card">
-      <h3>Reachability check</h3>
-      <div style="font-size:13px;color:#94a3b8;margin-bottom:10px">Tests if a host responds from your browser.</div>
-      <div class="input-row">
-        <input type="text" id="reach-host" placeholder="Domain or IP e.g. google.com"/>
-        <button class="btn btn-primary" onclick="reachTest()"><i class="ti ti-radar"></i> Test</button>
-      </div>
-      <div id="reach-result" class="result" style="margin-top:8px;min-height:0;display:none"></div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
-        <button class="btn" onclick="setReach('8.8.8.8')">Google DNS</button>
-        <button class="btn" onclick="setReach('1.1.1.1')">Cloudflare</button>
-        <button class="btn" onclick="setReach('google.com')">Google.com</button>
-      </div>
-    </div>
-    <div class="card">
-      <h3>Linux terminal commands</h3>
-      <div style="font-size:13px;color:#94a3b8;margin-bottom:10px">Copy and run on your Linux Mint PC for full network diagnostics.</div>
-      <div class="result"># Show all interfaces
-ip link show
-
-# Show IP addresses
-ip addr show
-
-# Scan all devices on network (change subnet if needed)
-sudo nmap -sn 192.168.1.0/24
-
-# Live bandwidth monitor
-sudo apt install nload -y &amp;&amp; nload
-
-# Per-connection bandwidth
-sudo apt install iftop -y &amp;&amp; sudo iftop
-
-# Speed test in terminal
-sudo apt install speedtest-cli -y &amp;&amp; speedtest
-
-# DNS check
-nslookup google.com
-
-# Show your public IP
-curl ifconfig.me</div>
-    </div>
-  </div>
-
-  <!-- DOWNLOADS -->
-  <div id="panel-downloads" class="panel">
-    <div style="font-size:13px;color:#94a3b8;margin-bottom:16px">Official Fiberhome apps — click the download button to get the APK from Google Drive.</div>
-
-    <div class="card" style="border:1px solid #3b82f6">
-      <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
-        <div style="width:56px;height:56px;border-radius:12px;background:#1e3a8a;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-          <i class="ti ti-device-tv" style="font-size:28px;color:#93c5fd"></i>
-        </div>
-        <div style="flex:1;min-width:180px">
-          <div style="font-size:16px;font-weight:600;color:#f1f5f9;margin-bottom:4px">Yalla TV</div>
-          <div style="font-size:13px;color:#94a3b8;margin-bottom:4px">New Fiberhome TV streaming app</div>
-          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px">
-            <span style="background:#1e3a8a;color:#93c5fd;font-size:11px;padding:3px 10px;border-radius:6px;font-weight:600">NEW</span>
-            <span style="background:#1e293b;color:#64748b;font-size:11px;padding:3px 10px;border-radius:6px">Android APK</span>
-            <span style="background:#1e293b;color:#64748b;font-size:11px;padding:3px 10px;border-radius:6px">~50MB</span>
-          </div>
-        </div>
-        <a href="https://drive.google.com/uc?export=download&id=1GyePDdpK8h4HEUj0SA18T_56ECFi_bhC" target="_blank" class="btn btn-primary" style="flex-shrink:0;text-decoration:none">
-          <i class="ti ti-download"></i> Download
-        </a>
-      </div>
-      <div style="margin-top:14px;padding-top:14px;border-top:1px solid #2d3748;font-size:12px;color:#64748b">
-        <i class="ti ti-info-circle" style="font-size:13px;vertical-align:-1px"></i>
-        To install: enable <strong style="color:#94a3b8">Install from unknown sources</strong> in Android Settings → Security, then open the APK file.
-      </div>
-    </div>
-
-    <div class="card" style="margin-top:0">
-      <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
-        <div style="width:56px;height:56px;border-radius:12px;background:#1e293b;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-          <i class="ti ti-device-tv-old" style="font-size:28px;color:#64748b"></i>
-        </div>
-        <div style="flex:1;min-width:180px">
-          <div style="font-size:16px;font-weight:600;color:#f1f5f9;margin-bottom:4px">Fiber TV</div>
-          <div style="font-size:13px;color:#94a3b8;margin-bottom:4px">Original Fiberhome TV app</div>
-          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px">
-            <span style="background:#2d3748;color:#94a3b8;font-size:11px;padding:3px 10px;border-radius:6px;font-weight:600">LEGACY</span>
-            <span style="background:#1e293b;color:#64748b;font-size:11px;padding:3px 10px;border-radius:6px">Android APK</span>
-          </div>
-        </div>
-        <a href="https://drive.google.com/uc?export=download&id=1-i37JLT4qNQDIyss-jTgwMiWd9Y9nOun" target="_blank" class="btn" style="flex-shrink:0;text-decoration:none">
-          <i class="ti ti-download"></i> Download
-        </a>
-      </div>
-      <div style="margin-top:14px;padding-top:14px;border-top:1px solid #2d3748;font-size:12px;color:#64748b">
-        <i class="ti ti-info-circle" style="font-size:13px;vertical-align:-1px"></i>
-        To install: enable <strong style="color:#94a3b8">Install from unknown sources</strong> in Android Settings → Security, then open the APK file.
-      </div>
-    </div>
-
-    <div class="card" style="background:#0a0e18;border:1px solid #1e293b">
-      <h3>How to install APK on Android</h3>
-      <div style="display:flex;flex-direction:column;gap:10px;margin-top:4px">
-        <div style="display:flex;gap:12px;align-items:flex-start">
-          <span style="background:#1e3a8a;color:#93c5fd;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0">1</span>
-          <span style="font-size:13px;color:#94a3b8">Click Download and save the APK file to your phone</span>
-        </div>
-        <div style="display:flex;gap:12px;align-items:flex-start">
-          <span style="background:#1e3a8a;color:#93c5fd;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0">2</span>
-          <span style="font-size:13px;color:#94a3b8">Go to <strong style="color:#e2e8f0">Settings → Security → Install unknown apps</strong></span>
-        </div>
-        <div style="display:flex;gap:12px;align-items:flex-start">
-          <span style="background:#1e3a8a;color:#93c5fd;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0">3</span>
-          <span style="font-size:13px;color:#94a3b8">Allow your browser or file manager to install apps</span>
-        </div>
-        <div style="display:flex;gap:12px;align-items:flex-start">
-          <span style="background:#1e3a8a;color:#93c5fd;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0">4</span>
-          <span style="font-size:13px;color:#94a3b8">Open the APK file from your Downloads folder and tap <strong style="color:#e2e8f0">Install</strong></span>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- LATENCY MONITOR -->
-  <div id="panel-latency" class="panel">
-    <div class="card">
-      <h3>Target host</h3>
-      <div class="input-row">
-        <input type="text" id="lat-host" value="8.8.8.8" placeholder="Domain or IP"/>
-        <select id="lat-interval" style="width:auto;flex:none">
-          <option value="1000">Every 1s</option>
-          <option value="2000" selected>Every 2s</option>
-          <option value="5000">Every 5s</option>
-        </select>
-        <button class="btn btn-primary" id="lat-btn" onclick="toggleLatency()"><i class="ti ti-player-play"></i> Start</button>
-      </div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
-        <button class="btn" onclick="setLatHost('8.8.8.8')">Google DNS</button>
-        <button class="btn" onclick="setLatHost('1.1.1.1')">Cloudflare</button>
-        <button class="btn" onclick="setLatHost('google.com')">Google.com</button>
-        <button class="btn" onclick="setLatHost('facebook.com')">Facebook</button>
-      </div>
-    </div>
-
-    <div class="card">
-      <h3>Live stats</h3>
-      <div class="grid3" style="margin-bottom:0">
-        <div class="stat">
-          <div class="stat-val" id="lat-current" style="color:#93c5fd">—</div>
-          <div class="stat-lbl">Current (ms)</div>
-        </div>
-        <div class="stat">
-          <div class="stat-val" id="lat-avg" style="color:#34d399">—</div>
-          <div class="stat-lbl">Average (ms)</div>
-        </div>
-        <div class="stat">
-          <div class="stat-val" id="lat-jitter" style="color:#fbbf24">—</div>
-          <div class="stat-lbl">Jitter (ms)</div>
-        </div>
-      </div>
-      <div style="display:flex;gap:10px;margin-top:10px">
-        <div class="stat" style="flex:1">
-          <div class="stat-val" id="lat-min" style="color:#34d399;font-size:18px">—</div>
-          <div class="stat-lbl">Min (ms)</div>
-        </div>
-        <div class="stat" style="flex:1">
-          <div class="stat-val" id="lat-max" style="color:#f87171;font-size:18px">—</div>
-          <div class="stat-lbl">Max (ms)</div>
-        </div>
-        <div class="stat" style="flex:1">
-          <div class="stat-val" id="lat-loss" style="color:#f87171;font-size:18px">0%</div>
-          <div class="stat-lbl">Packet loss</div>
-        </div>
-        <div class="stat" style="flex:1">
-          <div class="stat-val" id="lat-count" style="color:#94a3b8;font-size:18px">0</div>
-          <div class="stat-lbl">Pings sent</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="card">
-      <h3>Latency graph — last 60 pings</h3>
-      <canvas id="lat-canvas" height="140" style="width:100%;display:block;border-radius:8px;background:#0a0e18"></canvas>
-      <div style="display:flex;gap:16px;margin-top:8px;font-size:11px;color:#475569">
-        <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:3px;background:#34d399;display:inline-block;border-radius:2px"></span>Good (&lt;50ms)</span>
-        <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:3px;background:#fbbf24;display:inline-block;border-radius:2px"></span>Fair (50–150ms)</span>
-        <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:3px;background:#f87171;display:inline-block;border-radius:2px"></span>Poor (&gt;150ms)</span>
-        <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:3px;background:#475569;display:inline-block;border-radius:2px"></span>Timeout</span>
-      </div>
-    </div>
-
-    <div class="card">
-      <h3>Connection quality log</h3>
-      <div id="lat-log" style="max-height:180px;overflow-y:auto;font-size:12px;font-family:monospace;color:#64748b;line-height:1.8">
-        <div style="color:#475569;text-align:center;padding:1rem">Start monitoring to see the log.</div>
-      </div>
-      <button class="btn" style="margin-top:10px" onclick="clearLog()"><i class="ti ti-trash"></i> Clear log</button>
-    </div>
-
-    <div class="card">
-      <h3>Solutions — how to improve latency</h3>
-      <div style="display:flex;flex-direction:column;gap:10px">
-
-        <div style="background:#0a0e18;border:1px solid #1e293b;border-radius:10px;padding:14px">
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
-            <span style="background:#1e3a8a;color:#93c5fd;border-radius:6px;padding:3px 10px;font-size:11px;font-weight:700">QUICK WINS</span>
-          </div>
-          <div style="display:flex;flex-direction:column;gap:7px;font-size:13px;color:#94a3b8">
-            <div><span style="color:#34d399">✔</span> Restart your router and modem — fixes 60% of latency issues</div>
-            <div><span style="color:#34d399">✔</span> Use a wired cable instead of WiFi — reduces latency by 10–50ms</div>
-            <div><span style="color:#34d399">✔</span> Connect to 5GHz WiFi instead of 2.4GHz if close to the router</div>
-            <div><span style="color:#34d399">✔</span> Close background apps and downloads while testing</div>
-            <div><span style="color:#34d399">✔</span> Check that no one else on the network is streaming or downloading</div>
-          </div>
-        </div>
-
-        <div style="background:#0a0e18;border:1px solid #1e293b;border-radius:10px;padding:14px">
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
-            <span style="background:#78350f;color:#fcd34d;border-radius:6px;padding:3px 10px;font-size:11px;font-weight:700">ROUTER SETTINGS</span>
-          </div>
-          <div style="display:flex;flex-direction:column;gap:7px;font-size:13px;color:#94a3b8">
-            <div><span style="color:#fbbf24">⚙</span> Enable <strong style="color:#e2e8f0">QoS</strong> in router settings — prioritizes important traffic</div>
-            <div><span style="color:#fbbf24">⚙</span> Change DNS to <strong style="color:#e2e8f0">1.1.1.1</strong> (Cloudflare) or <strong style="color:#e2e8f0">8.8.8.8</strong> (Google) — faster resolution</div>
-            <div><span style="color:#fbbf24">⚙</span> Switch WiFi channel to a less congested one (use WiFi analyzer)</div>
-            <div><span style="color:#fbbf24">⚙</span> Update router firmware to latest version</div>
-            <div><span style="color:#fbbf24">⚙</span> Disable SIP ALG if VoIP calls have high latency</div>
-          </div>
-        </div>
-
-        <div style="background:#0a0e18;border:1px solid #1e293b;border-radius:10px;padding:14px">
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
-            <span style="background:#4c1d95;color:#c4b5fd;border-radius:6px;padding:3px 10px;font-size:11px;font-weight:700">CALL ISP</span>
-          </div>
-          <div style="display:flex;flex-direction:column;gap:7px;font-size:13px;color:#94a3b8">
-            <div><span style="color:#a78bfa">📞</span> If average ping is above 100ms consistently — report to ISP</div>
-            <div><span style="color:#a78bfa">📞</span> If jitter is above 30ms — likely a line quality issue, request a line test</div>
-            <div><span style="color:#a78bfa">📞</span> If max ping spikes above 500ms — possible congestion or faulty equipment</div>
-            <div><span style="color:#a78bfa">📞</span> If packet loss is above 1% — request immediate line inspection</div>
-          </div>
-        </div>
-
-        <div style="background:#0a0e18;border:1px solid #1e293b;border-radius:10px;padding:14px">
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
-            <span style="background:#064e3b;color:#6ee7b7;border-radius:6px;padding:3px 10px;font-size:11px;font-weight:700">HARDWARE</span>
-          </div>
-          <div style="display:flex;flex-direction:column;gap:7px;font-size:13px;color:#94a3b8">
-            <div><span style="color:#34d399">🔧</span> Replace old Cat5 cables with Cat6 — especially runs over 30m</div>
-            <div><span style="color:#34d399">🔧</span> Check all RJ45 connectors and re-crimp any that look damaged</div>
-            <div><span style="color:#34d399">🔧</span> Replace router older than 4 years — hardware degrades over time</div>
-            <div><span style="color:#34d399">🔧</span> Add a WiFi extender or mesh node if client is far from router</div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-  </div>
-
-  <!-- SPEED TEST -->
-  <div id="panel-speedtest" class="panel">
-    <div class="card">
-      <h3>Multi-server speed test</h3>
-      <div style="font-size:13px;color:#94a3b8;margin-bottom:14px">Tests against 3 servers simultaneously and averages the result — more accurate than single-server tests.</div>
-      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
-        <button class="btn btn-primary" id="speed-btn" onclick="startSpeedTest()"><i class="ti ti-player-play"></i> Start Speed Test</button>
-        <span id="speed-status" style="font-size:13px;color:#64748b"></span>
-      </div>
-    </div>
-
-    <div class="card">
-      <h3>Results</h3>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
-        <div class="stat" style="background:#0a0e18">
-          <div style="font-size:11px;color:#64748b;margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em">Download</div>
-          <div style="display:flex;align-items:baseline;gap:6px;justify-content:center">
-            <div id="spd-down" style="font-size:36px;font-weight:700;color:#34d399">—</div>
-            <div style="font-size:13px;color:#64748b">Mbps</div>
-          </div>
-          <div id="spd-down-bar-wrap" style="margin-top:10px;background:#1e293b;border-radius:4px;height:6px;overflow:hidden">
-            <div id="spd-down-bar" style="height:6px;background:#34d399;border-radius:4px;width:0%;transition:width .3s"></div>
-          </div>
-        </div>
-        <div class="stat" style="background:#0a0e18">
-          <div style="font-size:11px;color:#64748b;margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em">Upload</div>
-          <div style="display:flex;align-items:baseline;gap:6px;justify-content:center">
-            <div id="spd-up" style="font-size:36px;font-weight:700;color:#93c5fd">—</div>
-            <div style="font-size:13px;color:#64748b">Mbps</div>
-          </div>
-          <div id="spd-up-bar-wrap" style="margin-top:10px;background:#1e293b;border-radius:4px;height:6px;overflow:hidden">
-            <div id="spd-up-bar" style="height:6px;background:#93c5fd;border-radius:4px;width:0%;transition:width .3s"></div>
-          </div>
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
-        <div class="stat">
-          <div class="stat-val" id="spd-ping" style="font-size:20px;color:#fbbf24">—</div>
-          <div class="stat-lbl">Ping (ms)</div>
-        </div>
-        <div class="stat">
-          <div class="stat-val" id="spd-jitter" style="font-size:20px;color:#a78bfa">—</div>
-          <div class="stat-lbl">Jitter (ms)</div>
-        </div>
-        <div class="stat">
-          <div class="stat-val" id="spd-grade" style="font-size:20px;color:#34d399">—</div>
-          <div class="stat-lbl">Grade</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="card">
-      <h3>Live download graph</h3>
-      <canvas id="spd-canvas" height="120" style="width:100%;display:block;border-radius:8px;background:#0a0e18"></canvas>
-      <div style="font-size:11px;color:#475569;margin-top:6px">Speed samples during test — higher and flatter = better connection</div>
-    </div>
-
-    <div class="card" id="spd-verdict-card" style="display:none">
-      <h3>Verdict & recommendation</h3>
-      <div id="spd-verdict" style="font-size:13px;color:#94a3b8;line-height:1.8"></div>
-    </div>
-
-    <div class="card">
-      <h3>Test history</h3>
-      <div id="spd-history" style="font-size:13px;color:#64748b">No tests run yet.</div>
-    </div>
-  </div>
-
-  <div id="panel-customers" class="panel">
-    <div class="card">
-      <h3>New ticket</h3>
-      <div class="input-row">
-        <input type="text" id="cust-name" placeholder="Customer name" style="flex:2"/>
-        <input type="text" id="cust-phone" placeholder="Phone number" style="flex:1"/>
-      </div>
-      <div class="input-row">
-        <input type="text" id="cust-addr" placeholder="Address / site"/>
-      </div>
-      <div class="input-row">
-        <select id="cust-issue">
-          <option>No internet</option>
-          <option>Slow speeds</option>
-          <option>VoIP problem</option>
-          <option>Cable / port issue</option>
-          <option>Router config</option>
-          <option>New installation</option>
-          <option>WiFi issue</option>
-          <option>Other</option>
-        </select>
-        <select id="cust-priority">
-          <option value="normal">Normal</option>
-          <option value="urgent">Urgent</option>
-        </select>
-        <select id="cust-status">
-          <option value="open">Open</option>
-          <option value="inprogress">In progress</option>
-          <option value="resolved">Resolved</option>
-        </select>
-        <button class="btn btn-primary" onclick="addTicket()"><i class="ti ti-plus"></i> Add</button>
-      </div>
-      <input type="text" id="cust-notes" placeholder="Notes (optional)" style="margin-top:4px"/>
-    </div>
-    <div class="card">
-      <h3>Ticket tracker</h3>
-      <div class="grid3" style="margin-bottom:16px">
-        <div class="stat stat-open"><div class="stat-val" id="stat-open">0</div><div class="stat-lbl">Open</div></div>
-        <div class="stat stat-inp"><div class="stat-val" id="stat-inprog">0</div><div class="stat-lbl">In progress</div></div>
-        <div class="stat stat-res"><div class="stat-val" id="stat-resolved">0</div><div class="stat-lbl">Resolved</div></div>
-      </div>
-      <div id="ticket-list"><div class="empty"><i class="ti ti-clipboard" style="font-size:32px;display:block;margin-bottom:8px"></i>No tickets yet.</div></div>
-    </div>
+    <div class="reader-audio"><audio id="rAudio" controls preload="none"></audio></div>
+    <div class="reader-body" id="rBody"></div>
   </div>
 </div>
 
 <script>
-const tabs=['ping','cable','mynet','downloads','latency','speedtest','customers'];
-function switchTab(t){
-  tabs.forEach((x,i)=>{
-    document.getElementById('panel-'+x).classList.toggle('active',x===t);
-    document.querySelectorAll('.tab')[i].classList.toggle('active',x===t);
-  });
-}
-
-function setHost(h){document.getElementById('ping-host').value=h;genPing();}
-function genPing(){
-  const h=document.getElementById('ping-host').value.trim();
-  if(!h){document.getElementById('ping-result').textContent='Please enter a host or IP.';return;}
-  document.getElementById('ping-result').textContent=
-`# Ping (4 packets)
-ping -c 4 ${h}
-
-# Traceroute
-traceroute ${h}
-
-# MTR (combined ping + traceroute)
-mtr ${h}
-
-# Port scan
-nmap -p 22,80,443,5060 ${h}
-
-# DNS lookup
-nslookup ${h}
-dig ${h}
-
-# Test specific port
-nc -zv ${h} 80
-nc -zv ${h} 5060`;
-}
-
-function calcSubnet(){
-  const ipStr=document.getElementById('sub-ip').value.trim();
-  const cidr=parseInt(document.getElementById('sub-cidr').value.replace('/',''));
-  if(!ipStr){document.getElementById('subnet-result').textContent='Please enter an IP address.';return;}
-  const parts=ipStr.split('.').map(Number);
-  if(parts.length!==4||parts.some(p=>isNaN(p)||p<0||p>255)){
-    document.getElementById('subnet-result').textContent='Invalid IP address.';return;
-  }
-  const mask=(0xFFFFFFFF<<(32-cidr))>>>0;
-  const ip=(parts[0]<<24|parts[1]<<16|parts[2]<<8|parts[3])>>>0;
-  const network=(ip&mask)>>>0;
-  const broadcast=(network|(~mask>>>0))>>>0;
-  const first=(network+1)>>>0;
-  const last=(broadcast-1)>>>0;
-  const hosts=Math.pow(2,32-cidr)-2;
-  function toIP(n){return[(n>>>24)&255,(n>>>16)&255,(n>>>8)&255,n&255].join('.');}
-  function toMask(m){return[(m>>>24)&255,(m>>>16)&255,(m>>>8)&255,m&255].join('.');}
-  document.getElementById('subnet-result').textContent=
-`Network address:  ${toIP(network)}/${cidr}
-Subnet mask:      ${toMask(mask)}
-First host:       ${toIP(first)}
-Last host:        ${toIP(last)}
-Broadcast:        ${toIP(broadcast)}
-Usable hosts:     ${hosts.toLocaleString()}`;
-}
-
-const voipChecks=[
-  'SIP server / proxy address configured',
-  'Port 5060 (UDP/TCP) open on firewall',
-  'QoS enabled — SIP/RTP traffic prioritized',
-  'NAT settings correct (STUN or SIP ALG)',
-  'Correct codec selected (G.711 / G.729)',
-  'Extension numbers and credentials verified',
-  'Inbound / outbound call test completed',
-  'Emergency number tested (100 / 101 / 102)',
-];
-(function(){
-  const c=document.getElementById('voip-checks');
-  voipChecks.forEach((item,i)=>{
-    const l=document.createElement('label');
-    l.className='check-item';
-    l.innerHTML=`<input type="checkbox" onchange="toggleCheck(this,${i})"/> ${item}`;
-    c.appendChild(l);
-  });
-})();
-function toggleCheck(el,i){el.closest('label').classList.toggle('done',el.checked);}
-
-function calcVoip(){
-  const calls=parseInt(document.getElementById('voip-calls').value)||1;
-  const kbps=parseFloat(document.getElementById('voip-codec').value);
-  const total=calls*kbps*2;
-  const recommended=Math.ceil(total*1.3);
-  document.getElementById('voip-result').textContent=
-`Calls: ${calls}  |  Per call: ${kbps} kbps (both directions)
-Raw bandwidth needed:    ${Math.round(total)} kbps  (${(total/1000).toFixed(2)} Mbps)
-Recommended (+30% overhead): ${recommended} kbps  (${(recommended/1000).toFixed(2)} Mbps)`;
-}
-
-const t568a=[['White/Green','#166534','#bbf7d0'],['Green','#14532d','#86efac'],['White/Orange','#7c2d12','#fed7aa'],['Blue','#1e3a8a','#bfdbfe'],['White/Blue','#1e3a8a','#dbeafe'],['Orange','#7c2d12','#fdba74'],['White/Brown','#451a03','#fde68a'],['Brown','#451a03','#d97706']];
-const t568b=[['White/Orange','#7c2d12','#fed7aa'],['Orange','#7c2d12','#fdba74'],['White/Green','#166534','#bbf7d0'],['Blue','#1e3a8a','#bfdbfe'],['White/Blue','#1e3a8a','#dbeafe'],['Green','#14532d','#86efac'],['White/Brown','#451a03','#fde68a'],['Brown','#451a03','#d97706']];
-function buildWiring(id,data){
-  const el=document.getElementById(id);
-  data.forEach(([name,bg,fg],i)=>{
-    const d=document.createElement('div');
-    d.className='wire';
-    d.innerHTML=`<span class="pin">${i+1}</span><span style="background:${bg};color:${fg};border-radius:6px;padding:4px 12px;flex:1;font-size:12px">${name}</span>`;
-    el.appendChild(d);
-  });
-}
-buildWiring('t568a',t568a);
-buildWiring('t568b',t568b);
-
-const cableInfo={
-  straight:`Used to connect DIFFERENT devices (PC to switch, PC to router).
-Both ends use the same standard: T568B — T568B.
-Most common cable in any network installation.`,
-  crossover:`Used to connect SIMILAR devices directly (PC to PC, switch to switch).
-One end T568A, other end T568B.
-Note: Modern switches use Auto-MDIX so crossover may not be needed.`,
-  rollover:`Cisco console cable (flat / rolled).
-Used for router and switch initial configuration via COM port.
-Connect to console port using DB9 or USB-to-serial adapter.`,
-  cat5e:`Max speed: 1 Gbps  |  Max length: 100m
-Frequency: 100 MHz
-Good for standard home and office use.`,
-  cat6:`Max speed: 10 Gbps (up to 55m), 1 Gbps to 100m
-Frequency: 250 MHz
-Better shielding and thicker conductor — recommended for new installs.`,
-  cat6a:`Max speed: 10 Gbps up to 100m
-Frequency: 500 MHz
-Best for high-density environments and data centers.`,
-  fiber:`Immune to EMI, supports very long distances (up to 80km+).
-Singlemode (OS2): long distance, yellow jacket.
-Multimode (OM3/OM4): short distance, aqua or purple jacket.
-Handle carefully — do not bend below minimum bend radius.`
-};
-function showCable(){
-  const v=document.getElementById('cable-type').value;
-  const el=document.getElementById('cable-result');
-  el.textContent=v?cableInfo[v]:'';
-  el.style.display=v?'block':'none';
-}
-
-let tickets=JSON.parse(localStorage.getItem('ntt_tickets')||'[]');
-function saveTickets(){localStorage.setItem('ntt_tickets',JSON.stringify(tickets));}
-function addTicket(){
-  const name=document.getElementById('cust-name').value.trim();
-  const phone=document.getElementById('cust-phone').value.trim();
-  const addr=document.getElementById('cust-addr').value.trim();
-  const issue=document.getElementById('cust-issue').value;
-  const priority=document.getElementById('cust-priority').value;
-  const status=document.getElementById('cust-status').value;
-  const notes=document.getElementById('cust-notes').value.trim();
-  if(!name){alert('Please enter customer name.');return;}
-  tickets.unshift({id:Date.now(),name,phone,addr,issue,priority,status,notes,time:new Date().toLocaleString()});
-  saveTickets();
-  ['cust-name','cust-phone','cust-addr','cust-notes'].forEach(id=>document.getElementById(id).value='');
-  renderTickets();
-
-const translations = {
-  en: {
-    dir: 'ltr',
-    topbarTitle: 'Network Technician Toolkit',
-    topbarSub: 'Ping · Cable · My Network · Downloads',
-    tabs: ['Ping & Tests','Cable Guide','My Network','Downloads','Latency Monitor','Speed Test','Customers'],
-    ping_title: 'Generate commands',
-    ping_placeholder: 'IP or hostname e.g. 192.168.1.1',
-    ping_btn: 'Generate',
-    ping_quick: 'Quick targets',
-    ping_default: 'Enter a host above to generate commands.',
-    port_ref: 'Port reference',
-    cable_wiring: 'Ethernet wiring — T568A & T568B',
-    cable_type_title: 'Cable type info',
-    cable_select: 'Select cable type...',
-    cable_trouble: 'Troubleshooting guide',
-    tel_single: 'RJ11 — Single line (most common)',
-    tel_dual: 'RJ11 — Dual line',
-    tel_rj45: 'RJ45 — Telephone over Ethernet cable (4 pairs)',
-    pairs25: '25-pair telephone cable — color code',
-    mynet_ip: 'Public IP & connection info',
-    mynet_fetch: 'Fetch my info',
-    mynet_isp: 'Israeli ISP speed tests',
-    mynet_dns: 'DNS lookup',
-    mynet_dns_ph: 'Domain e.g. google.com',
-    mynet_reach: 'Reachability check',
-    mynet_reach_ph: 'Domain or IP e.g. google.com',
-    mynet_reach_desc: 'Tests if a host responds from your browser.',
-    mynet_terminal: 'Linux terminal commands',
-    mynet_terminal_desc: 'Copy and run on your Linux Mint PC for full network diagnostics.',
-    dl_title: 'Official Fiberhome apps — click the download button to get the APK from Google Drive.',
-    dl_install: 'How to install APK on Android',
-    lat_host: 'Target host',
-    lat_stats: 'Live stats',
-    lat_graph: 'Latency graph — last 60 pings',
-    lat_log: 'Connection quality log',
-    lat_clear: 'Clear log',
-    lat_solutions: 'Solutions — how to improve latency',
-    spd_title: 'Multi-server speed test',
-    spd_desc: 'Tests against 3 servers simultaneously and averages the result — more accurate than single-server tests.',
-    spd_start: 'Start Speed Test',
-    spd_results: 'Results',
-    spd_graph: 'Live download graph',
-    spd_verdict: 'Verdict & recommendation',
-    spd_history: 'Test history',
-    cust_new: 'New ticket',
-    cust_tracker: 'Ticket tracker',
-    cust_name_ph: 'Customer name',
-    cust_phone_ph: 'Phone number',
-    cust_addr_ph: 'Address / site',
-    cust_notes_ph: 'Notes (optional)',
-    cust_add: 'Add',
-    download_btn: 'Download',
-  },
-  ar: {
-    dir: 'rtl',
-    topbarTitle: 'أدوات فني الشبكات',
-    topbarSub: 'بينج · كابل · شبكتي · تنزيلات',
-    tabs: ['اختبار البينج','دليل الكابل','شبكتي','التنزيلات','مراقب الزمن','اختبار السرعة','العملاء'],
-    ping_title: 'توليد الأوامر',
-    ping_placeholder: 'عنوان IP أو اسم المضيف مثل 192.168.1.1',
-    ping_btn: 'توليد',
-    ping_quick: 'أهداف سريعة',
-    ping_default: 'أدخل مضيفاً أعلاه لتوليد الأوامر.',
-    port_ref: 'مرجع المنافذ',
-    cable_wiring: 'توصيل الإيثرنت — T568A و T568B',
-    cable_type_title: 'معلومات نوع الكابل',
-    cable_select: 'اختر نوع الكابل...',
-    cable_trouble: 'دليل استكشاف الأخطاء',
-    tel_single: 'RJ11 — خط واحد (الأكثر شيوعاً)',
-    tel_dual: 'RJ11 — خطان',
-    tel_rj45: 'RJ45 — هاتف عبر كابل إيثرنت (4 أزواج)',
-    pairs25: 'كابل 25 زوجاً — كود الألوان',
-    mynet_ip: 'IP العام ومعلومات الاتصال',
-    mynet_fetch: 'جلب معلوماتي',
-    mynet_isp: 'اختبارات سرعة مزودي الإنترنت الإسرائيليين',
-    mynet_dns: 'بحث DNS',
-    mynet_dns_ph: 'نطاق مثل google.com',
-    mynet_reach: 'فحص إمكانية الوصول',
-    mynet_reach_ph: 'نطاق أو IP مثل google.com',
-    mynet_reach_desc: 'يختبر ما إذا كان المضيف يستجيب من متصفحك.',
-    mynet_terminal: 'أوامر الطرفية على Linux',
-    mynet_terminal_desc: 'انسخ وشغّل على جهاز Linux Mint الخاص بك.',
-    dl_title: 'تطبيقات Fiberhome الرسمية — انقر على زر التنزيل للحصول على APK من Google Drive.',
-    dl_install: 'كيفية تثبيت APK على Android',
-    lat_host: 'المضيف المستهدف',
-    lat_stats: 'إحصائيات مباشرة',
-    lat_graph: 'رسم بياني للزمن — آخر 60 بينج',
-    lat_log: 'سجل جودة الاتصال',
-    lat_clear: 'مسح السجل',
-    lat_solutions: 'حلول — كيفية تحسين زمن الاستجابة',
-    spd_title: 'اختبار سرعة متعدد الخوادم',
-    spd_desc: 'يختبر 3 خوادم في وقت واحد ويحسب المتوسط — أكثر دقة من الاختبارات أحادية الخادم.',
-    spd_start: 'بدء اختبار السرعة',
-    spd_results: 'النتائج',
-    spd_graph: 'رسم بياني للتنزيل المباشر',
-    spd_verdict: 'الحكم والتوصية',
-    spd_history: 'سجل الاختبارات',
-    cust_new: 'تذكرة جديدة',
-    cust_tracker: 'متتبع التذاكر',
-    cust_name_ph: 'اسم العميل',
-    cust_phone_ph: 'رقم الهاتف',
-    cust_addr_ph: 'العنوان / الموقع',
-    cust_notes_ph: 'ملاحظات (اختياري)',
-    cust_add: 'إضافة',
-    download_btn: 'تنزيل',
-  },
-  he: {
-    dir: 'rtl',
-    topbarTitle: 'ערכת כלים לטכנאי רשת',
-    topbarSub: 'פינג · כבל · הרשת שלי · הורדות',
-    tabs: ['פינג ובדיקות','מדריך כבלים','הרשת שלי','הורדות','מוניטור השהיה','בדיקת מהירות','לקוחות'],
-    ping_title: 'יצירת פקודות',
-    ping_placeholder: 'כתובת IP או שם מארח למשל 192.168.1.1',
-    ping_btn: 'צור',
-    ping_quick: 'יעדים מהירים',
-    ping_default: 'הכנס מארח למעלה כדי ליצור פקודות.',
-    port_ref: 'עזר פורטים',
-    cable_wiring: 'חיווט Ethernet — T568A ו-T568B',
-    cable_type_title: 'מידע על סוג הכבל',
-    cable_select: 'בחר סוג כבל...',
-    cable_trouble: 'מדריך פתרון תקלות',
-    tel_single: 'RJ11 — קו בודד (הנפוץ ביותר)',
-    tel_dual: 'RJ11 — שני קווים',
-    tel_rj45: 'RJ45 — טלפון דרך כבל Ethernet (4 זוגות)',
-    pairs25: 'כבל 25 זוגות — קוד צבעים',
-    mynet_ip: 'IP ציבורי ומידע חיבור',
-    mynet_fetch: 'טען את המידע שלי',
-    mynet_isp: 'בדיקות מהירות של ספקי אינטרנט ישראליים',
-    mynet_dns: 'בדיקת DNS',
-    mynet_dns_ph: 'דומיין למשל google.com',
-    mynet_reach: 'בדיקת נגישות',
-    mynet_reach_ph: 'דומיין או IP למשל google.com',
-    mynet_reach_desc: 'בודק אם מארח מגיב מהדפדפן שלך.',
-    mynet_terminal: 'פקודות טרמינל Linux',
-    mynet_terminal_desc: 'העתק והפעל על מחשב Linux Mint שלך לאבחון מלא.',
-    dl_title: 'אפליקציות Fiberhome הרשמיות — לחץ על כפתור ההורדה לקבלת APK מ-Google Drive.',
-    dl_install: 'כיצד להתקין APK על Android',
-    lat_host: 'מארח יעד',
-    lat_stats: 'נתונים בזמן אמת',
-    lat_graph: 'גרף השהיה — 60 פינגים אחרונים',
-    lat_log: 'יומן איכות חיבור',
-    lat_clear: 'נקה יומן',
-    lat_solutions: 'פתרונות — כיצד לשפר השהיה',
-    spd_title: 'בדיקת מהירות רב-שרתית',
-    spd_desc: 'בודק 3 שרתים במקביל ומחשב ממוצע — מדויק יותר מבדיקות שרת בודד.',
-    spd_start: 'התחל בדיקת מהירות',
-    spd_results: 'תוצאות',
-    spd_graph: 'גרף הורדה בזמן אמת',
-    spd_verdict: 'פסיקה והמלצה',
-    spd_history: 'היסטוריית בדיקות',
-    cust_new: 'כרטיס חדש',
-    cust_tracker: 'מעקב כרטיסים',
-    cust_name_ph: 'שם לקוח',
-    cust_phone_ph: 'מספר טלפון',
-    cust_addr_ph: 'כתובת / אתר',
-    cust_notes_ph: 'הערות (אופציונלי)',
-    cust_add: 'הוסף',
-    download_btn: 'הורד',
-  }
+/* ================================================================
+   ⚙️  الإعدادات — عدّل هذه القيم لتناسب مسجدك
+   ================================================================ */
+const CONFIG = {
+  mosqueName: "مسجد سلمان الفارسي",  // اسم المسجد
+  cityLabel:  "عسفيا",              // اسم المدينة للعرض
+  mawaqitSlug:"masjid-salman-lfarissi-asfia-3009000-israel", // معرّف المسجد على mawaqit.net
+  latitude:   32.7194,              // خط العرض  (لعرض الخريطة فقط)
+  longitude:  35.0633,              // خط الطول
+  address:    "عسفيا، جبل الكرمل",
+  phone:      "+972000000000",      // ← ضع رقم الهاتف الحقيقي
+  email:      "salman.alfarisi.isfiya@gmail.com",
 };
 
-let currentLang = 'en';
-
-function setLang(lang) {
-  currentLang = lang;
-  const t = translations[lang];
-  document.body.classList.toggle('rtl', t.dir === 'rtl');
-  document.documentElement.setAttribute('dir', t.dir);
-
-  // Lang buttons
-  document.querySelectorAll('.lang-btn').forEach((b, i) => {
-    b.classList.toggle('active', ['en','ar','he'][i] === lang);
-  });
-
-  // Topbar
-  document.querySelector('.topbar-title').textContent = t.topbarTitle;
-  document.getElementById('topbar-sub').textContent = t.topbarSub;
-
-  // Tab labels
-  const tabOrder = ['ping','cable','mynet','downloads','latency','speedtest','customers'];
-  document.querySelectorAll('.tab').forEach((tab, i) => {
-    const icon = tab.querySelector('i').outerHTML;
-    tab.innerHTML = icon + t.tabs[i];
-  });
-
-  // Ping panel
-  safeText('ping-host', null, t.ping_placeholder, true);
-  safeText('ping-result', t.ping_default);
-  safeH3('panel-ping', 0, t.ping_title);
-  safeH3('panel-ping', 1, t.ping_quick);
-  safeH3('panel-ping', 2, t.port_ref);
-  safeBtnText('panel-ping', 0, t.ping_btn);
-
-  // Cable panel
-  safeH3('panel-cable', 0, t.cable_wiring);
-  safeH3('panel-cable', 1, t.cable_type_title);
-  safeH3('panel-cable', 2, t.cable_trouble);
-  safeH3('panel-cable', 3, t.tel_single.replace('RJ11 — ','RJ11 — '));
-  safeH3('panel-cable', 4, t.tel_dual);
-  safeH3('panel-cable', 5, t.tel_rj45);
-  safeH3('panel-cable', 6, t.pairs25);
-  const cableSelect = document.getElementById('cable-type');
-  if (cableSelect) cableSelect.options[0].text = t.cable_select;
-
-  // My network panel
-  safeH3('panel-mynet', 0, t.mynet_ip);
-  safeH3('panel-mynet', 1, t.mynet_isp);
-  safeH3('panel-mynet', 2, t.mynet_dns);
-  safeH3('panel-mynet', 3, t.mynet_reach);
-  safeH3('panel-mynet', 4, t.mynet_terminal);
-  safeText('dns-host', null, t.mynet_dns_ph, true);
-  safeText('reach-host', null, t.mynet_reach_ph, true);
-  const fetchBtn = document.getElementById('btn-netinfo');
-  if (fetchBtn) fetchBtn.innerHTML = '<i class="ti ti-refresh"></i> ' + t.mynet_fetch;
-
-  // Downloads
-  const dlDesc = document.querySelector('#panel-downloads > div');
-  if (dlDesc) dlDesc.textContent = t.dl_title;
-  safeH3('panel-downloads', 0, t.dl_install);
-  document.querySelectorAll('#panel-downloads a.btn').forEach(a => {
-    if (a.textContent.includes('Download') || a.textContent.includes('تنزيل') || a.textContent.includes('הורד')) {
-      a.innerHTML = '<i class="ti ti-download"></i> ' + t.download_btn;
-    }
-  });
-
-  // Latency
-  safeH3('panel-latency', 0, t.lat_host);
-  safeH3('panel-latency', 1, t.lat_stats);
-  safeH3('panel-latency', 2, t.lat_graph);
-  safeH3('panel-latency', 3, t.lat_log);
-  safeH3('panel-latency', 4, t.lat_solutions);
-  const clearBtn = document.querySelector('#panel-latency .btn');
-  if (clearBtn) clearBtn.innerHTML = '<i class="ti ti-trash"></i> ' + t.lat_clear;
-
-  // Speed test
-  safeH3('panel-speedtest', 0, t.spd_title);
-  safeH3('panel-speedtest', 1, t.spd_results);
-  safeH3('panel-speedtest', 2, t.spd_graph);
-  safeH3('panel-speedtest', 3, t.spd_verdict);
-  safeH3('panel-speedtest', 4, t.spd_history);
-  const spdBtn = document.getElementById('speed-btn');
-  if (spdBtn && !spdBtn.disabled) spdBtn.innerHTML = '<i class="ti ti-player-play"></i> ' + t.spd_start;
-
-  // Customers
-  safeH3('panel-customers', 0, t.cust_new);
-  safeH3('panel-customers', 1, t.cust_tracker);
-  safeText('cust-name', null, t.cust_name_ph, true);
-  safeText('cust-phone', null, t.cust_phone_ph, true);
-  safeText('cust-addr', null, t.cust_addr_ph, true);
-  safeText('cust-notes', null, t.cust_notes_ph, true);
-  const addBtn = document.querySelector('#panel-customers .btn-primary');
-  if (addBtn) addBtn.innerHTML = '<i class="ti ti-plus"></i> ' + t.cust_add;
+/* ---------- أدوات مساعدة ---------- */
+const arNum = s => String(s).replace(/[0-9]/g, d => "٠١٢٣٤٥٦٧٨٩"[d]);
+const pad = n => String(n).padStart(2,"0");
+function fmtTime(t){
+  let [h,m] = t.split(":").map(Number);
+  const period = h >= 12 ? "مساءً" : "صباحًا";
+  let h12 = h % 12 || 12;
+  return arNum(h12)+":"+arNum(pad(m))+" "+period;
 }
 
-function safeH3(panelId, index, text) {
-  const panel = document.getElementById(panelId);
-  if (!panel) return;
-  const h3s = panel.querySelectorAll('h3');
-  if (h3s[index]) h3s[index].textContent = text;
-}
+/* ---------- تعبئة الإعدادات في الصفحة ---------- */
+document.getElementById("brandName").textContent = CONFIG.mosqueName;
+document.getElementById("heroName").innerHTML = CONFIG.mosqueName;
+document.getElementById("footName").textContent = "© " + CONFIG.mosqueName + " — جميع الحقوق محفوظة";
+document.getElementById("addrLine").textContent = CONFIG.address;
+const phoneLink = document.getElementById("phoneLink");
+phoneLink.href = "tel:"+CONFIG.phone; document.getElementById("phoneText").textContent = CONFIG.phone;
+const mailLink = document.getElementById("mailLink");
+mailLink.href = "mailto:"+CONFIG.email; document.getElementById("mailText").textContent = CONFIG.email;
 
-function safeText(id, text, placeholder, isPlaceholder) {
-  const el = document.getElementById(id);
-  if (!el) return;
-  if (isPlaceholder) el.placeholder = placeholder;
-  else if (text) el.textContent = text;
-}
+/* ---------- الخريطة ---------- */
+(function(){
+  const d = 0.008, la = CONFIG.latitude, lo = CONFIG.longitude;
+  const bbox = (lo-d)+","+(la-d)+","+(lo+d)+","+(la+d);
+  document.getElementById("mapFrame").src =
+    "https://www.openstreetmap.org/export/embed.html?bbox="+bbox+"&layer=mapnik&marker="+la+","+lo;
+  document.getElementById("dirBtn").href =
+    "https://www.google.com/maps/dir/?api=1&destination="+la+","+lo;
+})();
 
-function safeBtnText(panelId, index, text) {
-  const panel = document.getElementById(panelId);
-  if (!panel) return;
-  const btns = panel.querySelectorAll('button.btn');
-  if (btns[index]) {
-    const icon = btns[index].querySelector('i');
-    btns[index].innerHTML = (icon ? icon.outerHTML + ' ' : '') + text;
+/* ---------- الساعة الحية ---------- */
+function tickClock(){
+  const now = new Date();
+  const t = arNum(pad(now.getHours()%12||12))+":"+arNum(pad(now.getMinutes()))+":"+arNum(pad(now.getSeconds()))
+            +(now.getHours()>=12?" مساءً":" صباحًا");
+  document.getElementById("liveClock").textContent = t;
+}
+setInterval(tickClock,1000); tickClock();
+
+/* ---------- مواقيت الصلاة (MAWAQIT الرسمية) ---------- */
+document.getElementById("mawaqitFrame").src =
+  "https://mawaqit.net/ar/w/" + CONFIG.mawaqitSlug + "?showOnly5PrayerTimes=0";
+
+/* ---------- التاريخ الهجري (تقويم أم القرى) ---------- */
+function renderHijri(){
+  try{
+    const fmt = new Intl.DateTimeFormat("ar-TN-u-ca-islamic-umalqura",
+      {weekday:"long", day:"numeric", month:"long", year:"numeric"});
+    document.getElementById("hijriDate").textContent = fmt.format(new Date()) + " هـ";
+  }catch(e){
+    document.getElementById("hijriDate").textContent = "";
   }
 }
+renderHijri();
 
-
-// RJ11 Single line wiring
-const rj11Single = [
-  ['Pin 1', 'unused', '#374151', '#9ca3af'],
-  ['Pin 2', 'unused', '#374151', '#9ca3af'],
-  ['Pin 3', 'TIP — Line 1 (+)', '#1e3a8a', '#93c5fd'],
-  ['Pin 4', 'RING — Line 1 (−)', '#166534', '#86efac'],
-  ['Pin 5', 'unused', '#374151', '#9ca3af'],
-  ['Pin 6', 'unused', '#374151', '#9ca3af'],
+/* ---------- الأخبار والفعاليات (عدّلها كما تشاء) ---------- */
+const NEWS = [
+  {date:"كل يوم جمعة", title:"خطبة الجمعة", body:"تُقام صلاة الجمعة وخطبتها في تمام الساعة الواحدة ظهرًا. الحضور مفتوح للجميع."},
+  {date:"يوميًا بعد العشاء", title:"درس فقه وتفسير", body:"درس علمي يومي بعد صلاة العشاء في قاعة المسجد، يلقيه إمام المسجد."},
+  {date:"رمضان المبارك", title:"صلاة التراويح والقيام", body:"برنامج كامل لصلاة التراويح والقيام طوال شهر رمضان مع ختمة قرآن."},
 ];
-(function(){
-  const el = document.getElementById('rj11-single');
-  rj11Single.forEach(([pin, name, bg, fg]) => {
-    const d = document.createElement('div');
-    d.className = 'wire';
-    d.innerHTML = '<span class="pin" style="font-size:10px;min-width:36px">' + pin + '</span><span style="background:' + bg + ';color:' + fg + ';border-radius:6px;padding:4px 10px;flex:1;font-size:12px">' + name + '</span>';
-    el.appendChild(d);
-  });
-})();
+document.getElementById("newsGrid").innerHTML = NEWS.map(n =>
+  '<div class="news-card">'+
+    '<span class="date">'+n.date+'</span>'+
+    '<h3>'+n.title+'</h3>'+
+    '<p>'+n.body+'</p>'+
+  '</div>'
+).join("");
 
-// RJ11 Dual line wiring
-const rj11Dual = [
-  ['Pin 1', 'unused', '#374151', '#9ca3af'],
-  ['Pin 2', 'TIP — Line 2 (+)', '#7c2d12', '#fed7aa'],
-  ['Pin 3', 'TIP — Line 1 (+)', '#1e3a8a', '#93c5fd'],
-  ['Pin 4', 'RING — Line 1 (−)', '#166534', '#86efac'],
-  ['Pin 5', 'RING — Line 2 (−)', '#78350f', '#fcd34d'],
-  ['Pin 6', 'unused', '#374151', '#9ca3af'],
-];
-(function(){
-  const el = document.getElementById('rj11-dual');
-  rj11Dual.forEach(([pin, name, bg, fg]) => {
-    const d = document.createElement('div');
-    d.className = 'wire';
-    d.innerHTML = '<span class="pin" style="font-size:10px;min-width:36px">' + pin + '</span><span style="background:' + bg + ';color:' + fg + ';border-radius:6px;padding:4px 10px;flex:1;font-size:12px">' + name + '</span>';
-    el.appendChild(d);
-  });
-})();
-
-// RJ45 Telephone
-const rj45Tel = [
-  ['Pin 1', 'White/Blue — Line 4 TIP', '#1e3a8a', '#dbeafe'],
-  ['Pin 2', 'Blue — Line 1 RING (−)', '#1e3a8a', '#93c5fd'],
-  ['Pin 3', 'White/Orange — Line 3 RING', '#7c2d12', '#fed7aa'],
-  ['Pin 4', 'Orange — Line 2 RING (−)', '#7c2d12', '#fdba74'],
-  ['Pin 5', 'White/Green — Line 2 TIP (+)', '#166534', '#bbf7d0'],
-  ['Pin 6', 'Green — Line 3 TIP', '#14532d', '#86efac'],
-  ['Pin 7', 'White/Brown — Line 4 RING', '#451a03', '#fde68a'],
-  ['Pin 8', 'Brown — Line 1 TIP (+)', '#451a03', '#d97706'],
-];
-(function(){
-  const el = document.getElementById('rj45-tel');
-  el.style.display = 'grid';
-  el.style.gridTemplateColumns = '1fr 1fr';
-  el.style.gap = '4px';
-  rj45Tel.forEach(([pin, name, bg, fg]) => {
-    const d = document.createElement('div');
-    d.className = 'wire';
-    d.innerHTML = '<span class="pin" style="font-size:10px;min-width:36px">' + pin + '</span><span style="background:' + bg + ';color:' + fg + ';border-radius:6px;padding:4px 10px;flex:1;font-size:12px">' + name + '</span>';
-    el.appendChild(d);
-  });
-})();
-
-// 25-pair color code
-const tipColors = ['White','Red','Black','Yellow','Violet'];
-const ringColors = ['Blue','Orange','Green','Brown','Slate'];
-const tipBg = ['#e2e8f0','#991b1b','#111827','#78350f','#4c1d95'];
-const tipFg = ['#1e293b','#fca5a5','#d1d5db','#fde68a','#ddd6fe'];
-const ringBg = ['#1e3a8a','#7c2d12','#14532d','#451a03','#334155'];
-const ringFg = ['#93c5fd','#fdba74','#86efac','#d97706','#cbd5e1'];
-(function(){
-  const el = document.getElementById('pairs-25');
-  for (let pair = 1; pair <= 25; pair++) {
-    const ti = Math.floor((pair-1) / 5);
-    const ri = (pair-1) % 5;
-    const d = document.createElement('div');
-    d.style.cssText = 'background:#0f1117;border:1px solid #1e293b;border-radius:8px;padding:8px 10px;font-size:12px';
-    d.innerHTML =
-      '<div style="font-weight:600;color:#64748b;margin-bottom:6px">Pair ' + pair + '</div>' +
-      '<div style="display:flex;gap:4px;margin-bottom:4px">' +
-        '<span style="background:' + tipBg[ti] + ';color:' + tipFg[ti] + ';border-radius:4px;padding:2px 8px;font-size:11px;flex:1;text-align:center">TIP: ' + tipColors[ti] + '</span>' +
-      '</div>' +
-      '<div style="display:flex;gap:4px">' +
-        '<span style="background:' + ringBg[ri] + ';color:' + ringFg[ri] + ';border-radius:4px;padding:2px 8px;font-size:11px;flex:1;text-align:center">RING: ' + ringColors[ri] + '</span>' +
-      '</div>';
-    el.appendChild(d);
-  }
-})();
-
-
-let spdHistory = [];
-let spdGraphData = [];
-let spdCanvas2, spdCtx2;
-
-async function startSpeedTest() {
-  const btn = document.getElementById('speed-btn');
-  const status = document.getElementById('speed-status');
-  btn.disabled = true;
-  btn.innerHTML = '<i class="ti ti-loader"></i> Testing...';
-  document.getElementById('spd-verdict-card').style.display = 'none';
-  spdGraphData = [];
-  ['spd-down','spd-up','spd-ping','spd-jitter','spd-grade'].forEach(id => document.getElementById(id).textContent = '—');
-  document.getElementById('spd-down-bar').style.width = '0%';
-  document.getElementById('spd-up-bar').style.width = '0%';
-
-  spdCanvas2 = document.getElementById('spd-canvas');
-  spdCtx2 = spdCanvas2.getContext('2d');
-  spdCanvas2.width = spdCanvas2.offsetWidth * window.devicePixelRatio;
-  spdCanvas2.height = 120 * window.devicePixelRatio;
-  spdCanvas2.style.width = '100%';
-  spdCanvas2.style.height = '120px';
-  spdCtx2.scale(window.devicePixelRatio, window.devicePixelRatio);
-
-  // Test ping first
-  status.textContent = 'Testing ping...';
-  const pings = [];
-  for (let i = 0; i < 5; i++) {
-    const t0 = Date.now();
-    try {
-      await fetch('https://1.1.1.1/cdn-cgi/trace', { cache: 'no-store' });
-      pings.push(Date.now() - t0);
-    } catch(e) {
-      try {
-        await fetch('https://dns.google/resolve?name=test.com&type=A&_=' + Date.now(), { cache: 'no-store' });
-        pings.push(Date.now() - t0);
-      } catch(e2) {}
-    }
-    await sleep(200);
-  }
-  const avgPing = pings.length ? Math.round(pings.reduce((a,b)=>a+b,0)/pings.length) : 999;
-  const jitter = pings.length > 1 ? Math.round(pings.slice(1).reduce((s,v,i)=>s+Math.abs(v-pings[i]),0)/(pings.length-1)) : 0;
-  document.getElementById('spd-ping').textContent = avgPing;
-  document.getElementById('spd-jitter').textContent = jitter;
-
-  // Download test — fetch from multiple CDN sources
-  status.textContent = 'Testing download speed...';
-  const dlSpeeds = [];
-  const dlUrls = [
-    'https://speed.cloudflare.com/__down?bytes=10000000',
-    'https://proof.ovh.net/files/10Mb.dat',
-  ];
-
-  for (const url of dlUrls) {
-    try {
-      const t0 = Date.now();
-      const resp = await fetch(url + (url.includes('?') ? '&' : '?') + '_=' + Date.now(), { cache: 'no-store' });
-      const reader = resp.body.getReader();
-      let received = 0;
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        received += value.length;
-        const elapsed = (Date.now() - t0) / 1000;
-        const mbps = parseFloat(((received * 8) / elapsed / 1000000).toFixed(2));
-        spdGraphData.push(mbps);
-        document.getElementById('spd-down').textContent = mbps.toFixed(1);
-        const pct = Math.min((mbps / 100) * 100, 100);
-        document.getElementById('spd-down-bar').style.width = pct + '%';
-        drawSpeedGraph();
-        if (Date.now() - t0 > 8000) { reader.cancel(); break; }
-      }
-      const totalTime = (Date.now() - t0) / 1000;
-      const speedMbps = (received * 8) / totalTime / 1000000;
-      dlSpeeds.push(speedMbps);
-    } catch(e) {}
-    await sleep(300);
-  }
-
-  const avgDl = dlSpeeds.length ? dlSpeeds.reduce((a,b)=>a+b,0)/dlSpeeds.length : 0;
-  document.getElementById('spd-down').textContent = avgDl.toFixed(1);
-  document.getElementById('spd-down-bar').style.width = Math.min((avgDl/100)*100,100) + '%';
-
-  // Upload test
-  status.textContent = 'Testing upload speed...';
-  let uploadMbps = 0;
-  try {
-    const uploadData = new Uint8Array(2 * 1024 * 1024);
-    crypto.getRandomValues(uploadData);
-    const blob = new Blob([uploadData]);
-    const t0 = Date.now();
-    await fetch('https://speed.cloudflare.com/__up', {
-      method: 'POST',
-      body: blob,
-      cache: 'no-store'
-    });
-    const elapsed = (Date.now() - t0) / 1000;
-    uploadMbps = (uploadData.length * 8) / elapsed / 1000000;
-  } catch(e) {
-    uploadMbps = avgDl * 0.3; // estimate if upload test fails
-  }
-  document.getElementById('spd-up').textContent = uploadMbps.toFixed(1);
-  document.getElementById('spd-up-bar').style.width = Math.min((uploadMbps/50)*100,100) + '%';
-
-  // Grade
-  let grade, gradeColor;
-  if (avgDl >= 50 && avgPing < 50) { grade = 'A'; gradeColor = '#34d399'; }
-  else if (avgDl >= 25 && avgPing < 100) { grade = 'B'; gradeColor = '#86efac'; }
-  else if (avgDl >= 10 && avgPing < 150) { grade = 'C'; gradeColor = '#fbbf24'; }
-  else if (avgDl >= 5) { grade = 'D'; gradeColor = '#fb923c'; }
-  else { grade = 'F'; gradeColor = '#f87171'; }
-  document.getElementById('spd-grade').textContent = grade;
-  document.getElementById('spd-grade').style.color = gradeColor;
-
-  // Verdict
-  let verdict = '';
-  if (avgDl >= 100) verdict += '✔ <strong style="color:#34d399">Excellent download speed</strong> — suitable for multiple 4K streams and large file transfers.<br>';
-  else if (avgDl >= 25) verdict += '✔ <strong style="color:#86efac">Good download speed</strong> — suitable for HD streaming and video calls.<br>';
-  else if (avgDl >= 5) verdict += '⚠ <strong style="color:#fbbf24">Average download speed</strong> — suitable for browsing but may struggle with HD video.<br>';
-  else verdict += '✘ <strong style="color:#f87171">Poor download speed</strong> — client should contact ISP to check their plan and line quality.<br>';
-
-  if (avgPing < 50) verdict += '✔ <strong style="color:#34d399">Excellent latency</strong> — great for VoIP and gaming.<br>';
-  else if (avgPing < 100) verdict += '⚠ <strong style="color:#fbbf24">Acceptable latency</strong> — VoIP calls may experience slight delay.<br>';
-  else verdict += '✘ <strong style="color:#f87171">High latency</strong> — VoIP and real-time applications will be affected. Check the Latency Monitor tab for solutions.<br>';
-
-  if (jitter > 30) verdict += '✘ <strong style="color:#f87171">High jitter (' + jitter + 'ms)</strong> — unstable connection, likely a line or router issue.<br>';
-  else verdict += '✔ <strong style="color:#34d399">Low jitter</strong> — connection is stable.<br>';
-
-  document.getElementById('spd-verdict').innerHTML = verdict;
-  document.getElementById('spd-verdict-card').style.display = 'block';
-
-  // History
-  const entry = { dl: avgDl.toFixed(1), ul: uploadMbps.toFixed(1), ping: avgPing, jitter, grade, time: new Date().toLocaleTimeString() };
-  spdHistory.unshift(entry);
-  if (spdHistory.length > 10) spdHistory.pop();
-  renderSpdHistory();
-
-  status.textContent = 'Test complete — ' + new Date().toLocaleTimeString();
-  btn.disabled = false;
-  btn.innerHTML = '<i class="ti ti-refresh"></i> Run Again';
-}
-
-function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
-
-function drawSpeedGraph() {
-  if (!spdCtx2) return;
-  const w = spdCanvas2.offsetWidth;
-  const h = 120;
-  spdCtx2.clearRect(0, 0, w, h);
-  spdCtx2.fillStyle = '#0a0e18';
-  spdCtx2.fillRect(0, 0, w, h);
-  if (spdGraphData.length < 2) return;
-  const max = Math.max(...spdGraphData, 10);
-  const barW = w / Math.max(spdGraphData.length, 40);
-  spdGraphData.forEach((v, i) => {
-    const barH = (v / max) * (h - 20);
-    const col = v > 50 ? '#34d399' : v > 10 ? '#fbbf24' : '#f87171';
-    spdCtx2.fillStyle = col + '44';
-    spdCtx2.fillRect(i * barW, h - barH, barW - 1, barH);
-    spdCtx2.fillStyle = col;
-    spdCtx2.fillRect(i * barW, h - barH, barW - 1, 2);
-  });
-}
-
-function renderSpdHistory() {
-  const el = document.getElementById('spd-history');
-  if (!spdHistory.length) { el.textContent = 'No tests run yet.'; return; }
-  el.innerHTML = '<table style="width:100%;border-collapse:collapse;font-size:12px">' +
-    '<tr><th>Time</th><th>Download</th><th>Upload</th><th>Ping</th><th>Jitter</th><th>Grade</th></tr>' +
-    spdHistory.map(h => '<tr><td>' + h.time + '</td><td>' + h.dl + ' Mbps</td><td>' + h.ul + ' Mbps</td><td>' + h.ping + 'ms</td><td>' + h.jitter + 'ms</td><td style="font-weight:700">' + h.grade + '</td></tr>').join('') +
-    '</table>';
-}
-
-
-let latRunning = false;
-let latTimer = null;
-let latData = [];
-let latSent = 0;
-let latFailed = 0;
-let latCanvas, latCtx;
-
-function setLatHost(h) { document.getElementById('lat-host').value = h; }
-
-function toggleLatency() {
-  if (latRunning) {
-    stopLatency();
-  } else {
-    startLatency();
+/* ---------- القرآن الكريم (alquran.cloud API) ---------- */
+let SURAHS = [];
+async function loadSurahs(){
+  try{
+    const res = await fetch("https://api.alquran.cloud/v1/surah");
+    const j = await res.json();
+    SURAHS = j.data;
+    renderSurahs(SURAHS);
+  }catch(e){
+    document.getElementById("surahGrid").innerHTML =
+      '<div class="err">تعذّر تحميل السور. تأكّد من الاتصال بالإنترنت.</div>';
   }
 }
-
-function startLatency() {
-  latRunning = true;
-  latData = []; latSent = 0; latFailed = 0;
-  document.getElementById('lat-btn').innerHTML = '<i class="ti ti-player-stop"></i> Stop';
-  document.getElementById('lat-btn').style.background = '#7f1d1d';
-  document.getElementById('lat-btn').style.borderColor = '#ef4444';
-  document.getElementById('lat-log').innerHTML = '';
-  latCanvas = document.getElementById('lat-canvas');
-  latCtx = latCanvas.getContext('2d');
-  latCanvas.width = latCanvas.offsetWidth * window.devicePixelRatio;
-  latCanvas.height = 140 * window.devicePixelRatio;
-  latCanvas.style.width = '100%';
-  latCanvas.style.height = '140px';
-  latCtx.scale(window.devicePixelRatio, window.devicePixelRatio);
-  doPing();
-  const interval = parseInt(document.getElementById('lat-interval').value);
-  latTimer = setInterval(doPing, interval);
+function renderSurahs(list){
+  const g = document.getElementById("surahGrid");
+  if(!list.length){ g.innerHTML = '<div class="loader">لا توجد نتائج</div>'; return; }
+  g.innerHTML = list.map(s =>
+    '<div class="surah-card" data-num="'+s.number+'">'+
+      '<div class="num">'+
+        '<svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.2">'+
+          '<rect x="9" y="9" width="22" height="22"/>'+
+          '<rect x="9" y="9" width="22" height="22" transform="rotate(45 20 20)"/></svg>'+
+        '<span>'+arNum(s.number)+'</span>'+
+      '</div>'+
+      '<div class="meta">'+
+        '<div class="nm">'+s.name+'</div>'+
+        '<div class="sub">'+(s.revelationType==="Meccan"?"مكية":"مدنية")+' • '+arNum(s.numberOfAyahs)+' آية</div>'+
+      '</div>'+
+    '</div>'
+  ).join("");
+  document.querySelectorAll(".surah-card").forEach(c =>
+    c.addEventListener("click", () => openSurah(+c.dataset.num)));
 }
+document.getElementById("surahSearch").addEventListener("input", e => {
+  const q = e.target.value.trim();
+  renderSurahs(SURAHS.filter(s => s.name.includes(q) || String(s.number)===q || arNum(s.number).includes(q)));
+});
 
-function stopLatency() {
-  latRunning = false;
-  clearInterval(latTimer);
-  document.getElementById('lat-btn').innerHTML = '<i class="ti ti-player-play"></i> Start';
-  document.getElementById('lat-btn').style.background = '';
-  document.getElementById('lat-btn').style.borderColor = '';
-  addLog('--- Monitoring stopped ---', '#475569');
-}
-
-function doPing() {
-  const host = document.getElementById('lat-host').value.trim() || '8.8.8.8';
-  const t0 = Date.now();
-  latSent++;
-  document.getElementById('lat-count').textContent = latSent;
-  const url = 'https://' + host + '/favicon.ico?_=' + t0;
-  fetch(url, { mode: 'no-cors', cache: 'no-store' })
-    .then(() => {
-      const ms = Date.now() - t0;
-      recordPing(ms, host);
-    })
-    .catch(() => {
-      // try again with no-cors HEAD
-      const t1 = Date.now();
-      fetch('https://dns.google/resolve?name=' + encodeURIComponent(host) + '&type=A&_=' + t1, { cache: 'no-store' })
-        .then(() => { recordPing(Date.now() - t1, host); })
-        .catch(() => {
-          latFailed++;
-          latData.push(null);
-          if (latData.length > 60) latData.shift();
-          const loss = Math.round((latFailed / latSent) * 100);
-          document.getElementById('lat-loss').textContent = loss + '%';
-          document.getElementById('lat-loss').style.color = loss > 5 ? '#f87171' : '#34d399';
-          document.getElementById('lat-current').textContent = 'TIMEOUT';
-          document.getElementById('lat-current').style.color = '#f87171';
-          addLog('[' + new Date().toLocaleTimeString() + ']  ' + host + '  →  TIMEOUT', '#f87171');
-          drawGraph();
-        });
-    });
-}
-
-function recordPing(ms, host) {
-  latData.push(ms);
-  if (latData.length > 60) latData.shift();
-  const valid = latData.filter(x => x !== null);
-  const avg = Math.round(valid.reduce((a,b) => a+b, 0) / valid.length);
-  const mn = Math.min(...valid);
-  const mx = Math.max(...valid);
-  const jitter = valid.length > 1 ? Math.round(valid.slice(1).reduce((s,v,i) => s + Math.abs(v - valid[i]), 0) / (valid.length - 1)) : 0;
-  const loss = Math.round((latFailed / latSent) * 100);
-  const col = ms < 50 ? '#34d399' : ms < 150 ? '#fbbf24' : '#f87171';
-  document.getElementById('lat-current').textContent = ms;
-  document.getElementById('lat-current').style.color = col;
-  document.getElementById('lat-avg').textContent = avg;
-  document.getElementById('lat-avg').style.color = avg < 50 ? '#34d399' : avg < 150 ? '#fbbf24' : '#f87171';
-  document.getElementById('lat-jitter').textContent = jitter;
-  document.getElementById('lat-jitter').style.color = jitter < 10 ? '#34d399' : jitter < 30 ? '#fbbf24' : '#f87171';
-  document.getElementById('lat-min').textContent = mn;
-  document.getElementById('lat-max').textContent = mx;
-  document.getElementById('lat-loss').textContent = loss + '%';
-  document.getElementById('lat-loss').style.color = loss > 5 ? '#f87171' : '#34d399';
-  const quality = ms < 50 ? '✔ Good' : ms < 150 ? '~ Fair' : '✘ Poor';
-  const qcol = ms < 50 ? '#34d399' : ms < 150 ? '#fbbf24' : '#f87171';
-  addLog('[' + new Date().toLocaleTimeString() + ']  ' + host + '  →  ' + ms + 'ms  ' + quality, qcol);
-  drawGraph();
-}
-
-function drawGraph() {
-  if (!latCtx) return;
-  const w = latCanvas.offsetWidth;
-  const h = 140;
-  latCtx.clearRect(0, 0, w, h);
-  latCtx.fillStyle = '#0a0e18';
-  latCtx.fillRect(0, 0, w, h);
-
-  // Grid lines
-  [50, 100, 150, 200].forEach(ms => {
-    const y = h - (ms / 250 * h);
-    latCtx.strokeStyle = '#1e293b';
-    latCtx.lineWidth = 0.5;
-    latCtx.beginPath(); latCtx.moveTo(0, y); latCtx.lineTo(w, y); latCtx.stroke();
-    latCtx.fillStyle = '#334155';
-    latCtx.font = '10px monospace';
-    latCtx.fillText(ms + 'ms', 4, y - 3);
-  });
-
-  if (latData.length < 2) return;
-  const barW = w / 60;
-
-  latData.forEach((ms, i) => {
-    const x = i * barW;
-    if (ms === null) {
-      latCtx.fillStyle = '#374151';
-      latCtx.fillRect(x + 1, 0, barW - 2, h);
-      return;
-    }
-    const barH = Math.min((ms / 250) * h, h);
-    const col = ms < 50 ? '#34d399' : ms < 150 ? '#fbbf24' : '#f87171';
-    latCtx.fillStyle = col + '33';
-    latCtx.fillRect(x + 1, h - barH, barW - 2, barH);
-    latCtx.fillStyle = col;
-    latCtx.fillRect(x + 1, h - barH, barW - 2, 2);
-  });
-}
-
-function addLog(msg, color) {
-  const el = document.getElementById('lat-log');
-  const line = document.createElement('div');
-  line.style.color = color || '#64748b';
-  line.textContent = msg;
-  el.appendChild(line);
-  el.scrollTop = el.scrollHeight;
-  // Keep max 200 lines
-  while (el.children.length > 200) el.removeChild(el.firstChild);
-}
-
-function clearLog() {
-  document.getElementById('lat-log').innerHTML = '';
-  latData = []; latSent = 0; latFailed = 0;
-  ['lat-current','lat-avg','lat-jitter','lat-min','lat-max'].forEach(id => document.getElementById(id).textContent = '—');
-  document.getElementById('lat-loss').textContent = '0%';
-  document.getElementById('lat-count').textContent = '0';
-  if (latCtx) { latCtx.clearRect(0, 0, latCanvas.width, latCanvas.height); }
-}
-
-}
-function removeTicket(id){if(confirm('Remove this ticket?')){tickets=tickets.filter(t=>t.id!==id);saveTickets();renderTickets();}}
-function updateStatus(id,val){const t=tickets.find(x=>x.id===id);if(t){t.status=val;saveTickets();renderTickets();}}
-function renderTickets(){
-  document.getElementById('stat-open').textContent=tickets.filter(t=>t.status==='open').length;
-  document.getElementById('stat-inprog').textContent=tickets.filter(t=>t.status==='inprogress').length;
-  document.getElementById('stat-resolved').textContent=tickets.filter(t=>t.status==='resolved').length;
-  const el=document.getElementById('ticket-list');
-  if(!tickets.length){el.innerHTML='<div class="empty"><i class="ti ti-clipboard" style="font-size:32px;display:block;margin-bottom:8px"></i>No tickets yet.</div>';return;}
-  el.innerHTML=tickets.map(t=>`
-    <div class="ticket">
-      <div class="ticket-header">
-        <span class="ticket-name">${t.name} ${t.priority==='urgent'?'<span class="badge badge-open">URGENT</span>':''}</span>
-        <div style="display:flex;gap:6px;align-items:center">
-          <select onchange="updateStatus(${t.id},this.value)" style="font-size:12px;padding:4px 8px;width:auto">
-            <option value="open"${t.status==='open'?' selected':''}>Open</option>
-            <option value="inprogress"${t.status==='inprogress'?' selected':''}>In progress</option>
-            <option value="resolved"${t.status==='resolved'?' selected':''}>Resolved</option>
-          </select>
-          <button onclick="removeTicket(${t.id})" style="background:none;border:none;cursor:pointer;color:#64748b;font-size:18px;padding:0 4px"><i class="ti ti-trash"></i></button>
-        </div>
-      </div>
-      <div class="ticket-meta">
-        ${t.phone?`<span><i class="ti ti-phone" style="font-size:12px"></i> ${t.phone}</span>`:''}
-        ${t.addr?`<span><i class="ti ti-map-pin" style="font-size:12px"></i> ${t.addr}</span>`:''}
-        <span><i class="ti ti-alert-circle" style="font-size:12px"></i> ${t.issue}</span>
-        <span><i class="ti ti-clock" style="font-size:12px"></i> ${t.time}</span>
-      </div>
-      ${t.notes?`<div style="font-size:12px;color:#94a3b8;margin-top:8px;padding-top:8px;border-top:1px solid #1e293b">${t.notes}</div>`:''}
-    </div>`).join('');
-}
-renderTickets();
-
-const translations = {
-  en: {
-    dir: 'ltr',
-    topbarTitle: 'Network Technician Toolkit',
-    topbarSub: 'Ping · Cable · My Network · Downloads',
-    tabs: ['Ping & Tests','Cable Guide','My Network','Downloads','Latency Monitor','Speed Test','Customers'],
-    ping_title: 'Generate commands',
-    ping_placeholder: 'IP or hostname e.g. 192.168.1.1',
-    ping_btn: 'Generate',
-    ping_quick: 'Quick targets',
-    ping_default: 'Enter a host above to generate commands.',
-    port_ref: 'Port reference',
-    cable_wiring: 'Ethernet wiring — T568A & T568B',
-    cable_type_title: 'Cable type info',
-    cable_select: 'Select cable type...',
-    cable_trouble: 'Troubleshooting guide',
-    tel_single: 'RJ11 — Single line (most common)',
-    tel_dual: 'RJ11 — Dual line',
-    tel_rj45: 'RJ45 — Telephone over Ethernet cable (4 pairs)',
-    pairs25: '25-pair telephone cable — color code',
-    mynet_ip: 'Public IP & connection info',
-    mynet_fetch: 'Fetch my info',
-    mynet_isp: 'Israeli ISP speed tests',
-    mynet_dns: 'DNS lookup',
-    mynet_dns_ph: 'Domain e.g. google.com',
-    mynet_reach: 'Reachability check',
-    mynet_reach_ph: 'Domain or IP e.g. google.com',
-    mynet_reach_desc: 'Tests if a host responds from your browser.',
-    mynet_terminal: 'Linux terminal commands',
-    mynet_terminal_desc: 'Copy and run on your Linux Mint PC for full network diagnostics.',
-    dl_title: 'Official Fiberhome apps — click the download button to get the APK from Google Drive.',
-    dl_install: 'How to install APK on Android',
-    lat_host: 'Target host',
-    lat_stats: 'Live stats',
-    lat_graph: 'Latency graph — last 60 pings',
-    lat_log: 'Connection quality log',
-    lat_clear: 'Clear log',
-    lat_solutions: 'Solutions — how to improve latency',
-    spd_title: 'Multi-server speed test',
-    spd_desc: 'Tests against 3 servers simultaneously and averages the result — more accurate than single-server tests.',
-    spd_start: 'Start Speed Test',
-    spd_results: 'Results',
-    spd_graph: 'Live download graph',
-    spd_verdict: 'Verdict & recommendation',
-    spd_history: 'Test history',
-    cust_new: 'New ticket',
-    cust_tracker: 'Ticket tracker',
-    cust_name_ph: 'Customer name',
-    cust_phone_ph: 'Phone number',
-    cust_addr_ph: 'Address / site',
-    cust_notes_ph: 'Notes (optional)',
-    cust_add: 'Add',
-    download_btn: 'Download',
-  },
-  ar: {
-    dir: 'rtl',
-    topbarTitle: 'أدوات فني الشبكات',
-    topbarSub: 'بينج · كابل · شبكتي · تنزيلات',
-    tabs: ['اختبار البينج','دليل الكابل','شبكتي','التنزيلات','مراقب الزمن','اختبار السرعة','العملاء'],
-    ping_title: 'توليد الأوامر',
-    ping_placeholder: 'عنوان IP أو اسم المضيف مثل 192.168.1.1',
-    ping_btn: 'توليد',
-    ping_quick: 'أهداف سريعة',
-    ping_default: 'أدخل مضيفاً أعلاه لتوليد الأوامر.',
-    port_ref: 'مرجع المنافذ',
-    cable_wiring: 'توصيل الإيثرنت — T568A و T568B',
-    cable_type_title: 'معلومات نوع الكابل',
-    cable_select: 'اختر نوع الكابل...',
-    cable_trouble: 'دليل استكشاف الأخطاء',
-    tel_single: 'RJ11 — خط واحد (الأكثر شيوعاً)',
-    tel_dual: 'RJ11 — خطان',
-    tel_rj45: 'RJ45 — هاتف عبر كابل إيثرنت (4 أزواج)',
-    pairs25: 'كابل 25 زوجاً — كود الألوان',
-    mynet_ip: 'IP العام ومعلومات الاتصال',
-    mynet_fetch: 'جلب معلوماتي',
-    mynet_isp: 'اختبارات سرعة مزودي الإنترنت الإسرائيليين',
-    mynet_dns: 'بحث DNS',
-    mynet_dns_ph: 'نطاق مثل google.com',
-    mynet_reach: 'فحص إمكانية الوصول',
-    mynet_reach_ph: 'نطاق أو IP مثل google.com',
-    mynet_reach_desc: 'يختبر ما إذا كان المضيف يستجيب من متصفحك.',
-    mynet_terminal: 'أوامر الطرفية على Linux',
-    mynet_terminal_desc: 'انسخ وشغّل على جهاز Linux Mint الخاص بك.',
-    dl_title: 'تطبيقات Fiberhome الرسمية — انقر على زر التنزيل للحصول على APK من Google Drive.',
-    dl_install: 'كيفية تثبيت APK على Android',
-    lat_host: 'المضيف المستهدف',
-    lat_stats: 'إحصائيات مباشرة',
-    lat_graph: 'رسم بياني للزمن — آخر 60 بينج',
-    lat_log: 'سجل جودة الاتصال',
-    lat_clear: 'مسح السجل',
-    lat_solutions: 'حلول — كيفية تحسين زمن الاستجابة',
-    spd_title: 'اختبار سرعة متعدد الخوادم',
-    spd_desc: 'يختبر 3 خوادم في وقت واحد ويحسب المتوسط — أكثر دقة من الاختبارات أحادية الخادم.',
-    spd_start: 'بدء اختبار السرعة',
-    spd_results: 'النتائج',
-    spd_graph: 'رسم بياني للتنزيل المباشر',
-    spd_verdict: 'الحكم والتوصية',
-    spd_history: 'سجل الاختبارات',
-    cust_new: 'تذكرة جديدة',
-    cust_tracker: 'متتبع التذاكر',
-    cust_name_ph: 'اسم العميل',
-    cust_phone_ph: 'رقم الهاتف',
-    cust_addr_ph: 'العنوان / الموقع',
-    cust_notes_ph: 'ملاحظات (اختياري)',
-    cust_add: 'إضافة',
-    download_btn: 'تنزيل',
-  },
-  he: {
-    dir: 'rtl',
-    topbarTitle: 'ערכת כלים לטכנאי רשת',
-    topbarSub: 'פינג · כבל · הרשת שלי · הורדות',
-    tabs: ['פינג ובדיקות','מדריך כבלים','הרשת שלי','הורדות','מוניטור השהיה','בדיקת מהירות','לקוחות'],
-    ping_title: 'יצירת פקודות',
-    ping_placeholder: 'כתובת IP או שם מארח למשל 192.168.1.1',
-    ping_btn: 'צור',
-    ping_quick: 'יעדים מהירים',
-    ping_default: 'הכנס מארח למעלה כדי ליצור פקודות.',
-    port_ref: 'עזר פורטים',
-    cable_wiring: 'חיווט Ethernet — T568A ו-T568B',
-    cable_type_title: 'מידע על סוג הכבל',
-    cable_select: 'בחר סוג כבל...',
-    cable_trouble: 'מדריך פתרון תקלות',
-    tel_single: 'RJ11 — קו בודד (הנפוץ ביותר)',
-    tel_dual: 'RJ11 — שני קווים',
-    tel_rj45: 'RJ45 — טלפון דרך כבל Ethernet (4 זוגות)',
-    pairs25: 'כבל 25 זוגות — קוד צבעים',
-    mynet_ip: 'IP ציבורי ומידע חיבור',
-    mynet_fetch: 'טען את המידע שלי',
-    mynet_isp: 'בדיקות מהירות של ספקי אינטרנט ישראליים',
-    mynet_dns: 'בדיקת DNS',
-    mynet_dns_ph: 'דומיין למשל google.com',
-    mynet_reach: 'בדיקת נגישות',
-    mynet_reach_ph: 'דומיין או IP למשל google.com',
-    mynet_reach_desc: 'בודק אם מארח מגיב מהדפדפן שלך.',
-    mynet_terminal: 'פקודות טרמינל Linux',
-    mynet_terminal_desc: 'העתק והפעל על מחשב Linux Mint שלך לאבחון מלא.',
-    dl_title: 'אפליקציות Fiberhome הרשמיות — לחץ על כפתור ההורדה לקבלת APK מ-Google Drive.',
-    dl_install: 'כיצד להתקין APK על Android',
-    lat_host: 'מארח יעד',
-    lat_stats: 'נתונים בזמן אמת',
-    lat_graph: 'גרף השהיה — 60 פינגים אחרונים',
-    lat_log: 'יומן איכות חיבור',
-    lat_clear: 'נקה יומן',
-    lat_solutions: 'פתרונות — כיצד לשפר השהיה',
-    spd_title: 'בדיקת מהירות רב-שרתית',
-    spd_desc: 'בודק 3 שרתים במקביל ומחשב ממוצע — מדויק יותר מבדיקות שרת בודד.',
-    spd_start: 'התחל בדיקת מהירות',
-    spd_results: 'תוצאות',
-    spd_graph: 'גרף הורדה בזמן אמת',
-    spd_verdict: 'פסיקה והמלצה',
-    spd_history: 'היסטוריית בדיקות',
-    cust_new: 'כרטיס חדש',
-    cust_tracker: 'מעקב כרטיסים',
-    cust_name_ph: 'שם לקוח',
-    cust_phone_ph: 'מספר טלפון',
-    cust_addr_ph: 'כתובת / אתר',
-    cust_notes_ph: 'הערות (אופציונלי)',
-    cust_add: 'הוסף',
-    download_btn: 'הורד',
-  }
-};
-
-let currentLang = 'en';
-
-function setLang(lang) {
-  currentLang = lang;
-  const t = translations[lang];
-  document.body.classList.toggle('rtl', t.dir === 'rtl');
-  document.documentElement.setAttribute('dir', t.dir);
-
-  // Lang buttons
-  document.querySelectorAll('.lang-btn').forEach((b, i) => {
-    b.classList.toggle('active', ['en','ar','he'][i] === lang);
-  });
-
-  // Topbar
-  document.querySelector('.topbar-title').textContent = t.topbarTitle;
-  document.getElementById('topbar-sub').textContent = t.topbarSub;
-
-  // Tab labels
-  const tabOrder = ['ping','cable','mynet','downloads','latency','speedtest','customers'];
-  document.querySelectorAll('.tab').forEach((tab, i) => {
-    const icon = tab.querySelector('i').outerHTML;
-    tab.innerHTML = icon + t.tabs[i];
-  });
-
-  // Ping panel
-  safeText('ping-host', null, t.ping_placeholder, true);
-  safeText('ping-result', t.ping_default);
-  safeH3('panel-ping', 0, t.ping_title);
-  safeH3('panel-ping', 1, t.ping_quick);
-  safeH3('panel-ping', 2, t.port_ref);
-  safeBtnText('panel-ping', 0, t.ping_btn);
-
-  // Cable panel
-  safeH3('panel-cable', 0, t.cable_wiring);
-  safeH3('panel-cable', 1, t.cable_type_title);
-  safeH3('panel-cable', 2, t.cable_trouble);
-  safeH3('panel-cable', 3, t.tel_single.replace('RJ11 — ','RJ11 — '));
-  safeH3('panel-cable', 4, t.tel_dual);
-  safeH3('panel-cable', 5, t.tel_rj45);
-  safeH3('panel-cable', 6, t.pairs25);
-  const cableSelect = document.getElementById('cable-type');
-  if (cableSelect) cableSelect.options[0].text = t.cable_select;
-
-  // My network panel
-  safeH3('panel-mynet', 0, t.mynet_ip);
-  safeH3('panel-mynet', 1, t.mynet_isp);
-  safeH3('panel-mynet', 2, t.mynet_dns);
-  safeH3('panel-mynet', 3, t.mynet_reach);
-  safeH3('panel-mynet', 4, t.mynet_terminal);
-  safeText('dns-host', null, t.mynet_dns_ph, true);
-  safeText('reach-host', null, t.mynet_reach_ph, true);
-  const fetchBtn = document.getElementById('btn-netinfo');
-  if (fetchBtn) fetchBtn.innerHTML = '<i class="ti ti-refresh"></i> ' + t.mynet_fetch;
-
-  // Downloads
-  const dlDesc = document.querySelector('#panel-downloads > div');
-  if (dlDesc) dlDesc.textContent = t.dl_title;
-  safeH3('panel-downloads', 0, t.dl_install);
-  document.querySelectorAll('#panel-downloads a.btn').forEach(a => {
-    if (a.textContent.includes('Download') || a.textContent.includes('تنزيل') || a.textContent.includes('הורד')) {
-      a.innerHTML = '<i class="ti ti-download"></i> ' + t.download_btn;
-    }
-  });
-
-  // Latency
-  safeH3('panel-latency', 0, t.lat_host);
-  safeH3('panel-latency', 1, t.lat_stats);
-  safeH3('panel-latency', 2, t.lat_graph);
-  safeH3('panel-latency', 3, t.lat_log);
-  safeH3('panel-latency', 4, t.lat_solutions);
-  const clearBtn = document.querySelector('#panel-latency .btn');
-  if (clearBtn) clearBtn.innerHTML = '<i class="ti ti-trash"></i> ' + t.lat_clear;
-
-  // Speed test
-  safeH3('panel-speedtest', 0, t.spd_title);
-  safeH3('panel-speedtest', 1, t.spd_results);
-  safeH3('panel-speedtest', 2, t.spd_graph);
-  safeH3('panel-speedtest', 3, t.spd_verdict);
-  safeH3('panel-speedtest', 4, t.spd_history);
-  const spdBtn = document.getElementById('speed-btn');
-  if (spdBtn && !spdBtn.disabled) spdBtn.innerHTML = '<i class="ti ti-player-play"></i> ' + t.spd_start;
-
-  // Customers
-  safeH3('panel-customers', 0, t.cust_new);
-  safeH3('panel-customers', 1, t.cust_tracker);
-  safeText('cust-name', null, t.cust_name_ph, true);
-  safeText('cust-phone', null, t.cust_phone_ph, true);
-  safeText('cust-addr', null, t.cust_addr_ph, true);
-  safeText('cust-notes', null, t.cust_notes_ph, true);
-  const addBtn = document.querySelector('#panel-customers .btn-primary');
-  if (addBtn) addBtn.innerHTML = '<i class="ti ti-plus"></i> ' + t.cust_add;
-}
-
-function safeH3(panelId, index, text) {
-  const panel = document.getElementById(panelId);
-  if (!panel) return;
-  const h3s = panel.querySelectorAll('h3');
-  if (h3s[index]) h3s[index].textContent = text;
-}
-
-function safeText(id, text, placeholder, isPlaceholder) {
-  const el = document.getElementById(id);
-  if (!el) return;
-  if (isPlaceholder) el.placeholder = placeholder;
-  else if (text) el.textContent = text;
-}
-
-function safeBtnText(panelId, index, text) {
-  const panel = document.getElementById(panelId);
-  if (!panel) return;
-  const btns = panel.querySelectorAll('button.btn');
-  if (btns[index]) {
-    const icon = btns[index].querySelector('i');
-    btns[index].innerHTML = (icon ? icon.outerHTML + ' ' : '') + text;
+/* ---------- قارئ السورة ---------- */
+const overlay = document.getElementById("overlay");
+async function openSurah(num){
+  const s = SURAHS.find(x => x.number===num);
+  document.getElementById("rTitle").textContent = "سورة " + s.name;
+  document.getElementById("rSub").textContent =
+    (s.revelationType==="Meccan"?"مكية":"مدنية")+" • عدد الآيات "+arNum(s.numberOfAyahs);
+  const body = document.getElementById("rBody");
+  body.innerHTML = '<div class="loader">جارٍ تحميل الآيات…</div>';
+  const audio = document.getElementById("rAudio");
+  audio.src = "https://cdn.islamic.network/quran/audio-surah/128/ar.alafasy/"+num+".mp3";
+  overlay.classList.add("show");
+  try{
+    const res = await fetch("https://api.alquran.cloud/v1/surah/"+num+"/quran-uthmani");
+    const j = await res.json();
+    const ayat = j.data.ayahs;
+    let html = "";
+    if(num !== 1 && num !== 9)
+      html += '<div class="basmala">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>';
+    html += '<div class="ayat">' + ayat.map(a =>
+      a.text + '<span class="ayah-num">'+arNum(a.numberInSurah)+'</span> '
+    ).join("") + '</div>';
+    body.innerHTML = html;
+    body.scrollTop = 0;
+  }catch(e){
+    body.innerHTML = '<div class="err">تعذّر تحميل الآيات.</div>';
   }
 }
-
-
-// RJ11 Single line wiring
-const rj11Single = [
-  ['Pin 1', 'unused', '#374151', '#9ca3af'],
-  ['Pin 2', 'unused', '#374151', '#9ca3af'],
-  ['Pin 3', 'TIP — Line 1 (+)', '#1e3a8a', '#93c5fd'],
-  ['Pin 4', 'RING — Line 1 (−)', '#166534', '#86efac'],
-  ['Pin 5', 'unused', '#374151', '#9ca3af'],
-  ['Pin 6', 'unused', '#374151', '#9ca3af'],
-];
-(function(){
-  const el = document.getElementById('rj11-single');
-  rj11Single.forEach(([pin, name, bg, fg]) => {
-    const d = document.createElement('div');
-    d.className = 'wire';
-    d.innerHTML = '<span class="pin" style="font-size:10px;min-width:36px">' + pin + '</span><span style="background:' + bg + ';color:' + fg + ';border-radius:6px;padding:4px 10px;flex:1;font-size:12px">' + name + '</span>';
-    el.appendChild(d);
-  });
-})();
-
-// RJ11 Dual line wiring
-const rj11Dual = [
-  ['Pin 1', 'unused', '#374151', '#9ca3af'],
-  ['Pin 2', 'TIP — Line 2 (+)', '#7c2d12', '#fed7aa'],
-  ['Pin 3', 'TIP — Line 1 (+)', '#1e3a8a', '#93c5fd'],
-  ['Pin 4', 'RING — Line 1 (−)', '#166534', '#86efac'],
-  ['Pin 5', 'RING — Line 2 (−)', '#78350f', '#fcd34d'],
-  ['Pin 6', 'unused', '#374151', '#9ca3af'],
-];
-(function(){
-  const el = document.getElementById('rj11-dual');
-  rj11Dual.forEach(([pin, name, bg, fg]) => {
-    const d = document.createElement('div');
-    d.className = 'wire';
-    d.innerHTML = '<span class="pin" style="font-size:10px;min-width:36px">' + pin + '</span><span style="background:' + bg + ';color:' + fg + ';border-radius:6px;padding:4px 10px;flex:1;font-size:12px">' + name + '</span>';
-    el.appendChild(d);
-  });
-})();
-
-// RJ45 Telephone
-const rj45Tel = [
-  ['Pin 1', 'White/Blue — Line 4 TIP', '#1e3a8a', '#dbeafe'],
-  ['Pin 2', 'Blue — Line 1 RING (−)', '#1e3a8a', '#93c5fd'],
-  ['Pin 3', 'White/Orange — Line 3 RING', '#7c2d12', '#fed7aa'],
-  ['Pin 4', 'Orange — Line 2 RING (−)', '#7c2d12', '#fdba74'],
-  ['Pin 5', 'White/Green — Line 2 TIP (+)', '#166534', '#bbf7d0'],
-  ['Pin 6', 'Green — Line 3 TIP', '#14532d', '#86efac'],
-  ['Pin 7', 'White/Brown — Line 4 RING', '#451a03', '#fde68a'],
-  ['Pin 8', 'Brown — Line 1 TIP (+)', '#451a03', '#d97706'],
-];
-(function(){
-  const el = document.getElementById('rj45-tel');
-  el.style.display = 'grid';
-  el.style.gridTemplateColumns = '1fr 1fr';
-  el.style.gap = '4px';
-  rj45Tel.forEach(([pin, name, bg, fg]) => {
-    const d = document.createElement('div');
-    d.className = 'wire';
-    d.innerHTML = '<span class="pin" style="font-size:10px;min-width:36px">' + pin + '</span><span style="background:' + bg + ';color:' + fg + ';border-radius:6px;padding:4px 10px;flex:1;font-size:12px">' + name + '</span>';
-    el.appendChild(d);
-  });
-})();
-
-// 25-pair color code
-const tipColors = ['White','Red','Black','Yellow','Violet'];
-const ringColors = ['Blue','Orange','Green','Brown','Slate'];
-const tipBg = ['#e2e8f0','#991b1b','#111827','#78350f','#4c1d95'];
-const tipFg = ['#1e293b','#fca5a5','#d1d5db','#fde68a','#ddd6fe'];
-const ringBg = ['#1e3a8a','#7c2d12','#14532d','#451a03','#334155'];
-const ringFg = ['#93c5fd','#fdba74','#86efac','#d97706','#cbd5e1'];
-(function(){
-  const el = document.getElementById('pairs-25');
-  for (let pair = 1; pair <= 25; pair++) {
-    const ti = Math.floor((pair-1) / 5);
-    const ri = (pair-1) % 5;
-    const d = document.createElement('div');
-    d.style.cssText = 'background:#0f1117;border:1px solid #1e293b;border-radius:8px;padding:8px 10px;font-size:12px';
-    d.innerHTML =
-      '<div style="font-weight:600;color:#64748b;margin-bottom:6px">Pair ' + pair + '</div>' +
-      '<div style="display:flex;gap:4px;margin-bottom:4px">' +
-        '<span style="background:' + tipBg[ti] + ';color:' + tipFg[ti] + ';border-radius:4px;padding:2px 8px;font-size:11px;flex:1;text-align:center">TIP: ' + tipColors[ti] + '</span>' +
-      '</div>' +
-      '<div style="display:flex;gap:4px">' +
-        '<span style="background:' + ringBg[ri] + ';color:' + ringFg[ri] + ';border-radius:4px;padding:2px 8px;font-size:11px;flex:1;text-align:center">RING: ' + ringColors[ri] + '</span>' +
-      '</div>';
-    el.appendChild(d);
-  }
-})();
-
-
-let spdHistory = [];
-let spdGraphData = [];
-let spdCanvas2, spdCtx2;
-
-async function startSpeedTest() {
-  const btn = document.getElementById('speed-btn');
-  const status = document.getElementById('speed-status');
-  btn.disabled = true;
-  btn.innerHTML = '<i class="ti ti-loader"></i> Testing...';
-  document.getElementById('spd-verdict-card').style.display = 'none';
-  spdGraphData = [];
-  ['spd-down','spd-up','spd-ping','spd-jitter','spd-grade'].forEach(id => document.getElementById(id).textContent = '—');
-  document.getElementById('spd-down-bar').style.width = '0%';
-  document.getElementById('spd-up-bar').style.width = '0%';
-
-  spdCanvas2 = document.getElementById('spd-canvas');
-  spdCtx2 = spdCanvas2.getContext('2d');
-  spdCanvas2.width = spdCanvas2.offsetWidth * window.devicePixelRatio;
-  spdCanvas2.height = 120 * window.devicePixelRatio;
-  spdCanvas2.style.width = '100%';
-  spdCanvas2.style.height = '120px';
-  spdCtx2.scale(window.devicePixelRatio, window.devicePixelRatio);
-
-  // Test ping first
-  status.textContent = 'Testing ping...';
-  const pings = [];
-  for (let i = 0; i < 5; i++) {
-    const t0 = Date.now();
-    try {
-      await fetch('https://1.1.1.1/cdn-cgi/trace', { cache: 'no-store' });
-      pings.push(Date.now() - t0);
-    } catch(e) {
-      try {
-        await fetch('https://dns.google/resolve?name=test.com&type=A&_=' + Date.now(), { cache: 'no-store' });
-        pings.push(Date.now() - t0);
-      } catch(e2) {}
-    }
-    await sleep(200);
-  }
-  const avgPing = pings.length ? Math.round(pings.reduce((a,b)=>a+b,0)/pings.length) : 999;
-  const jitter = pings.length > 1 ? Math.round(pings.slice(1).reduce((s,v,i)=>s+Math.abs(v-pings[i]),0)/(pings.length-1)) : 0;
-  document.getElementById('spd-ping').textContent = avgPing;
-  document.getElementById('spd-jitter').textContent = jitter;
-
-  // Download test — fetch from multiple CDN sources
-  status.textContent = 'Testing download speed...';
-  const dlSpeeds = [];
-  const dlUrls = [
-    'https://speed.cloudflare.com/__down?bytes=10000000',
-    'https://proof.ovh.net/files/10Mb.dat',
-  ];
-
-  for (const url of dlUrls) {
-    try {
-      const t0 = Date.now();
-      const resp = await fetch(url + (url.includes('?') ? '&' : '?') + '_=' + Date.now(), { cache: 'no-store' });
-      const reader = resp.body.getReader();
-      let received = 0;
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        received += value.length;
-        const elapsed = (Date.now() - t0) / 1000;
-        const mbps = parseFloat(((received * 8) / elapsed / 1000000).toFixed(2));
-        spdGraphData.push(mbps);
-        document.getElementById('spd-down').textContent = mbps.toFixed(1);
-        const pct = Math.min((mbps / 100) * 100, 100);
-        document.getElementById('spd-down-bar').style.width = pct + '%';
-        drawSpeedGraph();
-        if (Date.now() - t0 > 8000) { reader.cancel(); break; }
-      }
-      const totalTime = (Date.now() - t0) / 1000;
-      const speedMbps = (received * 8) / totalTime / 1000000;
-      dlSpeeds.push(speedMbps);
-    } catch(e) {}
-    await sleep(300);
-  }
-
-  const avgDl = dlSpeeds.length ? dlSpeeds.reduce((a,b)=>a+b,0)/dlSpeeds.length : 0;
-  document.getElementById('spd-down').textContent = avgDl.toFixed(1);
-  document.getElementById('spd-down-bar').style.width = Math.min((avgDl/100)*100,100) + '%';
-
-  // Upload test
-  status.textContent = 'Testing upload speed...';
-  let uploadMbps = 0;
-  try {
-    const uploadData = new Uint8Array(2 * 1024 * 1024);
-    crypto.getRandomValues(uploadData);
-    const blob = new Blob([uploadData]);
-    const t0 = Date.now();
-    await fetch('https://speed.cloudflare.com/__up', {
-      method: 'POST',
-      body: blob,
-      cache: 'no-store'
-    });
-    const elapsed = (Date.now() - t0) / 1000;
-    uploadMbps = (uploadData.length * 8) / elapsed / 1000000;
-  } catch(e) {
-    uploadMbps = avgDl * 0.3; // estimate if upload test fails
-  }
-  document.getElementById('spd-up').textContent = uploadMbps.toFixed(1);
-  document.getElementById('spd-up-bar').style.width = Math.min((uploadMbps/50)*100,100) + '%';
-
-  // Grade
-  let grade, gradeColor;
-  if (avgDl >= 50 && avgPing < 50) { grade = 'A'; gradeColor = '#34d399'; }
-  else if (avgDl >= 25 && avgPing < 100) { grade = 'B'; gradeColor = '#86efac'; }
-  else if (avgDl >= 10 && avgPing < 150) { grade = 'C'; gradeColor = '#fbbf24'; }
-  else if (avgDl >= 5) { grade = 'D'; gradeColor = '#fb923c'; }
-  else { grade = 'F'; gradeColor = '#f87171'; }
-  document.getElementById('spd-grade').textContent = grade;
-  document.getElementById('spd-grade').style.color = gradeColor;
-
-  // Verdict
-  let verdict = '';
-  if (avgDl >= 100) verdict += '✔ <strong style="color:#34d399">Excellent download speed</strong> — suitable for multiple 4K streams and large file transfers.<br>';
-  else if (avgDl >= 25) verdict += '✔ <strong style="color:#86efac">Good download speed</strong> — suitable for HD streaming and video calls.<br>';
-  else if (avgDl >= 5) verdict += '⚠ <strong style="color:#fbbf24">Average download speed</strong> — suitable for browsing but may struggle with HD video.<br>';
-  else verdict += '✘ <strong style="color:#f87171">Poor download speed</strong> — client should contact ISP to check their plan and line quality.<br>';
-
-  if (avgPing < 50) verdict += '✔ <strong style="color:#34d399">Excellent latency</strong> — great for VoIP and gaming.<br>';
-  else if (avgPing < 100) verdict += '⚠ <strong style="color:#fbbf24">Acceptable latency</strong> — VoIP calls may experience slight delay.<br>';
-  else verdict += '✘ <strong style="color:#f87171">High latency</strong> — VoIP and real-time applications will be affected. Check the Latency Monitor tab for solutions.<br>';
-
-  if (jitter > 30) verdict += '✘ <strong style="color:#f87171">High jitter (' + jitter + 'ms)</strong> — unstable connection, likely a line or router issue.<br>';
-  else verdict += '✔ <strong style="color:#34d399">Low jitter</strong> — connection is stable.<br>';
-
-  document.getElementById('spd-verdict').innerHTML = verdict;
-  document.getElementById('spd-verdict-card').style.display = 'block';
-
-  // History
-  const entry = { dl: avgDl.toFixed(1), ul: uploadMbps.toFixed(1), ping: avgPing, jitter, grade, time: new Date().toLocaleTimeString() };
-  spdHistory.unshift(entry);
-  if (spdHistory.length > 10) spdHistory.pop();
-  renderSpdHistory();
-
-  status.textContent = 'Test complete — ' + new Date().toLocaleTimeString();
-  btn.disabled = false;
-  btn.innerHTML = '<i class="ti ti-refresh"></i> Run Again';
+function closeReader(){
+  overlay.classList.remove("show");
+  const a = document.getElementById("rAudio"); a.pause();
 }
+document.getElementById("rClose").addEventListener("click", closeReader);
+overlay.addEventListener("click", e => { if(e.target===overlay) closeReader(); });
+document.addEventListener("keydown", e => { if(e.key==="Escape") closeReader(); });
 
-function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+/* ---------- ظهور العناصر عند التمرير ---------- */
+const io = new IntersectionObserver(es => es.forEach(en => {
+  if(en.isIntersecting){ en.target.classList.add("in"); io.unobserve(en.target); }
+}), {threshold:.12});
+document.querySelectorAll(".reveal").forEach(el => io.observe(el));
 
-function drawSpeedGraph() {
-  if (!spdCtx2) return;
-  const w = spdCanvas2.offsetWidth;
-  const h = 120;
-  spdCtx2.clearRect(0, 0, w, h);
-  spdCtx2.fillStyle = '#0a0e18';
-  spdCtx2.fillRect(0, 0, w, h);
-  if (spdGraphData.length < 2) return;
-  const max = Math.max(...spdGraphData, 10);
-  const barW = w / Math.max(spdGraphData.length, 40);
-  spdGraphData.forEach((v, i) => {
-    const barH = (v / max) * (h - 20);
-    const col = v > 50 ? '#34d399' : v > 10 ? '#fbbf24' : '#f87171';
-    spdCtx2.fillStyle = col + '44';
-    spdCtx2.fillRect(i * barW, h - barH, barW - 1, barH);
-    spdCtx2.fillStyle = col;
-    spdCtx2.fillRect(i * barW, h - barH, barW - 1, 2);
-  });
-}
-
-function renderSpdHistory() {
-  const el = document.getElementById('spd-history');
-  if (!spdHistory.length) { el.textContent = 'No tests run yet.'; return; }
-  el.innerHTML = '<table style="width:100%;border-collapse:collapse;font-size:12px">' +
-    '<tr><th>Time</th><th>Download</th><th>Upload</th><th>Ping</th><th>Jitter</th><th>Grade</th></tr>' +
-    spdHistory.map(h => '<tr><td>' + h.time + '</td><td>' + h.dl + ' Mbps</td><td>' + h.ul + ' Mbps</td><td>' + h.ping + 'ms</td><td>' + h.jitter + 'ms</td><td style="font-weight:700">' + h.grade + '</td></tr>').join('') +
-    '</table>';
-}
-
-
-let latRunning = false;
-let latTimer = null;
-let latData = [];
-let latSent = 0;
-let latFailed = 0;
-let latCanvas, latCtx;
-
-function setLatHost(h) { document.getElementById('lat-host').value = h; }
-
-function toggleLatency() {
-  if (latRunning) {
-    stopLatency();
-  } else {
-    startLatency();
-  }
-}
-
-function startLatency() {
-  latRunning = true;
-  latData = []; latSent = 0; latFailed = 0;
-  document.getElementById('lat-btn').innerHTML = '<i class="ti ti-player-stop"></i> Stop';
-  document.getElementById('lat-btn').style.background = '#7f1d1d';
-  document.getElementById('lat-btn').style.borderColor = '#ef4444';
-  document.getElementById('lat-log').innerHTML = '';
-  latCanvas = document.getElementById('lat-canvas');
-  latCtx = latCanvas.getContext('2d');
-  latCanvas.width = latCanvas.offsetWidth * window.devicePixelRatio;
-  latCanvas.height = 140 * window.devicePixelRatio;
-  latCanvas.style.width = '100%';
-  latCanvas.style.height = '140px';
-  latCtx.scale(window.devicePixelRatio, window.devicePixelRatio);
-  doPing();
-  const interval = parseInt(document.getElementById('lat-interval').value);
-  latTimer = setInterval(doPing, interval);
-}
-
-function stopLatency() {
-  latRunning = false;
-  clearInterval(latTimer);
-  document.getElementById('lat-btn').innerHTML = '<i class="ti ti-player-play"></i> Start';
-  document.getElementById('lat-btn').style.background = '';
-  document.getElementById('lat-btn').style.borderColor = '';
-  addLog('--- Monitoring stopped ---', '#475569');
-}
-
-function doPing() {
-  const host = document.getElementById('lat-host').value.trim() || '8.8.8.8';
-  const t0 = Date.now();
-  latSent++;
-  document.getElementById('lat-count').textContent = latSent;
-  const url = 'https://' + host + '/favicon.ico?_=' + t0;
-  fetch(url, { mode: 'no-cors', cache: 'no-store' })
-    .then(() => {
-      const ms = Date.now() - t0;
-      recordPing(ms, host);
-    })
-    .catch(() => {
-      // try again with no-cors HEAD
-      const t1 = Date.now();
-      fetch('https://dns.google/resolve?name=' + encodeURIComponent(host) + '&type=A&_=' + t1, { cache: 'no-store' })
-        .then(() => { recordPing(Date.now() - t1, host); })
-        .catch(() => {
-          latFailed++;
-          latData.push(null);
-          if (latData.length > 60) latData.shift();
-          const loss = Math.round((latFailed / latSent) * 100);
-          document.getElementById('lat-loss').textContent = loss + '%';
-          document.getElementById('lat-loss').style.color = loss > 5 ? '#f87171' : '#34d399';
-          document.getElementById('lat-current').textContent = 'TIMEOUT';
-          document.getElementById('lat-current').style.color = '#f87171';
-          addLog('[' + new Date().toLocaleTimeString() + ']  ' + host + '  →  TIMEOUT', '#f87171');
-          drawGraph();
-        });
-    });
-}
-
-function recordPing(ms, host) {
-  latData.push(ms);
-  if (latData.length > 60) latData.shift();
-  const valid = latData.filter(x => x !== null);
-  const avg = Math.round(valid.reduce((a,b) => a+b, 0) / valid.length);
-  const mn = Math.min(...valid);
-  const mx = Math.max(...valid);
-  const jitter = valid.length > 1 ? Math.round(valid.slice(1).reduce((s,v,i) => s + Math.abs(v - valid[i]), 0) / (valid.length - 1)) : 0;
-  const loss = Math.round((latFailed / latSent) * 100);
-  const col = ms < 50 ? '#34d399' : ms < 150 ? '#fbbf24' : '#f87171';
-  document.getElementById('lat-current').textContent = ms;
-  document.getElementById('lat-current').style.color = col;
-  document.getElementById('lat-avg').textContent = avg;
-  document.getElementById('lat-avg').style.color = avg < 50 ? '#34d399' : avg < 150 ? '#fbbf24' : '#f87171';
-  document.getElementById('lat-jitter').textContent = jitter;
-  document.getElementById('lat-jitter').style.color = jitter < 10 ? '#34d399' : jitter < 30 ? '#fbbf24' : '#f87171';
-  document.getElementById('lat-min').textContent = mn;
-  document.getElementById('lat-max').textContent = mx;
-  document.getElementById('lat-loss').textContent = loss + '%';
-  document.getElementById('lat-loss').style.color = loss > 5 ? '#f87171' : '#34d399';
-  const quality = ms < 50 ? '✔ Good' : ms < 150 ? '~ Fair' : '✘ Poor';
-  const qcol = ms < 50 ? '#34d399' : ms < 150 ? '#fbbf24' : '#f87171';
-  addLog('[' + new Date().toLocaleTimeString() + ']  ' + host + '  →  ' + ms + 'ms  ' + quality, qcol);
-  drawGraph();
-}
-
-function drawGraph() {
-  if (!latCtx) return;
-  const w = latCanvas.offsetWidth;
-  const h = 140;
-  latCtx.clearRect(0, 0, w, h);
-  latCtx.fillStyle = '#0a0e18';
-  latCtx.fillRect(0, 0, w, h);
-
-  // Grid lines
-  [50, 100, 150, 200].forEach(ms => {
-    const y = h - (ms / 250 * h);
-    latCtx.strokeStyle = '#1e293b';
-    latCtx.lineWidth = 0.5;
-    latCtx.beginPath(); latCtx.moveTo(0, y); latCtx.lineTo(w, y); latCtx.stroke();
-    latCtx.fillStyle = '#334155';
-    latCtx.font = '10px monospace';
-    latCtx.fillText(ms + 'ms', 4, y - 3);
-  });
-
-  if (latData.length < 2) return;
-  const barW = w / 60;
-
-  latData.forEach((ms, i) => {
-    const x = i * barW;
-    if (ms === null) {
-      latCtx.fillStyle = '#374151';
-      latCtx.fillRect(x + 1, 0, barW - 2, h);
-      return;
-    }
-    const barH = Math.min((ms / 250) * h, h);
-    const col = ms < 50 ? '#34d399' : ms < 150 ? '#fbbf24' : '#f87171';
-    latCtx.fillStyle = col + '33';
-    latCtx.fillRect(x + 1, h - barH, barW - 2, barH);
-    latCtx.fillStyle = col;
-    latCtx.fillRect(x + 1, h - barH, barW - 2, 2);
-  });
-}
-
-function addLog(msg, color) {
-  const el = document.getElementById('lat-log');
-  const line = document.createElement('div');
-  line.style.color = color || '#64748b';
-  line.textContent = msg;
-  el.appendChild(line);
-  el.scrollTop = el.scrollHeight;
-  // Keep max 200 lines
-  while (el.children.length > 200) el.removeChild(el.firstChild);
-}
-
-function clearLog() {
-  document.getElementById('lat-log').innerHTML = '';
-  latData = []; latSent = 0; latFailed = 0;
-  ['lat-current','lat-avg','lat-jitter','lat-min','lat-max'].forEach(id => document.getElementById(id).textContent = '—');
-  document.getElementById('lat-loss').textContent = '0%';
-  document.getElementById('lat-count').textContent = '0';
-  if (latCtx) { latCtx.clearRect(0, 0, latCanvas.width, latCanvas.height); }
-}
-
-
-function loadNetInfo() {
-  const el = document.getElementById('netinfo-result');
-  el.textContent = 'Fetching...';
-  fetch('https://ipapi.co/json/')
-    .then(r => r.json())
-    .then(d => {
-      el.textContent =
-        'Public IP:    ' + d.ip + '\n' +
-        'ISP:          ' + d.org + '\n' +
-        'City:         ' + d.city + '\n' +
-        'Region:       ' + d.region + '\n' +
-        'Country:      ' + d.country_name + '\n' +
-        'Timezone:     ' + d.timezone + '\n' +
-        'ASN:          ' + d.asn;
-    })
-    .catch(() => { el.textContent = 'Could not fetch IP info. Check your connection.'; });
-}
-
-function dnsLookup() {
-  const host = document.getElementById('dns-host').value.trim();
-  const el = document.getElementById('dns-result');
-  if (!host) return;
-  el.style.display = 'block';
-  el.textContent = 'Looking up ' + host + '...';
-  fetch('https://dns.google/resolve?name=' + encodeURIComponent(host) + '&type=A')
-    .then(r => r.json())
-    .then(d => {
-      if (d.Answer) {
-        el.textContent = d.Answer.map(a => a.type + '  ' + a.name + '  →  ' + a.data).join('\n');
-      } else {
-        el.textContent = 'No DNS records found for ' + host;
-      }
-    })
-    .catch(() => { el.textContent = 'DNS lookup failed.'; });
-}
-
-function setReach(h) { document.getElementById('reach-host').value = h; reachTest(); }
-function reachTest() {
-  const host = document.getElementById('reach-host').value.trim();
-  const el = document.getElementById('reach-result');
-  if (!host) return;
-  el.style.display = 'block';
-  el.textContent = 'Testing reachability of ' + host + '...';
-  const t0 = Date.now();
-  fetch('https://' + host, { mode: 'no-cors', cache: 'no-store' })
-    .then(() => { el.textContent = '✔  ' + host + ' is reachable  (' + (Date.now()-t0) + 'ms response time)'; el.style.color='#34d399'; })
-    .catch(() => { el.textContent = '✘  ' + host + ' did not respond (may be blocked or offline)'; el.style.color='#f87171'; });
-}
-
+/* ---------- التشغيل ---------- */
+loadSurahs();
 </script>
 </body>
 </html>
