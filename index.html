@@ -50,6 +50,9 @@
     border-bottom:1px solid rgba(201,165,90,.2);
   }
   .topbar .clock{font-variant-numeric:tabular-nums;letter-spacing:.5px}
+  .topbar .dates{display:flex;align-items:center;flex-wrap:wrap;justify-content:flex-end;gap:.15rem}
+  .topbar .greg{color:#e9e0c8}
+  .topbar .sep{color:var(--gold);opacity:.6;margin:0 .45rem}
   .topbar .hijri{color:#e9e0c8}
 
   /* ---------- NAV ---------- */
@@ -336,7 +339,11 @@
 <!-- ============ TOP BAR ============ -->
 <div class="topbar">
   <span class="clock" id="liveClock">—</span>
-  <span class="hijri" id="hijriDate">جارٍ التحميل…</span>
+  <span class="dates">
+    <span class="greg" id="gregDate">…</span>
+    <span class="sep">•</span>
+    <span class="hijri" id="hijriDate">جارٍ التحميل…</span>
+  </span>
 </div>
 
 <!-- ============ NAV ============ -->
@@ -570,17 +577,21 @@ setInterval(tickClock,1000); tickClock();
 document.getElementById("mawaqitFrame").src =
   "https://mawaqit.net/ar/w/" + CONFIG.mawaqitSlug + "?showOnly5PrayerTimes=0";
 
-/* ---------- التاريخ الهجري (تقويم أم القرى) ---------- */
-function renderHijri(){
+/* ---------- التاريخ الميلادي والهجري ---------- */
+function renderDates(){
+  const now = new Date();
   try{
-    const fmt = new Intl.DateTimeFormat("ar-TN-u-ca-islamic-umalqura",
-      {weekday:"long", day:"numeric", month:"long", year:"numeric"});
-    document.getElementById("hijriDate").textContent = fmt.format(new Date()) + " هـ";
-  }catch(e){
-    document.getElementById("hijriDate").textContent = "";
-  }
+    const greg = new Intl.DateTimeFormat("ar",
+      {weekday:"long", day:"numeric", month:"long", year:"numeric"}).format(now);
+    document.getElementById("gregDate").textContent = greg + " م";
+  }catch(e){ document.getElementById("gregDate").textContent = ""; }
+  try{
+    const hijri = new Intl.DateTimeFormat("ar-TN-u-ca-islamic-umalqura",
+      {weekday:"long", day:"numeric", month:"long", year:"numeric"}).format(now);
+    document.getElementById("hijriDate").textContent = hijri + " هـ";
+  }catch(e){ document.getElementById("hijriDate").textContent = ""; }
 }
-renderHijri();
+renderDates();
 
 /* ---------- الأخبار والفعاليات (عدّلها كما تشاء) ---------- */
 const NEWS = [
