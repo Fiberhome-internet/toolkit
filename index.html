@@ -567,9 +567,11 @@ mailLink.href = "mailto:"+CONFIG.email; document.getElementById("mailText").text
 /* ---------- الساعة الحية ---------- */
 function tickClock(){
   const now = new Date();
-  const t = arNum(pad(now.getHours()%12||12))+":"+arNum(pad(now.getMinutes()))+":"+arNum(pad(now.getSeconds()))
-            +(now.getHours()>=12?" مساءً":" صباحًا");
-  document.getElementById("liveClock").textContent = t;
+  const h = now.getHours(), m = now.getMinutes(), s = now.getSeconds(), h12 = h % 12 || 12;
+  const ar = arNum(pad(h12))+":"+arNum(pad(m))+":"+arNum(pad(s))+" "+(h>=12?"مساءً":"صباحًا");
+  const en = pad(h12)+":"+pad(m)+":"+pad(s)+" "+(h>=12?"PM":"AM");
+  document.getElementById("liveClock").innerHTML =
+    ar + ' <span class="sep">·</span> <bdi dir="ltr">' + en + '</bdi>';
 }
 setInterval(tickClock,1000); tickClock();
 
@@ -586,8 +588,9 @@ function renderDates(){
     document.getElementById("gregDate").textContent = greg + " م";
   }catch(e){ document.getElementById("gregDate").textContent = ""; }
   try{
-    const hijri = new Intl.DateTimeFormat("ar-TN-u-ca-islamic-umalqura",
+    let hijri = new Intl.DateTimeFormat("ar-TN-u-ca-islamic-umalqura",
       {weekday:"long", day:"numeric", month:"long", year:"numeric"}).format(now);
+    hijri = hijri.replace(/\s*هـ\s*$/, "").trim();   // avoid a doubled era marker
     document.getElementById("hijriDate").textContent = hijri + " هـ";
   }catch(e){ document.getElementById("hijriDate").textContent = ""; }
 }
